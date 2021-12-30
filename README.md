@@ -59,6 +59,9 @@
 - AI & ML (Tools, Env)    
   <img src="https://img.shields.io/badge/colab-F9AB00?style=for-the-badge&logo=googlecolab&logoColor=white"> <img src="https://img.shields.io/badge/scikit_learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white"> <img src="https://img.shields.io/badge/tensorflow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white"> 
   
+- UI/UX, MockUp Design    
+  <img src="https://img.shields.io/badge/proto.io-34A7C1?style=for-the-badge&logo=proto.io&logoColor=white"> <img src="https://img.shields.io/badge/adobe_photoshop-31A8FF?style=for-the-badge&logo=adobephotoshop&logoColor=white"> 
+  
 - Team Collaboration Tool    
   <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/jira-0052CC?style=for-the-badge&logo=jira&logoColor=white">
 
