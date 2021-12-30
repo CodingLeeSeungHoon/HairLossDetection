@@ -4,7 +4,7 @@
 
 
 <p align="center">
-  <img src="https://github.com/CodingLeeSeungHoon/HairLossDetection/blob/main/iphonemock.png" />
+  <img src="https://github.com/CodingLeeSeungHoon/HairLossDetection/blob/deploy/iphonemock.png" />
   
 </p>
 <p align="center">
