@@ -72,9 +72,9 @@
 - 본 프로젝트(탈모 예방 및 진단 어플리케이션 개발)에 참여한 연구자 명단입니다.
 - This is a list of researchers who participated in this project.
 ```  
-> 🏆 **[이승훈](https://github.com/CodingLeeSeungHoon)** : ```None```    
-> 🏆 **[이한범](https://github.com/Y-greatigr)** : ```None```    
-> 🏆 **[김준태](https://github.com/KZunT)** : ```None```    
+> 🏆 **[이승훈](https://github.com/CodingLeeSeungHoon)** : ```App Dev``` ```BE Dev``` ```AI Dev```    
+> 🏆 **[이한범](https://github.com/Y-greatigr)** : ```Docker``` ```BE Dev``` ```AI Dev```     
+> 🏆 **[김준태](https://github.com/KZunT)** : ```AI Dev```    
 
 ```
 - 본 프로젝트의 라이선스는 '탈모 예방 및 진단 어플리케이션 개발'에 참여한 연구자들(이승훈, 이한범, 김준태)에게 있습니다.
