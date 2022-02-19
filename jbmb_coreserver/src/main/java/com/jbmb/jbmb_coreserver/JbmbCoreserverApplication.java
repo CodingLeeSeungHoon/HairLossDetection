@@ -1,6 +1,9 @@
 package com.jbmb.jbmb_coreserver;
 
+import com.jbmb.jbmb_coreserver.account.controller.MemberController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration; // 구축 후 실행을 위해 잠깐 import
 import org.springframework.web.bind.annotation.GetMapping; // 예제 실행을 위해 추가한
