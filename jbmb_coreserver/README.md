@@ -1,4 +1,4 @@
-# 백엔드 파트
+# 백엔드
 
 ### 디렉토리 구조
 ```sh
@@ -14,9 +14,18 @@
    │  │               │   │   └── MemberController.java
    │  │               │   ├── dao
    │  │               │   ├── domain
+   │  │               │   │   └── Member.java
    │  │               │   ├── dto
+   │  │               │   │   └── JoinForm.java
+   │  │               │   ├── jwt
+   │  │               │   │   ├── CustomUserDetailService.java
+   │  │               │   │   ├── JwtAuthenticationFilter.java
+   │  │               │   │   ├── JwtTokenProvider.java
+   │  │               │   │   └── WebSecurityConfig.java
    │  │               │   ├── repository
+   │  │               │       └── MemberRepository.java
    │  │               │   └── service
+   │  │               │       └── MemberService.java
    │  │               ├── board
    │  │               │   ├── controller
    │  │               │   ├── dao
