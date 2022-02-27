@@ -1,4 +1,4 @@
-package com.jbmb.jbmb_coreserver.account.jwt;
+package com.jbmb.jbmb_coreserver.account.service;
 
 import com.jbmb.jbmb_coreserver.account.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +7,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+/**
+ * 로그인 시 필요한 유저 정보를 DB에서 불러옴.
+ */
 @RequiredArgsConstructor
 @Service
 public class CustomUserDetailService implements UserDetailsService {

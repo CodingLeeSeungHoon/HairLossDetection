@@ -1,5 +1,7 @@
-package com.jbmb.jbmb_coreserver.account.jwt;
+package com.jbmb.jbmb_coreserver.account.config;
 
+import com.jbmb.jbmb_coreserver.account.jwt.JwtAuthenticationFilter;
+import com.jbmb.jbmb_coreserver.account.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,6 +13,9 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * spring security를 설정하기 위한 클래스
+ */
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -40,7 +45,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests() // 요청에 대한 사용권한 체크
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 //.antMatchers("/user/**").hasRole("USER")
-                .anyRequest().permitAll() // 그외 나머지 요청은 누구나 접근 가능
+                .antMatchers("/user/account/edit/**").hasRole("USER")
+                .antMatchers("/diagnosis/**").hasRole("USER")
+                .antMatchers("/feedback/**").hasRole("USER")
+                .antMatchers("/border/**").hasRole("USER") // 회원정보 수정, 진단, 피드백, 게시판 접속하려면 로그인이 되어야 하게끔
+                .anyRequest().permitAll() // 그 외 나머지 요청은 누구나 접근 가능
+                //.and()
+                //.anonymous().disable() 만약 누구나 사용 가능하게 해주려면 주석 제거하면 됨
+                //.formLogin() spring security에서 제공하는 login form을 이용한다는 뜻. 로그인 성공시 '/'로 리다이렉트
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class);

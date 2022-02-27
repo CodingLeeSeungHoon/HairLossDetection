@@ -22,13 +22,10 @@ import java.util.Map;
 @RequestMapping("/user/account")
 public class MemberController {
 
-    private final PasswordEncoder passwordEncoder;
-    private final JwtTokenProvider jwtTokenProvider;
-    private final MemberRepository memberRepository;
-
     @Autowired
     private MemberService memberService;
 
+    // 회원가입 시 아이디 중복 체크
     @GetMapping("/check-duplicate/id/{id}/")
     public Boolean isAlreadyID(@RequestParam String id){
         return memberService.checkIdAlready(id);
@@ -37,26 +34,12 @@ public class MemberController {
     // 회원가입
     @PostMapping("/signup")
     public String joinInJBMB(@RequestBody Member user) {
-        return memberRepository.save(Member.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .password(passwordEncoder.encode(user.getPassword()))
-                .phoneNumber(user.getPhoneNumber())
-                .sex(user.getSex())
-                .age(user.getAge())
-                .roles(Collections.singletonList("ROLE_USER")) // 최초 가입시 USER 로 설정
-                .build()).getId();
+        return memberService.joinService(user);
     }
 
     // 로그인
     @PostMapping("/auth")
     public String login(@RequestBody Member user) {
-        Member member = memberRepository.findById(user.getId())
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID 입니다."));
-        if (!passwordEncoder.matches(user.getPassword(), member.getPassword())) {
-            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
-        }
-        return jwtTokenProvider.createToken(member.getUsername(), member.getRoles());
+        return memberService.loginService(user);
     }
-
 }

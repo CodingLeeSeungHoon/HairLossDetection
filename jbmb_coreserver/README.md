@@ -10,6 +10,8 @@
    │  │           └── jbmb_coreserver
    │  │               ├── jbmbCoreserverApplication.java
    │  │               ├── account
+   │  │               │   ├── config
+   │  │               │   │   └── WebSecurityConfig.java
    │  │               │   ├── controller
    │  │               │   │   └── MemberController.java
    │  │               │   ├── dao
@@ -18,13 +20,12 @@
    │  │               │   ├── dto
    │  │               │   │   └── JoinForm.java
    │  │               │   ├── jwt
-   │  │               │   │   ├── CustomUserDetailService.java
    │  │               │   │   ├── JwtAuthenticationFilter.java
-   │  │               │   │   ├── JwtTokenProvider.java
-   │  │               │   │   └── WebSecurityConfig.java
+   │  │               │   │   └── JwtTokenProvider.java
    │  │               │   ├── repository
-   │  │               │       └── MemberRepository.java
+   │  │               │   │   └── MemberRepository.java
    │  │               │   └── service
+   │  │               │   │   ├── CustomUserDetailService.java
    │  │               │       └── MemberService.java
    │  │               ├── board
    │  │               │   ├── controller
