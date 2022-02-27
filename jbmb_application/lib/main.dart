@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'screen/Home.dart';
 
 void main() => runApp(const JBMBApplication());
 
@@ -7,12 +8,10 @@ class JBMBApplication extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: '제발모발',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const Scaffold(),
+      themeMode: ThemeMode.system,
+      home: Home(),
     );
   }
 }
