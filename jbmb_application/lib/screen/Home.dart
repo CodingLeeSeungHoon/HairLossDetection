@@ -24,6 +24,14 @@ class _HomeState extends State<Home> {
     'images/community.png'
   ];
 
+  List<T> map<T>(List list, Function handler) {
+    List<T> result = [];
+    for (var i = 0; i < list.length; i++) {
+      result.add(handler(i, list[i]));
+    }
+    return result;
+  }
+
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
@@ -84,15 +92,18 @@ class _HomeState extends State<Home> {
                 ),
                 const SizedBox(height: 20),
                 CarouselSlider(
+                  // TODO: Indicator 만들기
                   options: CarouselOptions(
-                      height: 400.0,
-                      initialPage: 0,
-                      onPageChanged: (index, reason) {
-                        setState(() {
-                          _current = index;
-                        });
-                      },
-                      enableInfiniteScroll: false,
+                    height: 380.0,
+                    initialPage: 0,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        _current = index;
+                      });
+                    },
+                    enableInfiniteScroll: false,
+                    // autoPlay: true,
+                    // autoPlayCurve: Curves.easeIn,
                   ),
                   items: imgList.map((imgUrl) {
                     return Builder(
@@ -102,7 +113,7 @@ class _HomeState extends State<Home> {
                             child: Column(
                               children: [
                                 const SizedBox(
-                                  height: 40.0,
+                                  height: 30.0,
                                 ),
                                 Image.asset(
                                   imgUrl,
@@ -117,9 +128,9 @@ class _HomeState extends State<Home> {
                                   height: 30.0,
                                 ),
                                 ClickableButton(
-                                    buttonText: getButtonTextByIndex(_current),
-                                    iconData: getIconDataByIndex(_current),
-                                    // TODO : 각 버튼별 Action 지정 필요
+                                  buttonText: getButtonTextByIndex(_current),
+                                  iconData: getIconDataByIndex(_current),
+                                  // TODO : 각 버튼별 Action 지정 필요
                                 ),
                               ],
                             ));
@@ -127,6 +138,24 @@ class _HomeState extends State<Home> {
                     );
                   }).toList(),
                 ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: map<Widget>(imgList, (index, url) {
+                    return Container(
+                      width: 20.0,
+                      height: 10.0,
+                      margin:
+                          EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color:
+                              _current == index ? Colors.black : Colors.grey),
+                    );
+                  }),
+                )
               ],
             )));
   }
@@ -150,7 +179,7 @@ class _HomeState extends State<Home> {
     return retval;
   }
 
-  Column getMenuTextByIndex(int index){
+  Column getMenuTextByIndex(int index) {
     Column retval = Column();
     const double fontSize = 13.0;
     const Color color = Colors.black87;
@@ -160,32 +189,64 @@ class _HomeState extends State<Home> {
       case 0:
         retval = Column(
           children: const [
-            Text("자가진단 및 AI 이미지 진단으로", style: TextStyle(fontFamily: fontFamily, fontSize: fontSize, color: color),),
-            Text("간단하게 탈모 상태를 알아보세요", style: TextStyle(fontFamily: fontFamily, fontSize: fontSize, color: color),),
+            Text(
+              "자가진단 및 AI 이미지 진단으로",
+              style: TextStyle(
+                  fontFamily: fontFamily, fontSize: fontSize, color: color),
+            ),
+            Text(
+              "간단하게 탈모 상태를 알아보세요",
+              style: TextStyle(
+                  fontFamily: fontFamily, fontSize: fontSize, color: color),
+            ),
           ],
         );
         break;
       case 1:
         retval = Column(
           children: const [
-            Text("자신의 두피 타입에 따라", style: TextStyle(fontFamily: fontFamily, fontSize: fontSize, color: color),),
-            Text("적절한 샴푸를 추천해드려요", style: TextStyle(fontFamily: fontFamily, fontSize: fontSize, color: color),),
+            Text(
+              "자신의 두피 타입에 따라",
+              style: TextStyle(
+                  fontFamily: fontFamily, fontSize: fontSize, color: color),
+            ),
+            Text(
+              "적절한 샴푸를 추천해드려요",
+              style: TextStyle(
+                  fontFamily: fontFamily, fontSize: fontSize, color: color),
+            ),
           ],
         );
         break;
       case 2:
         retval = Column(
           children: const [
-            Text("근처 탈모 전문 병원을", style: TextStyle(fontFamily: fontFamily, fontSize: fontSize, color: color),),
-            Text("찾아보세요", style: TextStyle(fontFamily: fontFamily, fontSize: fontSize, color: color),),
+            Text(
+              "근처 탈모 전문 병원을",
+              style: TextStyle(
+                  fontFamily: fontFamily, fontSize: fontSize, color: color),
+            ),
+            Text(
+              "찾아보세요",
+              style: TextStyle(
+                  fontFamily: fontFamily, fontSize: fontSize, color: color),
+            ),
           ],
         );
         break;
       case 3:
         retval = Column(
           children: const [
-            Text("비슷한 고민이 있는 회원들과", style: TextStyle(fontFamily: fontFamily, fontSize: fontSize, color: color),),
-            Text("다양한 이야기를 나눠요", style: TextStyle(fontFamily: fontFamily, fontSize: fontSize, color: color),),
+            Text(
+              "비슷한 고민이 있는 회원들과",
+              style: TextStyle(
+                  fontFamily: fontFamily, fontSize: fontSize, color: color),
+            ),
+            Text(
+              "다양한 이야기를 나눠요",
+              style: TextStyle(
+                  fontFamily: fontFamily, fontSize: fontSize, color: color),
+            ),
           ],
         );
         break;
@@ -193,7 +254,7 @@ class _HomeState extends State<Home> {
     return retval;
   }
 
-  IconData? getIconDataByIndex(int index){
+  IconData? getIconDataByIndex(int index) {
     IconData? retval;
     switch (index) {
       case 0:
@@ -215,5 +276,4 @@ class _HomeState extends State<Home> {
     }
     return retval;
   }
-
 }
