@@ -6,17 +6,19 @@ import 'package:flutter/material.dart';
 class ClickableButton extends StatelessWidget {
   final String buttonText;
   final Function? action;
+  final IconData? iconData;
 
   const ClickableButton({
     Key? key,
     required this.buttonText,
+    required this.iconData,
     this.action,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton.icon(
-        icon: const Icon(Icons.local_hospital, color: Colors.black, size: 15,),
+        icon: Icon(iconData, color: Colors.black, size: 15,),
         onPressed: () {},
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.all(10.0),
