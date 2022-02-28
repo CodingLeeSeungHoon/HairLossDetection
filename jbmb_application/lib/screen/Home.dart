@@ -8,6 +8,7 @@ class Home extends StatefulWidget {
   /// 홈 메인 화면 구현
   /// 2022.02.27 이승훈 개발
   /// AppBar - 중간 문구 - 구분선 - 슬라이더(이미지 + 버튼) 구조
+  /// TODO : Refactoring
 
   const Home({Key? key}) : super(key: key);
 
@@ -130,7 +131,7 @@ class _HomeState extends State<Home> {
                                 ClickableButton(
                                   buttonText: getButtonTextByIndex(_current),
                                   iconData: getIconDataByIndex(_current),
-                                  // TODO : 각 버튼별 Action 지정 필요
+                                  onPressed: (){},
                                 ),
                               ],
                             ));

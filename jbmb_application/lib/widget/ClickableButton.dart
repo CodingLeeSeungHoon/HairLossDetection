@@ -5,21 +5,21 @@ import 'package:flutter/material.dart';
 
 class ClickableButton extends StatelessWidget {
   final String buttonText;
-  final Function? action;
   final IconData? iconData;
+  final VoidCallback? onPressed;
 
   const ClickableButton({
     Key? key,
     required this.buttonText,
     required this.iconData,
-    this.action,
+    this.onPressed
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton.icon(
         icon: Icon(iconData, color: Colors.black, size: 15,),
-        onPressed: () {},
+        onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.all(10.0),
           fixedSize: const Size(160, 45),
