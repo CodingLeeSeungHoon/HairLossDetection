@@ -1,4 +1,4 @@
-# 백엔드 파트
+# 백엔드
 
 ### 디렉토리 구조
 ```sh
@@ -10,13 +10,23 @@
    │  │           └── jbmb_coreserver
    │  │               ├── jbmbCoreserverApplication.java
    │  │               ├── account
+   │  │               │   ├── config
+   │  │               │   │   └── WebSecurityConfig.java
    │  │               │   ├── controller
    │  │               │   │   └── MemberController.java
    │  │               │   ├── dao
    │  │               │   ├── domain
+   │  │               │   │   └── Member.java
    │  │               │   ├── dto
+   │  │               │   │   └── JoinForm.java
+   │  │               │   ├── jwt
+   │  │               │   │   ├── JwtAuthenticationFilter.java
+   │  │               │   │   └── JwtTokenProvider.java
    │  │               │   ├── repository
+   │  │               │   │   └── MemberRepository.java
    │  │               │   └── service
+   │  │               │   │   ├── CustomUserDetailService.java
+   │  │               │       └── MemberService.java
    │  │               ├── board
    │  │               │   ├── controller
    │  │               │   ├── dao

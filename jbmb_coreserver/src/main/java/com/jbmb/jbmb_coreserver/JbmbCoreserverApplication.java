@@ -5,12 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration; // 구축 후 실행을 위해 잠깐 import
 import org.springframework.web.bind.annotation.GetMapping; // 예제 실행을 위해 추가한
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController; // 예제 실행을 위해 추가한
 
 @RestController // 예제 실행을 위해 추가한
-@SpringBootApplication(exclude={DataSourceAutoConfiguration.class}) // 한 번 실행해 보려고 한 것. 나중에 exclude부터 지워야
+@SpringBootApplication
 public class JbmbCoreserverApplication {
 
     @GetMapping("/") // 예제 실행을 위해 추가한
