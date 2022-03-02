@@ -9,15 +9,20 @@ class NavigationDrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 411 683 24
+    double phoneWidth = MediaQuery.of(context).size.width;
+    double phoneHeight = MediaQuery.of(context).size.height;
+    double phonePadding = MediaQuery.of(context).padding.top;
+
     return Drawer(
       child: Material(
         child: ListView(
           padding: padding,
           children: <Widget>[
-            const SizedBox(height: 70,),
+            SizedBox(height: phoneHeight * 0.10,),
             const Text("제발모발", textAlign: TextAlign.center, style: TextStyle(fontFamily: "Gugi-regular", fontSize: 25, fontWeight: FontWeight.bold),),
-            const SizedBox(
-              height: 40,
+            SizedBox(
+              height: phoneHeight * 0.05,
             ),
             buildMenuItem(
                 text: '로그인',
