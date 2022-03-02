@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jbmb_application/widget/MainDescription.dart';
-import '../widget/ClickableButton.dart';
+import '../widget/JBMBOutlinedButton.dart';
 import '../widget/NavigationDrawerWidget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -8,6 +8,7 @@ class Home extends StatefulWidget {
   /// 홈 메인 화면 구현
   /// 2022.02.27 이승훈 개발
   /// AppBar - 중간 문구 - 구분선 - 슬라이더(이미지 + 버튼) 구조
+  /// TODO : Refactoring
 
   const Home({Key? key}) : super(key: key);
 
@@ -24,15 +25,28 @@ class _HomeState extends State<Home> {
     'images/community.png'
   ];
 
+  List<T> map<T>(List list, Function handler) {
+    List<T> result = [];
+    for (var i = 0; i < list.length; i++) {
+      result.add(handler(i, list[i]));
+    }
+    return result;
+  }
+
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
+
+    double phoneWidth = MediaQuery.of(context).size.width;
+    double phoneHeight = MediaQuery.of(context).size.height;
+    double phonePadding = MediaQuery.of(context).padding.top;
+
     return Scaffold(
         key: _scaffoldKey,
         // sideDrawer
         endDrawer: Container(
-          width: 230,
+          width: phoneWidth * 0.55,
           child: NavigationDrawerWidget(),
         ),
         // 전체 화면 바탕색 지정
@@ -68,58 +82,59 @@ class _HomeState extends State<Home> {
             // 가운데 정렬
             alignment: AlignmentDirectional.center,
             // 패딩과 마진 값
-            padding: const EdgeInsets.all(8.0),
-            margin: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(phonePadding * 0.33),
+            margin: EdgeInsets.all(phonePadding * 0.33),
             // 내부 위젯 레이아웃 세로 배치
             child: Column(
               children: <Widget>[
                 // TODO: MainDescription 로그인 여부에 따라 내용 변경
                 const MainDescription(),
-                const SizedBox(
-                  height: 20,
+                SizedBox(
+                  height: phoneHeight * 0.02,
                 ),
                 const Divider(
                   thickness: 1,
                   color: Colors.black45,
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: phoneHeight * 0.03,),
                 CarouselSlider(
                   options: CarouselOptions(
-                      height: 400.0,
-                      initialPage: 0,
-                      onPageChanged: (index, reason) {
-                        setState(() {
-                          _current = index;
-                        });
-                      },
-                      enableInfiniteScroll: false,
+                    height: phoneHeight * 0.55,
+                    initialPage: 0,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        _current = index;
+                      });
+                    },
+                    enableInfiniteScroll: false,
+                    // autoPlay: true,
+                    // autoPlayCurve: Curves.easeIn,
                   ),
                   items: imgList.map((imgUrl) {
                     return Builder(
                       builder: (BuildContext context) {
                         return Container(
+                            alignment: Alignment.center,
                             margin: EdgeInsets.symmetric(horizontal: 10.0),
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const SizedBox(
-                                  height: 40.0,
-                                ),
                                 Image.asset(
                                   imgUrl,
-                                  width: 200.0,
-                                  height: 200.0,
+                                  width: phoneWidth * 0.5,
+                                  height: phoneWidth * 0.5,
                                 ),
-                                const SizedBox(
-                                  height: 20.0,
+                                SizedBox(
+                                  height: phoneHeight * 0.02,
                                 ),
                                 getMenuTextByIndex(_current),
-                                const SizedBox(
-                                  height: 30.0,
+                                SizedBox(
+                                  height: phoneHeight * 0.03,
                                 ),
-                                ClickableButton(
-                                    buttonText: getButtonTextByIndex(_current),
-                                    iconData: getIconDataByIndex(_current),
-                                    // TODO : 각 버튼별 Action 지정 필요
+                                JBMBOutlinedButton(
+                                  buttonText: getButtonTextByIndex(_current),
+                                  iconData: getIconDataByIndex(_current),
+                                  onPressed: (){},
                                 ),
                               ],
                             ));
@@ -127,6 +142,24 @@ class _HomeState extends State<Home> {
                     );
                   }).toList(),
                 ),
+                SizedBox(
+                  height: phoneHeight * 0.01,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: map<Widget>(imgList, (index, url) {
+                    return Container(
+                      width: phoneWidth * 0.04,
+                      height: phoneHeight * 0.014,
+                      margin:
+                          EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color:
+                              _current == index ? Colors.black : Colors.grey),
+                    );
+                  }),
+                )
               ],
             )));
   }
@@ -150,7 +183,7 @@ class _HomeState extends State<Home> {
     return retval;
   }
 
-  Column getMenuTextByIndex(int index){
+  Column getMenuTextByIndex(int index) {
     Column retval = Column();
     const double fontSize = 13.0;
     const Color color = Colors.black87;
@@ -160,32 +193,64 @@ class _HomeState extends State<Home> {
       case 0:
         retval = Column(
           children: const [
-            Text("자가진단 및 AI 이미지 진단으로", style: TextStyle(fontFamily: fontFamily, fontSize: fontSize, color: color),),
-            Text("간단하게 탈모 상태를 알아보세요", style: TextStyle(fontFamily: fontFamily, fontSize: fontSize, color: color),),
+            Text(
+              "자가진단 및 AI 이미지 진단으로",
+              style: TextStyle(
+                  fontFamily: fontFamily, fontSize: fontSize, color: color),
+            ),
+            Text(
+              "간단하게 탈모 상태를 알아보세요",
+              style: TextStyle(
+                  fontFamily: fontFamily, fontSize: fontSize, color: color),
+            ),
           ],
         );
         break;
       case 1:
         retval = Column(
           children: const [
-            Text("자신의 두피 타입에 따라", style: TextStyle(fontFamily: fontFamily, fontSize: fontSize, color: color),),
-            Text("적절한 샴푸를 추천해드려요", style: TextStyle(fontFamily: fontFamily, fontSize: fontSize, color: color),),
+            Text(
+              "자신의 두피 타입에 따라",
+              style: TextStyle(
+                  fontFamily: fontFamily, fontSize: fontSize, color: color),
+            ),
+            Text(
+              "적절한 샴푸를 추천해드려요",
+              style: TextStyle(
+                  fontFamily: fontFamily, fontSize: fontSize, color: color),
+            ),
           ],
         );
         break;
       case 2:
         retval = Column(
           children: const [
-            Text("근처 탈모 전문 병원을", style: TextStyle(fontFamily: fontFamily, fontSize: fontSize, color: color),),
-            Text("찾아보세요", style: TextStyle(fontFamily: fontFamily, fontSize: fontSize, color: color),),
+            Text(
+              "근처 탈모 전문 병원을",
+              style: TextStyle(
+                  fontFamily: fontFamily, fontSize: fontSize, color: color),
+            ),
+            Text(
+              "찾아보세요",
+              style: TextStyle(
+                  fontFamily: fontFamily, fontSize: fontSize, color: color),
+            ),
           ],
         );
         break;
       case 3:
         retval = Column(
           children: const [
-            Text("비슷한 고민이 있는 회원들과", style: TextStyle(fontFamily: fontFamily, fontSize: fontSize, color: color),),
-            Text("다양한 이야기를 나눠요", style: TextStyle(fontFamily: fontFamily, fontSize: fontSize, color: color),),
+            Text(
+              "비슷한 고민이 있는 회원들과",
+              style: TextStyle(
+                  fontFamily: fontFamily, fontSize: fontSize, color: color),
+            ),
+            Text(
+              "다양한 이야기를 나눠요",
+              style: TextStyle(
+                  fontFamily: fontFamily, fontSize: fontSize, color: color),
+            ),
           ],
         );
         break;
@@ -193,7 +258,7 @@ class _HomeState extends State<Home> {
     return retval;
   }
 
-  IconData? getIconDataByIndex(int index){
+  IconData? getIconDataByIndex(int index) {
     IconData? retval;
     switch (index) {
       case 0:
@@ -215,5 +280,4 @@ class _HomeState extends State<Home> {
     }
     return retval;
   }
-
 }
