@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jbmb_application/widget/MainDescription.dart';
-import '../widget/ClickableButton.dart';
+import '../widget/JBMBOutlinedButton.dart';
 import '../widget/NavigationDrawerWidget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -37,11 +37,16 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+
+    double phoneWidth = MediaQuery.of(context).size.width;
+    double phoneHeight = MediaQuery.of(context).size.height;
+    double phonePadding = MediaQuery.of(context).padding.top;
+
     return Scaffold(
         key: _scaffoldKey,
         // sideDrawer
         endDrawer: Container(
-          width: 230,
+          width: phoneWidth * 0.55,
           child: NavigationDrawerWidget(),
         ),
         // 전체 화면 바탕색 지정
@@ -77,25 +82,24 @@ class _HomeState extends State<Home> {
             // 가운데 정렬
             alignment: AlignmentDirectional.center,
             // 패딩과 마진 값
-            padding: const EdgeInsets.all(8.0),
-            margin: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(phonePadding * 0.33),
+            margin: EdgeInsets.all(phonePadding * 0.33),
             // 내부 위젯 레이아웃 세로 배치
             child: Column(
               children: <Widget>[
                 // TODO: MainDescription 로그인 여부에 따라 내용 변경
                 const MainDescription(),
-                const SizedBox(
-                  height: 20,
+                SizedBox(
+                  height: phoneHeight * 0.02,
                 ),
                 const Divider(
                   thickness: 1,
                   color: Colors.black45,
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: phoneHeight * 0.03,),
                 CarouselSlider(
-                  // TODO: Indicator 만들기
                   options: CarouselOptions(
-                    height: 380.0,
+                    height: phoneHeight * 0.55,
                     initialPage: 0,
                     onPageChanged: (index, reason) {
                       setState(() {
@@ -110,25 +114,24 @@ class _HomeState extends State<Home> {
                     return Builder(
                       builder: (BuildContext context) {
                         return Container(
+                            alignment: Alignment.center,
                             margin: EdgeInsets.symmetric(horizontal: 10.0),
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const SizedBox(
-                                  height: 30.0,
-                                ),
                                 Image.asset(
                                   imgUrl,
-                                  width: 200.0,
-                                  height: 200.0,
+                                  width: phoneWidth * 0.5,
+                                  height: phoneWidth * 0.5,
                                 ),
-                                const SizedBox(
-                                  height: 20.0,
+                                SizedBox(
+                                  height: phoneHeight * 0.02,
                                 ),
                                 getMenuTextByIndex(_current),
-                                const SizedBox(
-                                  height: 30.0,
+                                SizedBox(
+                                  height: phoneHeight * 0.03,
                                 ),
-                                ClickableButton(
+                                JBMBOutlinedButton(
                                   buttonText: getButtonTextByIndex(_current),
                                   iconData: getIconDataByIndex(_current),
                                   onPressed: (){},
@@ -139,15 +142,15 @@ class _HomeState extends State<Home> {
                     );
                   }).toList(),
                 ),
-                const SizedBox(
-                  height: 10.0,
+                SizedBox(
+                  height: phoneHeight * 0.01,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: map<Widget>(imgList, (index, url) {
                     return Container(
-                      width: 20.0,
-                      height: 10.0,
+                      width: phoneWidth * 0.04,
+                      height: phoneHeight * 0.014,
                       margin:
                           EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
                       decoration: BoxDecoration(
