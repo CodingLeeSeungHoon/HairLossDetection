@@ -44,6 +44,15 @@
 
 </details>
  
+  
+--- 
+**⚒ JBMB System Architecture**  
+ <p align="center">
+
+  <img src="https://github.com/CodingLeeSeungHoon/HairLossDetection/blob/deploy/jbmb_document/JBMB_system_architecture.png" />
+  
+</p>
+ 
 ---    
 **💎 Develop Stack**
 - Front-End    
