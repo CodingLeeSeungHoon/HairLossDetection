@@ -5,6 +5,7 @@ class JBMBTextField extends StatelessWidget {
   final String labelText;
   final String? hintText;
   final TextInputType textInputType;
+  final TextEditingController? controller;
 
   const JBMBTextField({
     Key? key,
@@ -12,6 +13,7 @@ class JBMBTextField extends StatelessWidget {
     required this.labelText,
     this.hintText,
     this.textInputType = TextInputType.text,
+    this.controller
   }) : super(key: key);
 
   @override
@@ -35,6 +37,7 @@ class JBMBTextField extends StatelessWidget {
         ),
       ),
       keyboardType: textInputType,
+      controller: controller,
     );
   }
 }
