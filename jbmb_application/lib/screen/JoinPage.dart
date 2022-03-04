@@ -18,9 +18,23 @@ class JoinPage extends StatefulWidget {
 
 class _JoinPageState extends State<JoinPage> {
   String _selectedGender = 'male';
+  String id = '';
+  String pw = '';
+  String name = '';
+  String phone = '';
+  String email = '';
+  int? age = 0;
+
+  TextEditingController idController = TextEditingController();
+  TextEditingController pwController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController ageController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+
     double phoneWidth = MediaQuery.of(context).size.width;
     double phoneHeight = MediaQuery.of(context).size.height;
     double phonePadding = MediaQuery.of(context).padding.top;
@@ -32,7 +46,7 @@ class _JoinPageState extends State<JoinPage> {
           elevation: 0,
           backgroundColor: Colors.transparent,
           leading: IconButton(
-            icon: Icon(Icons.cancel),
+            icon: const Icon(Icons.cancel),
             onPressed: () {
               FocusManager.instance.primaryFocus?.unfocus();
               Future.delayed(const Duration(milliseconds: 300), () {
@@ -95,6 +109,7 @@ class _JoinPageState extends State<JoinPage> {
                       obsecure: false,
                       labelText: 'ID (아이디)',
                       hintText: '아이디를 입력하세요.',
+                      controller: idController,
                     ),
                   ),
                   SizedBox(
@@ -107,6 +122,7 @@ class _JoinPageState extends State<JoinPage> {
                       obsecure: true,
                       labelText: 'PW (비밀번호)',
                       hintText: '비밀번호를 입력하세요.',
+                      controller: pwController,
                     ),
                   ),
                   SizedBox(
@@ -119,6 +135,7 @@ class _JoinPageState extends State<JoinPage> {
                       obsecure: false,
                       labelText: '이름',
                       hintText: '이름을 입력하세요.',
+                      controller: nameController,
                     ),
                   ),
                   SizedBox(
@@ -132,6 +149,7 @@ class _JoinPageState extends State<JoinPage> {
                       labelText: '전화번호',
                       hintText: '전화번호를 숫자만 입력하세요.',
                       textInputType: TextInputType.phone,
+                      controller: phoneController,
                     ),
                   ),
                   SizedBox(
@@ -145,6 +163,7 @@ class _JoinPageState extends State<JoinPage> {
                       labelText: '이메일',
                       hintText: '이메일을 입력하세요.',
                       textInputType: TextInputType.emailAddress,
+                      controller: emailController,
                     ),
                   ),
                   SizedBox(
@@ -158,6 +177,7 @@ class _JoinPageState extends State<JoinPage> {
                       labelText: '나이',
                       hintText: '나이를 숫자만 입력하세요.',
                       textInputType: TextInputType.number,
+                      controller: ageController,
                     ),
                   ),
                   SizedBox(
@@ -223,6 +243,21 @@ class _JoinPageState extends State<JoinPage> {
                         buttonText: '회원가입',
                         iconData: Icons.account_box,
                         onPressed: () {
+                          setState(() {
+                            id = idController.text;
+                            pw = pwController.text;
+                            name = nameController.text;
+                            phone = phoneController.text;
+                            email = emailController.text;
+                            age = int.tryParse(ageController.text);
+                          });
+                          print(id);
+                          print(pw);
+                          print(name);
+                          print(phone);
+                          print(email);
+                          print(age);
+                          // 키보드 drop, 화면 drop, SnackBar show up
                           FocusManager.instance.primaryFocus?.unfocus();
                           Future.delayed(const Duration(milliseconds:  300), () {
                             Navigator.pop(context);
@@ -242,7 +277,10 @@ class _JoinPageState extends State<JoinPage> {
                         elementColor: Colors.white,
                       ),
                     ],
-                  )
+                  ),
+                  SizedBox(
+                    height: phoneHeight * 0.041,
+                  ),
                 ],
               ),
             ),
