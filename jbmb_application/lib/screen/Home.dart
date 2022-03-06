@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:jbmb_application/screen/CommunityPage.dart';
+import 'package:jbmb_application/screen/HospitalPage.dart';
+import 'package:jbmb_application/screen/ShampooPage.dart';
 import 'package:jbmb_application/widget/MainDescription.dart';
 import '../widget/JBMBOutlinedButton.dart';
 import '../widget/NavigationDrawerWidget.dart';
@@ -134,7 +137,27 @@ class _HomeState extends State<Home> {
                                 JBMBOutlinedButton(
                                   buttonText: getButtonTextByIndex(_current),
                                   iconData: getIconDataByIndex(_current),
-                                  onPressed: (){},
+                                  onPressed: (){
+                                    switch(_current){
+                                      case 0:
+                                        break;
+                                      case 1:
+                                        Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (context) => ShampooPage(),
+                                        ));
+                                        break;
+                                      case 2:
+                                        Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (context) => HospitalPage(),
+                                        ));
+                                        break;
+                                      case 3:
+                                        Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (context) => CommunityPage(),
+                                        ));
+                                        break;
+                                    }
+                                  },
                                 ),
                               ],
                             ));
