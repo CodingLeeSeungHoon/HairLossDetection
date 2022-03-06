@@ -45,10 +45,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests() // 요청에 대한 사용권한 체크
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 //.antMatchers("/user/**").hasRole("USER")
-                .antMatchers("/user/account/edit/**").hasRole("USER")
-                .antMatchers("/diagnosis/**").hasRole("USER")
-                .antMatchers("/feedback/**").hasRole("USER")
-                .antMatchers("/border/**").hasRole("USER") // 회원정보 수정, 진단, 피드백, 게시판 접속하려면 로그인이 되어야 하게끔
+                .antMatchers("/user/account/logout").hasRole("USER")
+                .antMatchers("/user/diagnosis/**").hasRole("USER")
+                .antMatchers("/user/shampoo/**").hasRole("USER")
+                .antMatchers("/user/board/**").hasRole("USER") // 회원정보 수정, 진단, 피드백, 게시판 접속하려면 로그인이 되어야 하게끔
                 .anyRequest().permitAll() // 그 외 나머지 요청은 누구나 접근 가능
                 //.and()
                 //.anonymous().disable() 만약 누구나 사용 가능하게 해주려면 주석 제거하면 됨

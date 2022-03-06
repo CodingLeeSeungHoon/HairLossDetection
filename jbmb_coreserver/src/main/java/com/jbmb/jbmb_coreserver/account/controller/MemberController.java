@@ -25,12 +25,6 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-    // 회원가입 시 아이디 중복 체크
-    @GetMapping("/check-duplicate/id/{id}/")
-    public Boolean isAlreadyID(@RequestParam String id){
-        return memberService.checkIdAlready(id);
-    }
-
     // 회원가입
     @PostMapping("/signup")
     public String joinInJBMB(@RequestBody Member user) {
