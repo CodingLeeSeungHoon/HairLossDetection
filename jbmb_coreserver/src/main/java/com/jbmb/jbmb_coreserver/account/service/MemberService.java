@@ -40,16 +40,20 @@ public class MemberService {
     /**
      * 회원가입 버튼 클릭 시
      * @param user
-     * @return 아이디
+     * @return {결과 코드, 에러 발생 코드}
      */
     public String joinService(Member user){
+        if (!checkIdAlready(user.getId())) return "{ \"resultCode\" : 0, \"errorCode\" : 0 }"; // 중복 체크
         return memberRepository.save(Member.builder()
+                .userNum(user.getUserNum())
                 .id(user.getId())
-                .email(user.getEmail())
                 .password(passwordEncoder.encode(user.getPassword()))
-                .phoneNumber(user.getPhoneNumber())
+                .name(user.getName())
+                .email(user.getEmail())
+                .phone(user.getPhone())
                 .sex(user.getSex())
                 .age(user.getAge())
+                .hairType(user.getHairType())
                 .roles(Collections.singletonList("ROLE_USER")) // 최초 가입시 USER 로 설정
                 .build()).getId();
     }

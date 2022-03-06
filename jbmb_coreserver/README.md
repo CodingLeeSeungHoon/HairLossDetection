@@ -14,39 +14,42 @@
    │  │               │   │   └── WebSecurityConfig.java
    │  │               │   ├── controller
    │  │               │   │   └── MemberController.java
-   │  │               │   ├── dao
    │  │               │   ├── domain
    │  │               │   │   └── Member.java
    │  │               │   ├── dto
-   │  │               │   │   └── JoinForm.java
+   │  │               │   │   └── UserRequestDto.java
    │  │               │   ├── jwt
    │  │               │   │   ├── JwtAuthenticationFilter.java
    │  │               │   │   └── JwtTokenProvider.java
    │  │               │   ├── repository
    │  │               │   │   └── MemberRepository.java
    │  │               │   └── service
-   │  │               │   │   ├── CustomUserDetailService.java
+   │  │               │       ├── CustomUserDetailService.java
    │  │               │       └── MemberService.java
-   │  │               ├── board
-   │  │               │   ├── controller
-   │  │               │   ├── dao
-   │  │               │   ├── domain
-   │  │               │   ├── dto
-   │  │               │   ├── repository
-   │  │               │   └── service
    │  │               ├── diagnosis
    │  │               │   ├── controller
-   │  │               │   ├── dao
+   │  │               │   │   └── DiagnosisController.java
    │  │               │   ├── domain
+   │  │               │   │   └── Diagnosis.java
    │  │               │   ├── dto
+   │  │               │   │   └── DiagnosisRequestDto.java
    │  │               │   ├── repository
+   │  │               │   │   └── DiagnosisRepository.java
    │  │               │   └── service
-   │  │               └── feedback
-   │  │                   ├── controller
-   │  │                   ├── dao
-   │  │                   ├── domain
-   │  │                   ├── dto
-   │  │                   ├── repository
-   │  │                   └── service
-   │  └── resources                 
-   │      └── application.properties
+   │  │               │       └── DiagnosisService.java
+   │  │               ├── feedback
+   │  │               │   ├── controller
+   │  │               │   │   └── FeedbackController.java
+   │  │               │   └── service
+   │  │               │       └── FeedbackService.java
+   │  │               ├── board
+   │  │               │   ├── controller
+   │  │               │   │   └── BoardController.java
+   │  │               │   ├── domain
+   │  │               │   │   └── Board.java
+   │  │               │   ├── dto
+   │  │               │   │   └── BoardRequestDto.java
+   │  │               │   ├── repository
+   │  │               │   │   └── BoardRepository.java
+   │  │               │   └── service
+   │  │               │       └── BoardService.java

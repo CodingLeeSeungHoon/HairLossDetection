@@ -21,24 +21,32 @@ import java.util.stream.Collectors;
 public class Member implements UserDetails {
 
     @Id
-    //@Column(nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer userNum;
+
+    @Column(length = 20, nullable = false, unique = true, updatable = false)
     private String id;
 
-    @Column(length = 100, nullable = false, unique = true)
-    private String email;
-
-    @Column(length = 100, nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String password;
 
-    @Column(nullable = false)
-    private String phoneNumber;
+    @Column(length = 20, nullable = false)
+    private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT", unique = true)
+    private String email;
+
+    @Column(length = 16, nullable = false)
+    private String phone;
+
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
     private String sex;
 
     @Column(nullable = false)
     private Integer age;
 
+    @Column(nullable = false)
+    private Integer hairType;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
