@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jbmb_application/screen/JoinPage.dart';
+import 'package:jbmb_application/screen/LoginedHome.dart';
 import 'package:jbmb_application/widget/JBMBBigLogo.dart';
 import 'package:jbmb_application/widget/JBMBOutlinedButton.dart';
 import 'package:jbmb_application/widget/JBMBTextField.dart';
@@ -72,7 +73,12 @@ class LoginPage extends StatelessWidget {
                     JBMBOutlinedButton(
                       buttonText: '로그인',
                       iconData: Icons.login,
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => LoginedHome(),
+                        ));
+                      },
                     ),
                     JBMBOutlinedButton(
                       buttonText: '회원가입',
