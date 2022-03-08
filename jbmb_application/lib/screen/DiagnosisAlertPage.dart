@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jbmb_application/screen/LoginedHome.dart';
-import 'package:jbmb_application/screen/SurveyPage1.dart';
+import 'package:jbmb_application/screen/SurveyCustomPage.dart';
+import 'package:jbmb_application/screen/SurveyPages.dart';
 
 import '../widget/JBMBBigLogo.dart';
 
@@ -102,11 +103,11 @@ class _DiagnosisAlertPageState extends State<DiagnosisAlertPage> {
                               '진단 이외의 목적으로 사용하지 않을 것을 약속드립니다.\n')),
                       Step(
                         title: Text('3. 진단 유의 사항'),
-                        content:
-                            Text('제발모발(JBMB)에서 제공하는 자가진단 서비스는 공식적인 의료법에 의한 진단이 아닌 '
-                                'AI 이미지 분류를 통한 자가 진단이므로 의료적 효력이 없습니다. \n\n'
-                                '따라서 정확한 진료와 치료를 위해서는 가까운 병원을 내원하는 것을 권장합니다.\n\n'
-                                '최종 확인 버튼을 누르면, 자가진단이 시작됩니다.\n'),
+                        content: Text(
+                            '제발모발(JBMB)에서 제공하는 자가진단 서비스는 공식적인 의료법에 의한 진단이 아닌 '
+                            'AI 이미지 분류를 통한 자가 진단이므로 의료적 효력이 없습니다. \n\n'
+                            '따라서 정확한 진료와 치료를 위해서는 가까운 병원을 내원하는 것을 권장합니다.\n\n'
+                            '최종 확인 버튼을 누르면, 자가진단이 시작됩니다.\n'),
                       )
                     ],
                     currentStep: _currentStep,
@@ -116,8 +117,9 @@ class _DiagnosisAlertPageState extends State<DiagnosisAlertPage> {
                           _currentStep += 1;
                         });
                       } else {
+                        Navigator.pop(context);
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => SurveyPage1(),
+                          builder: (context) => SurveyPage1(qNum: 'Q1.', question: '\n하루에 빠지는 모발 양이 100개 이상이다.',),
                         ));
                       }
                     },
@@ -141,7 +143,8 @@ class _DiagnosisAlertPageState extends State<DiagnosisAlertPage> {
                                     TextButton(
                                         onPressed: () {
                                           Navigator.pop(context);
-                                          Navigator.of(context).push(MaterialPageRoute(
+                                          Navigator.of(context)
+                                              .push(MaterialPageRoute(
                                             builder: (context) => LoginedHome(),
                                           ));
                                         },
