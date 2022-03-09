@@ -38,6 +38,7 @@ dependencies:
   path_provider: ^2.0.2
   flutter_image_compress: ^1.0.0
   camera: ^0.9.4+14
+  syncfusion_flutter_gauges: ^19.4.55
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
