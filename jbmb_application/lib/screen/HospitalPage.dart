@@ -1,7 +1,10 @@
 import "package:flutter/material.dart";
 
-import '../widget/NavigationDrawerWidget.dart';
+import '../widget/LoginedNavigationDrawerWidget.dart';
 
+/// 2022.03.08 이승훈
+/// 위치 기반 탈모 전문 병원 안내 페이지
+/// NaverMapsAPI 사용
 class HospitalPage extends StatefulWidget {
   const HospitalPage({Key? key}) : super(key: key);
 
@@ -24,7 +27,7 @@ class _HospitalPageState extends State<HospitalPage> {
       // sideDrawer
       endDrawer: Container(
         width: phoneWidth * 0.55,
-        child: NavigationDrawerWidget(),
+        child: LoginedNavigationDrawerWidget(),
       ),
       // 전체 화면 바탕색 지정
       backgroundColor: Colors.white,

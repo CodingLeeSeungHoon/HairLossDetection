@@ -6,6 +6,8 @@ import 'package:jbmb_application/screen/SurveyPages.dart';
 
 import '../widget/JBMBBigLogo.dart';
 
+/// 2022.03.08 이승훈
+/// 무료 자가진단 입장 시, 주의사항에 대해 설명하는 페이지
 class DiagnosisAlertPage extends StatefulWidget {
   const DiagnosisAlertPage({Key? key}) : super(key: key);
 
@@ -14,15 +16,12 @@ class DiagnosisAlertPage extends StatefulWidget {
 }
 
 class _DiagnosisAlertPageState extends State<DiagnosisAlertPage> {
+  // Stepper Index
   int _currentStep = 0;
 
   @override
   Widget build(BuildContext context) {
-    double phoneWidth = MediaQuery.of(context).size.width;
-    double phoneHeight = MediaQuery.of(context).size.height;
-    double phonePadding = MediaQuery.of(context).padding.top;
-
-    return WillPopScope(
+    return WillPopScope( // Disable BackButton
         child: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
@@ -52,18 +51,19 @@ class _DiagnosisAlertPageState extends State<DiagnosisAlertPage> {
             centerTitle: true,
             // AppBar 그림자 제거
           ),
-          body: Scrollbar(
+          body: SingleChildScrollView(
             child: Container(
               alignment: Alignment.center,
-              padding: EdgeInsets.all(8),
-              margin: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
+              margin: const EdgeInsets.all(8),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  JBMBBigLogo(),
+                  const JBMBBigLogo(),
                   Stepper(
-                    physics: NeverScrollableScrollPhysics(),
+                    // physics: const NeverScrollableScrollPhysics(),
+                    // Custom Stepper Button - controlsBuilder
                     controlsBuilder: (context, controlBuilder) {
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -117,10 +117,19 @@ class _DiagnosisAlertPageState extends State<DiagnosisAlertPage> {
                           _currentStep += 1;
                         });
                       } else {
+                        // when confirm all step
                         Navigator.pop(context);
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => SurveyPage1(qNum: 'Q1.', question: '\n하루에 빠지는 모발 양이 100개 이상이다.',),
-                        ));
+                        // delay for button animation
+                        Future.delayed(const Duration(milliseconds: 250), (){
+                          Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation1, animation2) => const SurveyPage1(qNum: 'Q1.', question: '\n하루에 빠지는 모발 양이 100개 이상이다.',),
+                              transitionDuration: Duration.zero,
+                              reverseTransitionDuration: Duration.zero,
+                            ),
+                          );
+                        });
                       }
                     },
                     onStepCancel: () {
@@ -132,23 +141,24 @@ class _DiagnosisAlertPageState extends State<DiagnosisAlertPage> {
                         showDialog(
                             context: context,
                             builder: (_) => CupertinoAlertDialog(
-                                  title: Text("주의"),
-                                  content: Text("현재 화면을 나가시겠습니까?"),
+                              // ios friendly - CupertinoAlertDialog
+                                  title: const Text("주의"),
+                                  content: const Text("현재 화면을 나가시겠습니까?"),
                                   actions: [
                                     TextButton(
                                         onPressed: () {
                                           Navigator.pop(context);
                                         },
-                                        child: Text("아니오")),
+                                        child: const Text("아니오")),
                                     TextButton(
                                         onPressed: () {
                                           Navigator.pop(context);
                                           Navigator.of(context)
                                               .push(MaterialPageRoute(
-                                            builder: (context) => LoginedHome(),
+                                            builder: (context) => const LoginedHome(),
                                           ));
                                         },
-                                        child: Text("네")),
+                                        child: const Text("네")),
                                   ],
                                 ));
                       }

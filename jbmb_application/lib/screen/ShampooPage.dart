@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../widget/NavigationDrawerWidget.dart';
+import '../widget/LoginedNavigationDrawerWidget.dart';
 
+/// 2022.03.08 이승훈
+/// 두피에 따른 샴푸 검색 및 구매 페이지 유도
 class ShampooPage extends StatefulWidget {
   const ShampooPage({Key? key}) : super(key: key);
 
@@ -24,7 +26,7 @@ class _ShampooPageState extends State<ShampooPage> {
       // sideDrawer
       endDrawer: Container(
         width: phoneWidth * 0.55,
-        child: NavigationDrawerWidget(),
+        child: LoginedNavigationDrawerWidget(),
       ),
       // 전체 화면 바탕색 지정
       backgroundColor: Colors.white,

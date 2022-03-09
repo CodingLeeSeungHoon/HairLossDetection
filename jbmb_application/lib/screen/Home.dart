@@ -7,12 +7,10 @@ import '../widget/JBMBOutlinedButton.dart';
 import '../widget/NavigationDrawerWidget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
+/// 홈 메인 화면 구현
+/// 2022.02.27 이승훈 개발
+/// AppBar - 중간 문구 - 구분선 - 슬라이더(이미지 + 버튼) 구조
 class Home extends StatefulWidget {
-  /// 홈 메인 화면 구현
-  /// 2022.02.27 이승훈 개발
-  /// AppBar - 중간 문구 - 구분선 - 슬라이더(이미지 + 버튼) 구조
-  /// TODO : Refactoring
-
   const Home({Key? key}) : super(key: key);
 
   @override
@@ -213,7 +211,7 @@ class _HomeState extends State<Home> {
         retval = "무료 진단 받기";
         break;
       case 1:
-        retval = "내게 맞는 샴푸 보기";
+        retval = "추천 샴푸 보기";
         break;
       case 2:
         retval = "주변 병원 탐색";

@@ -2,10 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jbmb_application/widget/JBMBBigButton.dart';
 
+/// 2022.03.08 이승훈
+/// 설문조사 페이지 클래스화
 class SurveyCustomPage{
+  // question number with 'Q' + number + '.'
   final String qNum;
+  // question script
   final String question;
+  // when press button 'O'
   final VoidCallback? onPressedYes;
+  // when press button 'X'
   final VoidCallback? onPressedNo;
 
   const SurveyCustomPage({
@@ -16,6 +22,7 @@ class SurveyCustomPage{
     this.onPressedNo
   });
 
+  /// build Custom Survey UI in this [context]
   Widget build(BuildContext context) {
     return WillPopScope(
         child: Scaffold(

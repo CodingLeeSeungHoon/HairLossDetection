@@ -1,3 +1,6 @@
+/// 2022.03.08 이승훈
+/// JBMBRegister
+/// 회원가입 각 필드 값 모두 저장하는 객체, API RequestBody로 JSON Parsing을 거쳐 사용될 예정
 class JBMBRegister{
   String? _id;
   String? _pw;

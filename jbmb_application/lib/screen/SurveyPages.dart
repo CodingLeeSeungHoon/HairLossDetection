@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jbmb_application/screen/SurveyCustomPage.dart';
+import 'package:jbmb_application/screen/UploadImageGuidePage.dart';
 
+/// 2022.03.08 이승훈
+/// 설문조사 페이지 1
 class SurveyPage1 extends StatelessWidget {
   final String qNum;
   final String question;
@@ -48,6 +51,8 @@ class SurveyPage1 extends StatelessWidget {
   }
 }
 
+/// 2022.03.08 이승훈
+/// 설문조사 페이지 2
 class SurveyPage2 extends StatelessWidget {
   final String qNum;
   final String question;
@@ -95,6 +100,8 @@ class SurveyPage2 extends StatelessWidget {
   }
 }
 
+/// 2022.03.08 이승훈
+/// 설문조사 페이지 3
 class SurveyPage3 extends StatelessWidget {
   final String qNum;
   final String question;
@@ -142,6 +149,8 @@ class SurveyPage3 extends StatelessWidget {
   }
 }
 
+/// 2022.03.08 이승훈
+/// 설문조사 페이지 4
 class SurveyPage4 extends StatelessWidget {
   final String qNum;
   final String question;
@@ -189,6 +198,8 @@ class SurveyPage4 extends StatelessWidget {
   }
 }
 
+/// 2022.03.08 이승훈
+/// 설문조사 페이지 5
 class SurveyPage5 extends StatelessWidget {
   final String qNum;
   final String question;
@@ -236,6 +247,8 @@ class SurveyPage5 extends StatelessWidget {
   }
 }
 
+/// 2022.03.08 이승훈
+/// 설문조사 페이지 6
 class SurveyPage6 extends StatelessWidget {
   final String qNum;
   final String question;
@@ -283,6 +296,8 @@ class SurveyPage6 extends StatelessWidget {
   }
 }
 
+/// 2022.03.08 이승훈
+/// 설문조사 페이지 7
 class SurveyPage7 extends StatelessWidget {
   final String qNum;
   final String question;
@@ -330,6 +345,8 @@ class SurveyPage7 extends StatelessWidget {
   }
 }
 
+/// 2022.03.08 이승훈
+/// 설문조사 페이지 8
 class SurveyPage8 extends StatelessWidget {
   final String qNum;
   final String question;
@@ -377,6 +394,8 @@ class SurveyPage8 extends StatelessWidget {
   }
 }
 
+/// 2022.03.08 이승훈
+/// 설문조사 페이지 9
 class SurveyPage9 extends StatelessWidget {
   final String qNum;
   final String question;
@@ -424,6 +443,8 @@ class SurveyPage9 extends StatelessWidget {
   }
 }
 
+/// 2022.03.08 이승훈
+/// 설문조사 페이지 10
 class SurveyPage10 extends StatelessWidget {
   final String qNum;
   final String question;
@@ -437,8 +458,28 @@ class SurveyPage10 extends StatelessWidget {
       qNum: qNum,
       question: question,
       onPressedYes: () {
+        Future.delayed(const Duration(milliseconds: 250), (){
+          Navigator.pushReplacement(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (context, animation1, animation2) => const UploadImageGuidePage(),
+              transitionDuration: Duration.zero,
+              reverseTransitionDuration: Duration.zero,
+            ),
+          );
+        });
       },
       onPressedNo: () {
+        Future.delayed(const Duration(milliseconds: 250), (){
+          Navigator.pushReplacement(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (context, animation1, animation2) => const UploadImageGuidePage(),
+              transitionDuration: Duration.zero,
+              reverseTransitionDuration: Duration.zero,
+            ),
+          );
+        });
       },
     );
     return surveyPageMock.build(context);

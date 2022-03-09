@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:jbmb_application/widget/JBMBBigLogo.dart';
 import 'package:jbmb_application/widget/JBMBOutlinedButton.dart';
 
+/// 2022.03.08 이승훈
+/// JBMB 정보 페이지
+/// 어플리케이션 정보 페이지
 class InfoPage extends StatelessWidget {
   const InfoPage({Key? key}) : super(key: key);
 

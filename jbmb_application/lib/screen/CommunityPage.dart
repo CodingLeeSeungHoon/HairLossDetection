@@ -1,7 +1,11 @@
 import "package:flutter/material.dart";
 
-import '../widget/NavigationDrawerWidget.dart';
+import '../widget/LoginedNavigationDrawerWidget.dart';
 
+/// 2022.03.08 이승훈
+/// JBMB 커뮤니티 페이지
+/// ListView 형식으로 작성할 예정
+/// JBMBCommunityManager를 통해 DB상의 게시글을 불러옴.
 class CommunityPage extends StatefulWidget {
   const CommunityPage({Key? key}) : super(key: key);
 
@@ -24,7 +28,7 @@ class _CommunityPageState extends State<CommunityPage> {
       // sideDrawer
       endDrawer: Container(
         width: phoneWidth * 0.55,
-        child: NavigationDrawerWidget(),
+        child: LoginedNavigationDrawerWidget(),
       ),
       // 전체 화면 바탕색 지정
       backgroundColor: Colors.white,

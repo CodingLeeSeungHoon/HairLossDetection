@@ -6,6 +6,7 @@ import 'package:jbmb_application/screen/LoginPage.dart';
 import 'package:jbmb_application/screen/ShampooPage.dart';
 
 import '../screen/CommunityPage.dart';
+import '../screen/Home.dart';
 import '../screen/JoinPage.dart';
 
 /// 2020.03.07 이승훈 개발
@@ -89,7 +90,17 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
     switch (index) {
       case 0:
         // logout
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        // Navigator.of(context).popUntil((route) => route.isFirst);
+        Future.delayed(const Duration(milliseconds: 250), (){
+          Navigator.pushReplacement(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (context, animation1, animation2) => const Home(),
+              transitionDuration: Duration.zero,
+              reverseTransitionDuration: Duration.zero,
+            ),
+          );
+        });
         break;
       case 1:
         Navigator.of(context).push(MaterialPageRoute(

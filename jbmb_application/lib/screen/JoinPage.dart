@@ -1,12 +1,14 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:jbmb_application/service/JBMBRegisterManager.dart';
 import 'package:jbmb_application/widget/JBMBBigLogo.dart';
 import 'package:jbmb_application/widget/JBMBOutlinedButton.dart';
 import 'package:jbmb_application/widget/JBMBTextField.dart';
 
-enum Gender { man, women }
-
+/// 2022.03.08 이승훈
+/// 회원가입 페이지
+/// JBMBRegisterManager 사용 로직 관리
 class JoinPage extends StatefulWidget {
   const JoinPage({Key? key}) : super(key: key);
 
@@ -17,6 +19,7 @@ class JoinPage extends StatefulWidget {
 }
 
 class _JoinPageState extends State<JoinPage> {
+  JBMBRegisterManager jbmbRegisterManager = JBMBRegisterManager();
   String _selectedGender = 'male';
   String id = '';
   String pw = '';
@@ -48,10 +51,13 @@ class _JoinPageState extends State<JoinPage> {
           leading: IconButton(
             icon: const Icon(Icons.cancel),
             onPressed: () {
-              FocusManager.instance.primaryFocus?.unfocus();
-              Future.delayed(const Duration(milliseconds: 300), () {
-                Navigator.pop(context);
-              });
+              if (MediaQuery.of(context).viewInsets.bottom != 0) {
+                FocusManager.instance.primaryFocus?.unfocus();
+              } else {
+                Future.delayed(const Duration(milliseconds: 180), () {
+                  Navigator.pop(context);
+                });
+              }
             },
           ),
           iconTheme: const IconThemeData(
