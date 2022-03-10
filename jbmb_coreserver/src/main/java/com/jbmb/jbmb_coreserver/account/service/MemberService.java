@@ -3,14 +3,22 @@ package com.jbmb.jbmb_coreserver.account.service;
 import com.jbmb.jbmb_coreserver.account.domain.Member;
 import com.jbmb.jbmb_coreserver.account.jwt.JwtTokenProvider;
 import com.jbmb.jbmb_coreserver.account.repository.MemberRepository;
+import io.netty.util.Constant;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.openjsse.sun.security.ssl.SSLLogger;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -18,7 +26,7 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
-
+    private final RedisTemplate<String, Object> redisTemplate;
     /**
      *
      * @param id
@@ -70,5 +78,20 @@ public class MemberService {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
         return jwtTokenProvider.createToken(member.getUsername(), member.getRoles());
+    }
+
+    public String logoutService(HttpServletRequest req){
+        String token = jwtTokenProvider.resolveToken(req).substring(7);
+        System.out.println("토큰 내용은 : " + token); // 임시
+        if (jwtTokenProvider.checkAlreadyLogout(token)) {
+            Date expirationDate = jwtTokenProvider.getExpirationDate(token);
+            redisTemplate.opsForValue().set(
+                    token, "l",
+                    expirationDate.getTime() - System.currentTimeMillis(),
+                    TimeUnit.MILLISECONDS );
+            log.info("redis value : "+redisTemplate.opsForValue().get(token));
+            System.out.println("처음 로그아웃 시도인거지");
+        }
+        return "test";
     }
 }
