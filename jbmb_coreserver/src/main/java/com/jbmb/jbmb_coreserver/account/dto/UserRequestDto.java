@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 @Slf4j
 @ToString
-public class JoinForm {
+public class UserRequestDto {
     /**
      * ID :
      * PW :
