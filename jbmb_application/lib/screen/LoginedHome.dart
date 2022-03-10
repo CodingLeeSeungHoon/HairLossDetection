@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:jbmb_application/screen/CommunityPage.dart';
+import 'package:jbmb_application/screen/DiagnosisAlertPage.dart';
 import 'package:jbmb_application/screen/HospitalPage.dart';
 import 'package:jbmb_application/screen/ShampooPage.dart';
+import 'package:jbmb_application/widget/LoginedMainDescription.dart';
+import 'package:jbmb_application/widget/LoginedNavigationDrawerWidget.dart';
 import 'package:jbmb_application/widget/MainDescription.dart';
 import '../widget/JBMBOutlinedButton.dart';
 import '../widget/NavigationDrawerWidget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
-class Home extends StatefulWidget {
+class LoginedHome extends StatefulWidget {
   /// 홈 메인 화면 구현
-  /// 2022.02.27 이승훈 개발
+  /// 2022.03.07 이승훈 개발
   /// AppBar - 중간 문구 - 구분선 - 슬라이더(이미지 + 버튼) 구조
   /// TODO : Refactoring
 
-  const Home({Key? key}) : super(key: key);
+  const LoginedHome({Key? key}) : super(key: key);
 
   @override
-  _HomeState createState() => _HomeState();
+  _LoginedHomeState createState() => _LoginedHomeState();
 }
 
-class _HomeState extends State<Home> {
+class _LoginedHomeState extends State<LoginedHome> {
   int _current = 0;
   List imgList = [
     'images/hair-comb.png',
@@ -40,16 +43,17 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+
     double phoneWidth = MediaQuery.of(context).size.width;
     double phoneHeight = MediaQuery.of(context).size.height;
     double phonePadding = MediaQuery.of(context).padding.top;
 
-    return Scaffold(
+    return WillPopScope(child: Scaffold(
         key: _scaffoldKey,
         // sideDrawer
         endDrawer: Container(
           width: phoneWidth * 0.55,
-          child: NavigationDrawerWidget(),
+          child: LoginedNavigationDrawerWidget(),
         ),
         // 전체 화면 바탕색 지정
         backgroundColor: Colors.white,
@@ -81,7 +85,7 @@ class _HomeState extends State<Home> {
         ),
         // AppBar를 제외한 나머지 위젯 (중간문구 - 구분선 - 슬라이더)
         body: Container(
-            // 가운데 정렬
+          // 가운데 정렬
             alignment: AlignmentDirectional.center,
             // 패딩과 마진 값
             padding: EdgeInsets.all(phonePadding * 0.33),
@@ -89,8 +93,7 @@ class _HomeState extends State<Home> {
             // 내부 위젯 레이아웃 세로 배치
             child: Column(
               children: <Widget>[
-                // TODO: MainDescription 로그인 여부에 따라 내용 변경
-                const MainDescription(),
+                const LoginedMainDescription(),
                 SizedBox(
                   height: phoneHeight * 0.02,
                 ),
@@ -98,9 +101,7 @@ class _HomeState extends State<Home> {
                   thickness: 1,
                   color: Colors.black45,
                 ),
-                SizedBox(
-                  height: phoneHeight * 0.03,
-                ),
+                SizedBox(height: phoneHeight * 0.03,),
                 CarouselSlider(
                   options: CarouselOptions(
                     height: phoneHeight * 0.55,
@@ -138,20 +139,8 @@ class _HomeState extends State<Home> {
                                 JBMBOutlinedButton(
                                   buttonText: getButtonTextByIndex(_current),
                                   iconData: getIconDataByIndex(_current),
-                                  onPressed: () {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                            duration:
-                                                const Duration(seconds: 1),
-                                            content: Row(
-                                              children: const [
-                                                Icon(
-                                                  Icons.warning,
-                                                  color: Colors.redAccent,
-                                                ),
-                                                Text("  로그인이 필요한 메뉴입니다!")
-                                              ],
-                                            )));
+                                  onPressed: (){
+                                    movePageByCurrentIndex(_current);
                                   },
                                 ),
                               ],
@@ -169,23 +158,29 @@ class _HomeState extends State<Home> {
                     return Container(
                       width: phoneWidth * 0.04,
                       height: phoneHeight * 0.014,
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 2.0),
+                      margin:
+                      const EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color:
-                              _current == index ? Colors.black : Colors.grey),
+                          _current == index ? Colors.black : Colors.grey),
                     );
                   }),
                 )
               ],
-            )));
+            ))),
+        onWillPop: (){
+      return Future(() => false);
+        });
   }
 
   /// Move Page by [currentIndex] when clicked CarouselSlider Button
-  void movePageByCurrentIndex(int currentIndex) {
-    switch (currentIndex) {
+  void movePageByCurrentIndex(int currentIndex){
+    switch(currentIndex) {
       case 0:
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => DiagnosisAlertPage(),
+        ));
         break;
       case 1:
         Navigator.of(context).push(MaterialPageRoute(
@@ -238,9 +233,9 @@ class _HomeState extends State<Home> {
           children: const [
             Text(
               "자가진단 및 AI 이미지 진단으로\n"
-              "간단하게 탈모 상태를 알아보세요",
+                  "간단하게 탈모 상태를 알아보세요",
               style: TextStyle(
-                  fontFamily: fontFamily, fontSize: fontSize, color: color),
+                  fontFamily: fontFamily, fontSize: fontSize, color: color,),
               textAlign: TextAlign.center,
             ),
           ],
@@ -251,7 +246,7 @@ class _HomeState extends State<Home> {
           children: const [
             Text(
               "자신의 두피 타입에 따라\n"
-              "적절한 샴푸를 추천해드려요",
+                  "적절한 샴푸를 추천해드려요",
               style: TextStyle(
                   fontFamily: fontFamily, fontSize: fontSize, color: color),
               textAlign: TextAlign.center,
@@ -264,7 +259,7 @@ class _HomeState extends State<Home> {
           children: const [
             Text(
               "근처 탈모 전문 병원을\n"
-              "찾아보세요",
+                  "찾아보세요",
               style: TextStyle(
                   fontFamily: fontFamily, fontSize: fontSize, color: color),
               textAlign: TextAlign.center,
@@ -277,7 +272,7 @@ class _HomeState extends State<Home> {
           children: const [
             Text(
               "비슷한 고민이 있는 회원들과\n"
-              "다양한 이야기를 나눠요",
+                  "다양한 이야기를 나눠요",
               style: TextStyle(
                   fontFamily: fontFamily, fontSize: fontSize, color: color),
               textAlign: TextAlign.center,
@@ -294,19 +289,19 @@ class _HomeState extends State<Home> {
     IconData? retval;
     switch (index) {
       case 0:
-        // 무료 진단
+      // 무료 진단
         retval = Icons.check_box_rounded;
         return retval;
       case 1:
-        // 샴푸 추천
+      // 샴푸 추천
         retval = Icons.find_in_page_rounded;
         return retval;
       case 2:
-        // 병원 추천
+      // 병원 추천
         retval = Icons.local_hospital;
         return retval;
       case 3:
-        // 커뮤니티
+      // 커뮤니티
         retval = Icons.group;
         return retval;
     }

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:jbmb_application/screen/DiagnosisAlertPage.dart';
+import 'package:jbmb_application/screen/HospitalPage.dart';
 import 'package:jbmb_application/screen/InfoPage.dart';
 import 'package:jbmb_application/screen/LoginPage.dart';
+import 'package:jbmb_application/screen/ShampooPage.dart';
 
+import '../screen/CommunityPage.dart';
 import '../screen/JoinPage.dart';
 
-class NavigationDrawerWidget extends StatelessWidget {
+/// 2020.03.07 이승훈 개발
+class LoginedNavigationDrawerWidget extends StatelessWidget {
   final padding = EdgeInsets.symmetric(horizontal: 3);
 
   @override
@@ -24,17 +29,33 @@ class NavigationDrawerWidget extends StatelessWidget {
               height: phoneHeight * 0.05,
             ),
             buildMenuItem(
-                text: '로그인',
-                icon: Icons.login,
+                text: '로그아웃',
+                icon: Icons.logout,
                 onClicked: () => selectedItem(context, 0)),
             buildMenuItem(
-                text: '회원가입',
-                icon: Icons.account_box,
+                text: '무료 자가진단',
+                icon: Icons.check_box_rounded,
                 onClicked: () => selectedItem(context, 1)),
+            buildMenuItem(
+                text: '자가진단 기록',
+                icon: Icons.book_outlined,
+                onClicked: () => selectedItem(context, 2)),
+            buildMenuItem(
+                text: '내게 맞는 샴푸 검색',
+                icon: Icons.search,
+                onClicked: () => selectedItem(context, 3)),
+            buildMenuItem(
+                text: '근처 탈모 병원 찾기',
+                icon: Icons.local_hospital,
+                onClicked: () => selectedItem(context, 4)),
+            buildMenuItem(
+                text: 'JBMB 커뮤니티',
+                icon: Icons.group,
+                onClicked: () => selectedItem(context, 5)),
             buildMenuItem(
                 text: '앱 정보',
                 icon: Icons.info,
-                onClicked: () => selectedItem(context, 2)),
+                onClicked: () => selectedItem(context, 6)),
           ],
         ),
       ),
@@ -67,16 +88,38 @@ class NavigationDrawerWidget extends StatelessWidget {
 
     switch (index) {
       case 0:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => LoginPage(),
-        ));
+        // logout
+        Navigator.of(context).popUntil((route) => route.isFirst);
         break;
       case 1:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => JoinPage(),
+          builder: (context) => DiagnosisAlertPage(),
         ));
+        // diagnose
         break;
       case 2:
+        // diagnose log
+        break;
+      case 3:
+      // shampoo
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ShampooPage(),
+        ));
+        break;
+      case 4:
+      // hospital
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => HospitalPage(),
+        ));
+        break;
+      case 5:
+      // jbmb community
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => CommunityPage(),
+        ));
+        break;
+      case 6:
+      // info
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => InfoPage(),
         ));
