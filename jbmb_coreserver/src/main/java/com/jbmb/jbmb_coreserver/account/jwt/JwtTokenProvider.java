@@ -4,10 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.netty.util.Constant;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +17,6 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
-@Slf4j
 @RequiredArgsConstructor
 @Component
 public class JwtTokenProvider {
@@ -31,8 +27,7 @@ public class JwtTokenProvider {
     private long tokenValidTime = 30 * 60 * 1000L;
 
     private final UserDetailsService userDetailsService;
-    private final RedisTemplate redisTemplate;
-    
+
     // 객체 초기화, secretKey를 Base64로 인코딩한다.
     @PostConstruct
     protected void init() {
@@ -66,8 +61,7 @@ public class JwtTokenProvider {
 
     // Request의 Header에서 token 값을 가져옵니다. "X-AUTH-TOKEN" : "TOKEN값'
     public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("Authorization");
-        //return request.getHeader("X-AUTH-TOKEN");
+        return request.getHeader("X-AUTH-TOKEN");
     }
 
     // 토큰의 유효성 + 만료일자 확인
@@ -76,31 +70,6 @@ public class JwtTokenProvider {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
             return !claims.getBody().getExpiration().before(new Date());
         } catch (RuntimeException e) {
-            return false;
-        }
-    }
-
-    public Date getExpirationDate(String jwtToken){
-        Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
-        return claims.getBody().getExpiration();
-    }
-
-    public boolean checkAlreadyLogout(String jwtToken) {
-
-        try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
-            boolean isNotExpire = claims.getBody().getExpiration().after(new Date());
-
-            if (null != redisTemplate.opsForValue().get(jwtToken)) {
-                log.info("이미 로그아웃 처리된 사용자");
-                System.out.println("이미 로그아웃");
-                return false;
-            }
-            return isNotExpire;
-        } catch(
-        Exception e) {
-            System.out.println("토큰이 좀 이상한듯");
-            log.info("token is not valid");
             return false;
         }
     }
