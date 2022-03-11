@@ -45,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests() // 요청에 대한 사용권한 체크
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 //.antMatchers("/user/**").hasRole("USER")
-                .antMatchers("/user/account/logout").hasRole("USER")
+                //.antMatchers("/user/account/logout").hasRole("USER")
                 .antMatchers("/user/diagnosis/**").hasRole("USER")
                 .antMatchers("/user/shampoo/**").hasRole("USER")
                 .antMatchers("/user/board/**").hasRole("USER") // 회원정보 수정, 진단, 피드백, 게시판 접속하려면 로그인이 되어야 하게끔
