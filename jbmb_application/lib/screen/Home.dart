@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:jbmb_application/screen/CommunityPage.dart';
+import 'package:jbmb_application/screen/HospitalPage.dart';
+import 'package:jbmb_application/screen/ShampooPage.dart';
 import 'package:jbmb_application/widget/MainDescription.dart';
 import '../widget/JBMBAppBars.dart';
 import '../widget/JBMBOutlinedButton.dart';
@@ -149,6 +152,7 @@ class _HomeState extends State<Home> {
               ],
             )));
   }
+
 
   /// display Button Text by [index]
   String getButtonTextByIndex(int index) {

@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:jbmb_application/object/JBMBMemberInfo.dart';
 import 'package:jbmb_application/object/JBMBRegisterResult.dart';

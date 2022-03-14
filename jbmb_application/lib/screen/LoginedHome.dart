@@ -51,6 +51,7 @@ class _LoginedHomeState extends State<LoginedHome> {
 
   @override
   Widget build(BuildContext context) {
+
     double phoneWidth = MediaQuery.of(context).size.width;
     double phoneHeight = MediaQuery.of(context).size.height;
     double phonePadding = MediaQuery.of(context).padding.top;
