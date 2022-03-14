@@ -5,6 +5,7 @@ import 'package:jbmb_application/screen/LoginedHome.dart';
 import 'package:jbmb_application/screen/SurveyCustomPage.dart';
 import 'package:jbmb_application/screen/SurveyPages.dart';
 
+import '../widget/JBMBAppBars.dart';
 import '../widget/JBMBBigLogo.dart';
 
 /// 2022.03.08 이승훈
@@ -29,33 +30,12 @@ class _DiagnosisAlertPageState extends State<DiagnosisAlertPage> {
         // Disable BackButton
         child: Scaffold(
           backgroundColor: Colors.white,
-          appBar: AppBar(
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-            leading: IconButton(
-              icon: const Icon(Icons.cancel),
-              onPressed: () {
-                FocusManager.instance.primaryFocus?.unfocus();
-                Future.delayed(const Duration(milliseconds: 300), () {
-                  Navigator.pop(context);
-                });
-              },
-            ),
-            iconTheme: const IconThemeData(
-              color: Colors.black,
-            ),
-            title: const Text(
-              "제발모발",
-              style: TextStyle(
-                  fontSize: 23,
-                  color: Colors.black,
-                  fontFamily: 'Gugi-Regular',
-                  fontWeight: FontWeight.bold),
-            ),
-            // AppBar 내 요소 가운데 정렬
-            centerTitle: true,
-            // AppBar 그림자 제거
-          ),
+          appBar: JBMBTransparentAppbar(onPressedCancel: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+            Future.delayed(const Duration(milliseconds: 300), () {
+              Navigator.pop(context);
+            });
+          }),
           body: SingleChildScrollView(
             child: Container(
               alignment: Alignment.center,

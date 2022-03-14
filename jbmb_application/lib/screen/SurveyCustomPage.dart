@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jbmb_application/widget/JBMBBigButton.dart';
 
+import '../widget/JBMBAppBars.dart';
+
 /// 2022.03.08 이승훈
 /// 설문조사 페이지 클래스화
 class SurveyCustomPage{
@@ -27,21 +29,7 @@ class SurveyCustomPage{
     return WillPopScope(
         child: Scaffold(
           backgroundColor: Colors.white,
-          appBar: AppBar(
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-            title: const Text(
-              "제발모발",
-              style: TextStyle(
-                  fontSize: 23,
-                  color: Colors.black,
-                  fontFamily: 'Gugi-Regular',
-                  fontWeight: FontWeight.bold),
-            ),
-            // AppBar 내 요소 가운데 정렬
-            centerTitle: true,
-            // AppBar 그림자 제거
-          ),
+          appBar: JBMBAppBarWithOutMenu(),
           body: Container(
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.all(8),

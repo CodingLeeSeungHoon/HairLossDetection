@@ -7,6 +7,7 @@ import '../object/JBMBLoginResult.dart';
 /// 2022.03.14 이승훈
 /// 로그인 컨트롤러
 class JBMBLoginManager{
+
   /// 로그인 요청하는 메소드
   /// ID, PW 담고 있는 [loginInput]을 파라미터로 받고,
   /// 로그인 결과(JBMBLoginResult)를 리턴한다.

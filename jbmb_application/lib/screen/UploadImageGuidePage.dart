@@ -3,6 +3,8 @@ import 'package:jbmb_application/object/JBMBMemberInfo.dart';
 import 'package:jbmb_application/screen/UploadImagePage.dart';
 import 'package:jbmb_application/widget/JBMBOutlinedButton.dart';
 
+import '../widget/JBMBAppBars.dart';
+
 class UploadImageGuidePage extends StatelessWidget {
   final JBMBMemberInfo jbmbMemberInfo;
   const UploadImageGuidePage({
@@ -13,26 +15,11 @@ class UploadImageGuidePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double phoneWidth = MediaQuery.of(context).size.width;
-    double phoneHeight = MediaQuery.of(context).size.height;
-    double phonePadding = MediaQuery.of(context).padding.top;
 
     return WillPopScope(
         child: Scaffold(
           backgroundColor: Colors.white,
-          appBar: AppBar(
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-            title: const Text(
-              "제발모발",
-              style: TextStyle(
-                  fontSize: 23,
-                  color: Colors.black,
-                  fontFamily: 'Gugi-Regular',
-                  fontWeight: FontWeight.bold),
-            ),
-            // AppBar 내 요소 가운데 정렬
-            centerTitle: true,
-          ),
+          appBar: JBMBAppBarWithOutMenu(),
           body: Container(
             alignment: Alignment.center,
             padding: const EdgeInsets.all(8),

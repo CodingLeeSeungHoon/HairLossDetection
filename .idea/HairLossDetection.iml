@@ -36,6 +36,12 @@
       <excludeFolder url="file://$MODULE_DIR$/jbmb_application/ios/.symlinks/plugins/camera/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/jbmb_application/ios/.symlinks/plugins/camera/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/jbmb_application/ios/.symlinks/plugins/camera/build" />
+      <excludeFolder url="file://$MODULE_DIR$/jbmb_application/ios/.symlinks/plugins/simple_s3/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/jbmb_application/ios/.symlinks/plugins/simple_s3/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/jbmb_application/ios/.symlinks/plugins/simple_s3/build" />
+      <excludeFolder url="file://$MODULE_DIR$/jbmb_application/ios/.symlinks/plugins/simple_s3/example/build" />
+      <excludeFolder url="file://$MODULE_DIR$/jbmb_application/ios/.symlinks/plugins/simple_s3/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/jbmb_application/ios/.symlinks/plugins/simple_s3/example/.pub" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

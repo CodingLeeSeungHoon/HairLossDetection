@@ -13,7 +13,7 @@ class JBMBRegisterManager {
     JBMBRegisterResult jbmbRegisterResult = JBMBRegisterResult();
     bool isInputValid = false;
 
-    switch(validRegisterInput(registerInput)){
+    switch(_validRegisterInput(registerInput)){
       case 0:
         // 유효성 검사 통과
         isInputValid = true;
@@ -56,7 +56,7 @@ class JBMBRegisterManager {
   /// 2 : ID / PW 4자리 이상 입력
   /// 3 : 핸드폰 번호 11자리, 앞 010 유지 확인
   /// 4 : 이메일 양식 맞는지 확인
-  int validRegisterInput(JBMBMemberInfo registerInput){
+  int _validRegisterInput(JBMBMemberInfo registerInput){
     String? inputID = registerInput.getID;
     String? inputPW = registerInput.getPW;
     String? inputPhone = registerInput.getPhone;
@@ -96,6 +96,4 @@ class JBMBRegisterManager {
     // 모든 유효성 검사 통과
     return 0;
   }
-
-
 }

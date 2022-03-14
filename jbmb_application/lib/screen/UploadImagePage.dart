@@ -4,6 +4,7 @@ import 'package:jbmb_application/widget/JBMBOutlinedButton.dart';
 import 'package:jbmb_application/widget/JBMBUploadedImage.dart';
 
 import '../object/JBMBMemberInfo.dart';
+import '../widget/JBMBAppBars.dart';
 
 class UploadImagePage extends StatefulWidget {
   final JBMBMemberInfo jbmbMemberInfo;
@@ -24,20 +25,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
     return WillPopScope(
         child: Scaffold(
           backgroundColor: Colors.white,
-          appBar: AppBar(
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-            title: const Text(
-              "제발모발",
-              style: TextStyle(
-                  fontSize: 23,
-                  color: Colors.black,
-                  fontFamily: 'Gugi-Regular',
-                  fontWeight: FontWeight.bold),
-            ),
-            // AppBar 내 요소 가운데 정렬
-            centerTitle: true,
-          ),
+          appBar: JBMBAppBarWithOutMenu(),
           body: Container(
               alignment: Alignment.center,
               padding: const EdgeInsets.all(8),

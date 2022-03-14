@@ -8,6 +8,8 @@ import 'package:jbmb_application/widget/JBMBBigLogo.dart';
 import 'package:jbmb_application/widget/JBMBOutlinedButton.dart';
 import 'package:jbmb_application/widget/JBMBTextField.dart';
 
+import '../widget/JBMBAppBars.dart';
+
 /// 2022.03.08 이승훈
 /// 회원가입 페이지
 /// JBMBRegisterManager 사용 로직 관리
@@ -43,39 +45,28 @@ class _JoinPageState extends State<JoinPage> {
         // resizeToAvoidBottomInset: false,
         extendBodyBehindAppBar: true,
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          leading: IconButton(
-            icon: const Icon(Icons.cancel),
-            onPressed: () {
-              if (MediaQuery.of(context).viewInsets.bottom != 0) {
-                FocusManager.instance.primaryFocus?.unfocus();
-              } else {
-                Future.delayed(const Duration(milliseconds: 180), () {
-                  Navigator.pop(context);
-                });
-              }
-            },
-          ),
-          iconTheme: const IconThemeData(
-            color: Colors.black,
-          ),
-        ),
+        appBar: JBMBTransparentAppbar(onPressedCancel: () {
+          if (MediaQuery.of(context).viewInsets.bottom != 0) {
+            FocusManager.instance.primaryFocus?.unfocus();
+          } else {
+            Future.delayed(const Duration(milliseconds: 180), () {
+              Navigator.pop(context);
+            });
+          }
+        }),
         body: Scrollbar(
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Container(
               alignment: Alignment.topCenter,
-              padding: EdgeInsets.all(8),
-              margin: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
+              margin: const EdgeInsets.all(8),
               child: Column(
                 children: [
                   SizedBox(
                     height: phoneHeight * 0.073,
                   ),
-                  // TODO : LOGO Image Resolution
-                  JBMBBigLogo(),
+                  const JBMBBigLogo(),
                   SizedBox(
                     height: phoneHeight * 0.029,
                   ),
@@ -107,7 +98,7 @@ class _JoinPageState extends State<JoinPage> {
                   SizedBox(
                     height: phoneHeight * 0.029,
                   ),
-                  Container(
+                  SizedBox(
                     width: phoneWidth * 0.85,
                     height: phoneHeight * 0.073,
                     child: JBMBTextField(
@@ -120,7 +111,7 @@ class _JoinPageState extends State<JoinPage> {
                   SizedBox(
                     height: phoneHeight * 0.014,
                   ),
-                  Container(
+                  SizedBox(
                     width: phoneWidth * 0.85,
                     height: phoneHeight * 0.073,
                     child: JBMBTextField(
@@ -133,7 +124,7 @@ class _JoinPageState extends State<JoinPage> {
                   SizedBox(
                     height: phoneHeight * 0.014,
                   ),
-                  Container(
+                  SizedBox(
                     width: phoneWidth * 0.85,
                     height: phoneHeight * 0.073,
                     child: JBMBTextField(
@@ -146,7 +137,7 @@ class _JoinPageState extends State<JoinPage> {
                   SizedBox(
                     height: phoneHeight * 0.014,
                   ),
-                  Container(
+                  SizedBox(
                     width: phoneWidth * 0.85,
                     height: phoneHeight * 0.073,
                     child: JBMBTextField(
@@ -160,7 +151,7 @@ class _JoinPageState extends State<JoinPage> {
                   SizedBox(
                     height: phoneHeight * 0.014,
                   ),
-                  Container(
+                  SizedBox(
                     width: phoneWidth * 0.85,
                     height: phoneHeight * 0.073,
                     child: JBMBTextField(
@@ -174,7 +165,7 @@ class _JoinPageState extends State<JoinPage> {
                   SizedBox(
                     height: phoneHeight * 0.014,
                   ),
-                  Container(
+                  SizedBox(
                     width: phoneWidth * 0.85,
                     height: phoneHeight * 0.073,
                     child: JBMBTextField(
@@ -325,4 +316,3 @@ class JoinDescription extends StatelessWidget {
     );
   }
 }
-

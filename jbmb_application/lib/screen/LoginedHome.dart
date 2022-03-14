@@ -3,6 +3,7 @@ import 'package:jbmb_application/screen/CommunityPage.dart';
 import 'package:jbmb_application/screen/DiagnosisAlertPage.dart';
 import 'package:jbmb_application/screen/HospitalPage.dart';
 import 'package:jbmb_application/screen/ShampooPage.dart';
+import 'package:jbmb_application/widget/JBMBAppBars.dart';
 import 'package:jbmb_application/widget/LoginedMainDescription.dart';
 import 'package:jbmb_application/widget/LoginedNavigationDrawerWidget.dart';
 import 'package:jbmb_application/widget/MainDescription.dart';
@@ -63,32 +64,7 @@ class _LoginedHomeState extends State<LoginedHome> {
         ),
         // 전체 화면 바탕색 지정
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          // 최상단 앱 바
-          title: const Text(
-            "제발모발",
-            style: TextStyle(
-                fontSize: 23,
-                color: Colors.black,
-                fontFamily: 'Gugi-Regular',
-                fontWeight: FontWeight.bold),
-          ),
-          // AppBar 내 요소 가운데 정렬
-          centerTitle: true,
-          // AppBar 그림자 제거
-          elevation: 0,
-          // AppBar 바탕색 설정
-          backgroundColor: Colors.white,
-          actions: [
-            IconButton(
-              icon: const Icon(
-                Icons.menu,
-                color: Colors.black,
-              ),
-              onPressed: () => _scaffoldKey.currentState?.openEndDrawer(),
-            )
-          ],
-        ),
+        appBar: JBMBAppBar(onPressedMenu: () => _scaffoldKey.currentState?.openEndDrawer()),
         // AppBar를 제외한 나머지 위젯 (중간문구 - 구분선 - 슬라이더)
         body: Container(
           // 가운데 정렬
@@ -138,7 +114,7 @@ class _LoginedHomeState extends State<LoginedHome> {
                                 SizedBox(
                                   height: phoneHeight * 0.02,
                                 ),
-                                getMenuTextByIndex(_current),
+                                MenuTextByIndex(index: _current,),
                                 SizedBox(
                                   height: phoneHeight * 0.03,
                                 ),
@@ -226,12 +202,45 @@ class _LoginedHomeState extends State<LoginedHome> {
     return retval;
   }
 
-  /// get CarouselSlider Menu Text By [index]
-  Column getMenuTextByIndex(int index) {
-    Column retval = Column();
+  /// get CarouselSlider ButtonIcon By [index]
+  IconData? getIconDataByIndex(int index) {
+    IconData? retval;
+    switch (index) {
+      case 0:
+      // 무료 진단
+        retval = Icons.check_box_rounded;
+        return retval;
+      case 1:
+      // 샴푸 추천
+        retval = Icons.find_in_page_rounded;
+        return retval;
+      case 2:
+      // 병원 추천
+        retval = Icons.local_hospital;
+        return retval;
+      case 3:
+      // 커뮤니티
+        retval = Icons.group;
+        return retval;
+    }
+    return retval;
+  }
+}
+
+/// get CarouselSlider Menu Text By [index]
+class MenuTextByIndex extends StatelessWidget {
+  final int index;
+  const MenuTextByIndex({
+    Key? key,
+    required this.index
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     const double fontSize = 13.0;
     const Color color = Colors.black87;
     const String fontFamily = 'NanumGothic-Regular';
+    Column retval = Column();
 
     switch (index) {
       case 0:
@@ -241,7 +250,7 @@ class _LoginedHomeState extends State<LoginedHome> {
               "자가진단 및 AI 이미지 진단으로\n"
                   "간단하게 탈모 상태를 알아보세요",
               style: TextStyle(
-                  fontFamily: fontFamily, fontSize: fontSize, color: color,),
+                fontFamily: fontFamily, fontSize: fontSize, color: color,),
               textAlign: TextAlign.center,
             ),
           ],
@@ -286,30 +295,6 @@ class _LoginedHomeState extends State<LoginedHome> {
           ],
         );
         break;
-    }
-    return retval;
-  }
-
-  /// get CarouselSlider ButtonIcon By [index]
-  IconData? getIconDataByIndex(int index) {
-    IconData? retval;
-    switch (index) {
-      case 0:
-      // 무료 진단
-        retval = Icons.check_box_rounded;
-        return retval;
-      case 1:
-      // 샴푸 추천
-        retval = Icons.find_in_page_rounded;
-        return retval;
-      case 2:
-      // 병원 추천
-        retval = Icons.local_hospital;
-        return retval;
-      case 3:
-      // 커뮤니티
-        retval = Icons.group;
-        return retval;
     }
     return retval;
   }

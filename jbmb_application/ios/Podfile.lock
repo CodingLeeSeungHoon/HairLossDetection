@@ -1,4 +1,9 @@
 PODS:
+  - AWSCognito (2.19.1):
+    - AWSCore (= 2.19.1)
+  - AWSCore (2.19.1)
+  - AWSS3 (2.19.1):
+    - AWSCore (= 2.19.1)
   - camera (0.0.1):
     - Flutter
   - Flutter (1.0.0)
@@ -32,6 +37,11 @@ PODS:
   - SDWebImageWebPCoder (0.8.4):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
+  - simple_s3 (0.0.1):
+    - AWSCognito
+    - AWSCore
+    - AWSS3
+    - Flutter
   - TOCropViewController (2.6.1)
 
 DEPENDENCIES:
@@ -41,9 +51,13 @@ DEPENDENCIES:
   - image_cropper (from `.symlinks/plugins/image_cropper/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
+  - simple_s3 (from `.symlinks/plugins/simple_s3/ios`)
 
 SPEC REPOS:
   trunk:
+    - AWSCognito
+    - AWSCore
+    - AWSS3
     - libwebp
     - Mantle
     - SDWebImage
@@ -63,8 +77,13 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_picker/ios"
   path_provider_ios:
     :path: ".symlinks/plugins/path_provider_ios/ios"
+  simple_s3:
+    :path: ".symlinks/plugins/simple_s3/ios"
 
 SPEC CHECKSUMS:
+  AWSCognito: f50de600804941d083af37a7568905f31a774727
+  AWSCore: 55c154ae27efc5c98bdc30a0eeea5a35d10a2ab5
+  AWSS3: 2272253b098d07803af8dd20ce6ce7302bcffb47
   camera: 9993f92f2c793e87b65e35f3a23c70582afb05b1
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   flutter_image_compress: fd2b476345226e1a10ea352fa306af95704642c1
@@ -75,6 +94,7 @@ SPEC CHECKSUMS:
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
   SDWebImage: 631cf572cc93dfdfe54162e556410a61f1141928
   SDWebImageWebPCoder: f93010f3f6c031e2f8fb3081ca4ee6966c539815
+  simple_s3: dc1e236435ab824abf10e6147110fe86ab32c51c
   TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
 
 PODFILE CHECKSUM: a75497545d4391e2d394c3668e20cfb1c2bbd4aa

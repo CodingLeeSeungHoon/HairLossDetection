@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:jbmb_application/screen/CommunityPage.dart';
-import 'package:jbmb_application/screen/HospitalPage.dart';
-import 'package:jbmb_application/screen/ShampooPage.dart';
 import 'package:jbmb_application/widget/MainDescription.dart';
+import '../widget/JBMBAppBars.dart';
 import '../widget/JBMBOutlinedButton.dart';
 import '../widget/NavigationDrawerWidget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -51,32 +49,7 @@ class _HomeState extends State<Home> {
         ),
         // 전체 화면 바탕색 지정
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          // 최상단 앱 바
-          title: const Text(
-            "제발모발",
-            style: TextStyle(
-                fontSize: 23,
-                color: Colors.black,
-                fontFamily: 'Gugi-Regular',
-                fontWeight: FontWeight.bold),
-          ),
-          // AppBar 내 요소 가운데 정렬
-          centerTitle: true,
-          // AppBar 그림자 제거
-          elevation: 0,
-          // AppBar 바탕색 설정
-          backgroundColor: Colors.white,
-          actions: [
-            IconButton(
-              icon: const Icon(
-                Icons.menu,
-                color: Colors.black,
-              ),
-              onPressed: () => _scaffoldKey.currentState?.openEndDrawer(),
-            )
-          ],
-        ),
+        appBar: JBMBAppBar(onPressedMenu: () => _scaffoldKey.currentState?.openEndDrawer()),
         // AppBar를 제외한 나머지 위젯 (중간문구 - 구분선 - 슬라이더)
         body: Container(
             // 가운데 정렬
@@ -87,7 +60,6 @@ class _HomeState extends State<Home> {
             // 내부 위젯 레이아웃 세로 배치
             child: Column(
               children: <Widget>[
-                // TODO: MainDescription 로그인 여부에 따라 내용 변경
                 const MainDescription(),
                 SizedBox(
                   height: phoneHeight * 0.02,
@@ -109,8 +81,6 @@ class _HomeState extends State<Home> {
                       });
                     },
                     enableInfiniteScroll: false,
-                    // autoPlay: true,
-                    // autoPlayCurve: Curves.easeIn,
                   ),
                   items: imgList.map((imgUrl) {
                     return Builder(

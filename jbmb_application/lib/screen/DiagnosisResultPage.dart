@@ -3,6 +3,8 @@ import 'package:jbmb_application/object/JBMBMemberInfo.dart';
 import 'package:jbmb_application/screen/LoginedHome.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
+import '../widget/JBMBAppBars.dart';
+
 class DiagnosisResultPage extends StatefulWidget {
   final JBMBMemberInfo jbmbMemberInfo;
   const DiagnosisResultPage({
@@ -15,6 +17,8 @@ class DiagnosisResultPage extends StatefulWidget {
 }
 
 class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     TextStyle mildTitleTextStyle = const TextStyle(
@@ -45,35 +49,25 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
     return WillPopScope(
         child: Scaffold(
           extendBodyBehindAppBar: true,
-          appBar: AppBar(
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-            leading: IconButton(
-              icon: const Icon(Icons.cancel),
-              onPressed: () {
-                Future.delayed(const Duration(milliseconds: 250), () {
-                  Navigator.pushReplacement(
-                    context,
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation1, animation2) =>
-                          LoginedHome(jbmbMemberInfo: widget.jbmbMemberInfo,),
-                      transitionDuration: Duration.zero,
-                      reverseTransitionDuration: Duration.zero,
-                    ),
-                  );
-                });
-              },
-            ),
-            iconTheme: const IconThemeData(
-              color: Colors.black,
-            ),
-          ),
+          appBar: JBMBTransparentAppbar(onPressedCancel: () {
+            Future.delayed(const Duration(milliseconds: 250), () {
+              Navigator.pushReplacement(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation1, animation2) =>
+                      LoginedHome(jbmbMemberInfo: widget.jbmbMemberInfo,),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                ),
+              );
+            });
+          }),
           body: Scrollbar(
             child: SingleChildScrollView(
               child: Container(
                 alignment: Alignment.topCenter,
-                padding: EdgeInsets.all(8),
-                margin: EdgeInsets.all(8),
+                padding: const EdgeInsets.all(8),
+                margin: const EdgeInsets.all(8),
                 child: Column(
                   children: [
                     const SizedBox(
