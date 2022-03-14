@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 
 /// 2020.03.07 이승훈 개발
 class LoginedMainDescription extends StatelessWidget {
-  const LoginedMainDescription({Key? key}) : super(key: key);
+  final String userName;
+  const LoginedMainDescription({
+    Key? key,
+    required this.userName
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,17 +15,17 @@ class LoginedMainDescription extends StatelessWidget {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: const [
+          children: [
             Text(
-              "민들레",
-              style: TextStyle(
+              userName,
+              style: const TextStyle(
                   decoration: TextDecoration.underline,
                   fontSize: 23,
                   color: Colors.black45,
                   fontFamily: 'NanumGothic-Regular',
                   fontWeight: FontWeight.bold),
             ),
-            Text(
+            const Text(
               " 님,",
               style: TextStyle(
                   fontSize: 23,

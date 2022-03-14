@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:jbmb_application/widget/JBMBBigLogo.dart';
 import 'package:jbmb_application/widget/JBMBOutlinedButton.dart';
 
+/// 2022.03.08 이승훈
+/// JBMB 정보 페이지
+/// 어플리케이션 정보 페이지
 class InfoPage extends StatelessWidget {
   const InfoPage({Key? key}) : super(key: key);
 
@@ -24,7 +27,7 @@ class InfoPage extends StatelessWidget {
                 height: phoneHeight * 0.02,
               ),
               const Divider(
-                thickness: 2,
+                thickness: 1,
                 color: Colors.black38,
               ),
               SizedBox(
@@ -60,7 +63,7 @@ class InfoPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: const [
         Text("제발모발은 자가문진과 AI 이미지 분석을 통한 \n"
-            "무료 탈모 진단 및 추가 서비스 어플리케이션입니다.\n"
+            "무료 탈모 진단 및 추가 서비스 어플리케이션입니다.\n\n"
             "본 어플리케이션은 한국공학대학교 학생\n"
             "이승훈, 이한범, 김준태에게 모든 저작권이 있습니다.\n\n"
             "- 어플리케이션 제작에 많은 도움을 주신 전문가\n\n"

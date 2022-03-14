@@ -3,23 +3,31 @@ import 'package:jbmb_application/screen/CommunityPage.dart';
 import 'package:jbmb_application/screen/DiagnosisAlertPage.dart';
 import 'package:jbmb_application/screen/HospitalPage.dart';
 import 'package:jbmb_application/screen/ShampooPage.dart';
+import 'package:jbmb_application/widget/JBMBAppBars.dart';
 import 'package:jbmb_application/widget/LoginedMainDescription.dart';
 import 'package:jbmb_application/widget/LoginedNavigationDrawerWidget.dart';
 import 'package:jbmb_application/widget/MainDescription.dart';
+import '../object/JBMBMemberInfo.dart';
 import '../widget/JBMBOutlinedButton.dart';
 import '../widget/NavigationDrawerWidget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
+/// 로그인 이후 홈 메인 화면 구현
+/// 2022.03.08 이승훈 개발
+/// AppBar - 중간 문구 - 구분선 - 슬라이더(이미지 + 버튼) 구조
+/// LoginedMainDescription, LoginedNavigationDrawerWidget 사용 주의
 class LoginedHome extends StatefulWidget {
-  /// 홈 메인 화면 구현
-  /// 2022.03.07 이승훈 개발
-  /// AppBar - 중간 문구 - 구분선 - 슬라이더(이미지 + 버튼) 구조
-  /// TODO : Refactoring
+  // use this widget.jbmbMemberInfo in build function returns.
+  JBMBMemberInfo jbmbMemberInfo;
 
-  const LoginedHome({Key? key}) : super(key: key);
+  LoginedHome({
+    Key? key,
+    required this.jbmbMemberInfo
+  }) : super(key: key);
 
   @override
   _LoginedHomeState createState() => _LoginedHomeState();
+
 }
 
 class _LoginedHomeState extends State<LoginedHome> {
@@ -43,7 +51,6 @@ class _LoginedHomeState extends State<LoginedHome> {
 
   @override
   Widget build(BuildContext context) {
-
     double phoneWidth = MediaQuery.of(context).size.width;
     double phoneHeight = MediaQuery.of(context).size.height;
     double phonePadding = MediaQuery.of(context).padding.top;
@@ -53,36 +60,11 @@ class _LoginedHomeState extends State<LoginedHome> {
         // sideDrawer
         endDrawer: Container(
           width: phoneWidth * 0.55,
-          child: LoginedNavigationDrawerWidget(),
+          child: LoginedNavigationDrawerWidget(jbmbMemberInfo: widget.jbmbMemberInfo,),
         ),
         // 전체 화면 바탕색 지정
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          // 최상단 앱 바
-          title: const Text(
-            "제발모발",
-            style: TextStyle(
-                fontSize: 23,
-                color: Colors.black,
-                fontFamily: 'Gugi-Regular',
-                fontWeight: FontWeight.bold),
-          ),
-          // AppBar 내 요소 가운데 정렬
-          centerTitle: true,
-          // AppBar 그림자 제거
-          elevation: 0,
-          // AppBar 바탕색 설정
-          backgroundColor: Colors.white,
-          actions: [
-            IconButton(
-              icon: const Icon(
-                Icons.menu,
-                color: Colors.black,
-              ),
-              onPressed: () => _scaffoldKey.currentState?.openEndDrawer(),
-            )
-          ],
-        ),
+        appBar: JBMBAppBar(onPressedMenu: () => _scaffoldKey.currentState?.openEndDrawer()),
         // AppBar를 제외한 나머지 위젯 (중간문구 - 구분선 - 슬라이더)
         body: Container(
           // 가운데 정렬
@@ -93,7 +75,7 @@ class _LoginedHomeState extends State<LoginedHome> {
             // 내부 위젯 레이아웃 세로 배치
             child: Column(
               children: <Widget>[
-                const LoginedMainDescription(),
+                LoginedMainDescription(userName: widget.jbmbMemberInfo.getName!,),
                 SizedBox(
                   height: phoneHeight * 0.02,
                 ),
@@ -132,7 +114,7 @@ class _LoginedHomeState extends State<LoginedHome> {
                                 SizedBox(
                                   height: phoneHeight * 0.02,
                                 ),
-                                getMenuTextByIndex(_current),
+                                MenuTextByIndex(index: _current,),
                                 SizedBox(
                                   height: phoneHeight * 0.03,
                                 ),
@@ -179,22 +161,22 @@ class _LoginedHomeState extends State<LoginedHome> {
     switch(currentIndex) {
       case 0:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => DiagnosisAlertPage(),
+          builder: (context) => DiagnosisAlertPage(jbmbMemberInfo: widget.jbmbMemberInfo,),
         ));
         break;
       case 1:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ShampooPage(),
+          builder: (context) => ShampooPage(jbmbMemberInfo: widget.jbmbMemberInfo,),
         ));
         break;
       case 2:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => HospitalPage(),
+          builder: (context) => HospitalPage(jbmbMemberInfo: widget.jbmbMemberInfo,),
         ));
         break;
       case 3:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => CommunityPage(),
+          builder: (context) => CommunityPage(jbmbMemberInfo: widget.jbmbMemberInfo,),
         ));
         break;
     }
@@ -208,7 +190,7 @@ class _LoginedHomeState extends State<LoginedHome> {
         retval = "무료 진단 받기";
         break;
       case 1:
-        retval = "내게 맞는 샴푸 보기";
+        retval = "추천 샴푸 보기";
         break;
       case 2:
         retval = "주변 병원 탐색";
@@ -220,12 +202,45 @@ class _LoginedHomeState extends State<LoginedHome> {
     return retval;
   }
 
-  /// get CarouselSlider Menu Text By [index]
-  Column getMenuTextByIndex(int index) {
-    Column retval = Column();
+  /// get CarouselSlider ButtonIcon By [index]
+  IconData? getIconDataByIndex(int index) {
+    IconData? retval;
+    switch (index) {
+      case 0:
+      // 무료 진단
+        retval = Icons.check_box_rounded;
+        return retval;
+      case 1:
+      // 샴푸 추천
+        retval = Icons.find_in_page_rounded;
+        return retval;
+      case 2:
+      // 병원 추천
+        retval = Icons.local_hospital;
+        return retval;
+      case 3:
+      // 커뮤니티
+        retval = Icons.group;
+        return retval;
+    }
+    return retval;
+  }
+}
+
+/// get CarouselSlider Menu Text By [index]
+class MenuTextByIndex extends StatelessWidget {
+  final int index;
+  const MenuTextByIndex({
+    Key? key,
+    required this.index
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     const double fontSize = 13.0;
     const Color color = Colors.black87;
     const String fontFamily = 'NanumGothic-Regular';
+    Column retval = Column();
 
     switch (index) {
       case 0:
@@ -235,7 +250,7 @@ class _LoginedHomeState extends State<LoginedHome> {
               "자가진단 및 AI 이미지 진단으로\n"
                   "간단하게 탈모 상태를 알아보세요",
               style: TextStyle(
-                  fontFamily: fontFamily, fontSize: fontSize, color: color,),
+                fontFamily: fontFamily, fontSize: fontSize, color: color,),
               textAlign: TextAlign.center,
             ),
           ],
@@ -280,30 +295,6 @@ class _LoginedHomeState extends State<LoginedHome> {
           ],
         );
         break;
-    }
-    return retval;
-  }
-
-  /// get CarouselSlider ButtonIcon By [index]
-  IconData? getIconDataByIndex(int index) {
-    IconData? retval;
-    switch (index) {
-      case 0:
-      // 무료 진단
-        retval = Icons.check_box_rounded;
-        return retval;
-      case 1:
-      // 샴푸 추천
-        retval = Icons.find_in_page_rounded;
-        return retval;
-      case 2:
-      // 병원 추천
-        retval = Icons.local_hospital;
-        return retval;
-      case 3:
-      // 커뮤니티
-        retval = Icons.group;
-        return retval;
     }
     return retval;
   }

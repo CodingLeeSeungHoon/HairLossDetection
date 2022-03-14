@@ -1,12 +1,18 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:jbmb_application/object/JBMBMemberInfo.dart';
+import 'package:jbmb_application/object/JBMBRegisterResult.dart';
+import 'package:jbmb_application/service/JBMBRegisterManager.dart';
 import 'package:jbmb_application/widget/JBMBBigLogo.dart';
 import 'package:jbmb_application/widget/JBMBOutlinedButton.dart';
 import 'package:jbmb_application/widget/JBMBTextField.dart';
 
-enum Gender { man, women }
+import '../widget/JBMBAppBars.dart';
 
+/// 2022.03.08 이승훈
+/// 회원가입 페이지
+/// JBMBRegisterManager 사용 로직 관리
 class JoinPage extends StatefulWidget {
   const JoinPage({Key? key}) : super(key: key);
 
@@ -17,13 +23,9 @@ class JoinPage extends StatefulWidget {
 }
 
 class _JoinPageState extends State<JoinPage> {
+  JBMBRegisterManager jbmbRegisterManager = JBMBRegisterManager();
   String _selectedGender = 'male';
-  String id = '';
-  String pw = '';
-  String name = '';
-  String phone = '';
-  String email = '';
-  int? age = 0;
+  JBMBMemberInfo jbmbMemberInfo = JBMBMemberInfo();
 
   TextEditingController idController = TextEditingController();
   TextEditingController pwController = TextEditingController();
@@ -40,37 +42,31 @@ class _JoinPageState extends State<JoinPage> {
     double phonePadding = MediaQuery.of(context).padding.top;
 
     return Scaffold(
+        // resizeToAvoidBottomInset: false,
         extendBodyBehindAppBar: true,
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          leading: IconButton(
-            icon: const Icon(Icons.cancel),
-            onPressed: () {
-              FocusManager.instance.primaryFocus?.unfocus();
-              Future.delayed(const Duration(milliseconds: 300), () {
-                Navigator.pop(context);
-              });
-            },
-          ),
-          iconTheme: const IconThemeData(
-            color: Colors.black,
-          ),
-        ),
+        appBar: JBMBTransparentAppbar(onPressedCancel: () {
+          if (MediaQuery.of(context).viewInsets.bottom != 0) {
+            FocusManager.instance.primaryFocus?.unfocus();
+          } else {
+            Future.delayed(const Duration(milliseconds: 180), () {
+              Navigator.pop(context);
+            });
+          }
+        }),
         body: Scrollbar(
           child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             child: Container(
               alignment: Alignment.topCenter,
-              padding: EdgeInsets.all(8),
-              margin: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
+              margin: const EdgeInsets.all(8),
               child: Column(
                 children: [
                   SizedBox(
                     height: phoneHeight * 0.073,
                   ),
-                  // TODO : LOGO Image Resolution
-                  JBMBBigLogo(),
+                  const JBMBBigLogo(),
                   SizedBox(
                     height: phoneHeight * 0.029,
                   ),
@@ -96,13 +92,13 @@ class _JoinPageState extends State<JoinPage> {
                     width: phoneWidth * 0.85,
                     padding: EdgeInsets.all(phonePadding * 0.33),
                     alignment: Alignment.topLeft,
-                    decoration: BoxDecoration(color: Colors.black12),
-                    child: getDescription(),
+                    decoration: const BoxDecoration(color: Colors.black12),
+                    child: const JoinDescription(),
                   ),
                   SizedBox(
                     height: phoneHeight * 0.029,
                   ),
-                  Container(
+                  SizedBox(
                     width: phoneWidth * 0.85,
                     height: phoneHeight * 0.073,
                     child: JBMBTextField(
@@ -115,7 +111,7 @@ class _JoinPageState extends State<JoinPage> {
                   SizedBox(
                     height: phoneHeight * 0.014,
                   ),
-                  Container(
+                  SizedBox(
                     width: phoneWidth * 0.85,
                     height: phoneHeight * 0.073,
                     child: JBMBTextField(
@@ -128,7 +124,7 @@ class _JoinPageState extends State<JoinPage> {
                   SizedBox(
                     height: phoneHeight * 0.014,
                   ),
-                  Container(
+                  SizedBox(
                     width: phoneWidth * 0.85,
                     height: phoneHeight * 0.073,
                     child: JBMBTextField(
@@ -141,7 +137,7 @@ class _JoinPageState extends State<JoinPage> {
                   SizedBox(
                     height: phoneHeight * 0.014,
                   ),
-                  Container(
+                  SizedBox(
                     width: phoneWidth * 0.85,
                     height: phoneHeight * 0.073,
                     child: JBMBTextField(
@@ -155,7 +151,7 @@ class _JoinPageState extends State<JoinPage> {
                   SizedBox(
                     height: phoneHeight * 0.014,
                   ),
-                  Container(
+                  SizedBox(
                     width: phoneWidth * 0.85,
                     height: phoneHeight * 0.073,
                     child: JBMBTextField(
@@ -169,7 +165,7 @@ class _JoinPageState extends State<JoinPage> {
                   SizedBox(
                     height: phoneHeight * 0.014,
                   ),
-                  Container(
+                  SizedBox(
                     width: phoneWidth * 0.85,
                     height: phoneHeight * 0.073,
                     child: JBMBTextField(
@@ -244,29 +240,30 @@ class _JoinPageState extends State<JoinPage> {
                         iconData: Icons.account_box,
                         onPressed: () {
                           setState(() {
-                            id = idController.text;
-                            pw = pwController.text;
-                            name = nameController.text;
-                            phone = phoneController.text;
-                            email = emailController.text;
-                            age = int.tryParse(ageController.text);
+                            jbmbMemberInfo.setID = idController.text;
+                            jbmbMemberInfo.setPW = pwController.text;
+                            jbmbMemberInfo.setName = nameController.text;
+                            jbmbMemberInfo.setPhone = phoneController.text;
+                            jbmbMemberInfo.setEmail = emailController.text;
+                            jbmbMemberInfo.setAge = int.tryParse(ageController.text);
+                            jbmbMemberInfo.setSex = _selectedGender;
                           });
-                          print(id);
-                          print(pw);
-                          print(name);
-                          print(phone);
-                          print(email);
-                          print(age);
-                          // 키보드 drop, 화면 drop, SnackBar show up
+
+                          JBMBRegisterResult registerResult = jbmbRegisterManager.registerJBMB(jbmbMemberInfo);
                           FocusManager.instance.primaryFocus?.unfocus();
                           Future.delayed(const Duration(milliseconds:  300), () {
-                            Navigator.pop(context);
+                            if (registerResult.getResultCode == 0){
+                              Navigator.pop(context);
+                            }
                             Future.delayed(const Duration(milliseconds: 200), () {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(content: Row(
                                     children: [
-                                      const Icon(Icons.check, color: Colors.white,),
-                                      const Text("  회원가입이 완료되었습니다!")
+                                      if (registerResult.getResultCode == 0)
+                                        const Icon(Icons.check, color: Colors.white,),
+                                      if (registerResult.getResultCode != 0)
+                                        const Icon(Icons.cancel_outlined, color: Colors.redAccent,),
+                                      Text(registerResult.getResult),
                                     ],
                                   ))
                               );
@@ -287,8 +284,13 @@ class _JoinPageState extends State<JoinPage> {
           ),
         ));
   }
+}
 
-  Column getDescription() {
+class JoinDescription extends StatelessWidget {
+  const JoinDescription({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     const String fontFamily = 'NanumGothic-Regular';
     const Color color = Colors.black45;
     const double fontSize = 12;
@@ -303,11 +305,11 @@ class _JoinPageState extends State<JoinPage> {
       children: [
         const Text(
           "안녕하세요, 제발모발(JBMB)에 오신 것을 환영합니다.\n\n"
-          "제발모발(JBMB)은 AI를 활용한 탈모 자가진단 및 관리 서비스 어플리케이션으로 "
-          "간단한 설문과 이미지 AI 진단을 통해 자가 진단을 이용할 수 있으며 "
-          "두피에 맞는 샴푸와 내 근처 탈모 전문 병원을 쉽게 검색할 수 있습니다.\n\n"
-          "제발모발(JBMB)은 회원제로 운영되고 있으며, "
-          "아래의 빈 칸을 모두 입력하셔야 회원가입을 진행할 수 있습니다.",
+              "제발모발(JBMB)은 AI를 활용한 탈모 자가진단 및 관리 서비스 어플리케이션으로 "
+              "간단한 설문과 이미지 AI 진단을 통해 자가 진단을 이용할 수 있으며 "
+              "두피에 맞는 샴푸와 내 근처 탈모 전문 병원을 쉽게 검색할 수 있습니다.\n\n"
+              "제발모발(JBMB)은 회원제로 운영되고 있으며, "
+              "아래의 빈 칸을 모두 입력하셔야 회원가입을 진행할 수 있습니다.",
           style: textStyle,
         ),
       ],

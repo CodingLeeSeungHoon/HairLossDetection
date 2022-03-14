@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'screen/Home.dart';
 
-void main() => runApp(const JBMBApplication());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((value) {runApp(const JBMBApplication());});
+}
 
 class JBMBApplication extends StatelessWidget {
   const JBMBApplication({Key? key}) : super(key: key);
