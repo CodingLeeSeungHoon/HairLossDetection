@@ -1,69 +1,54 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jbmb_application/object/JBMBMemberInfo.dart';
 import 'package:jbmb_application/screen/LoginedHome.dart';
 import 'package:jbmb_application/screen/SurveyCustomPage.dart';
 import 'package:jbmb_application/screen/SurveyPages.dart';
 
+import '../widget/JBMBAppBars.dart';
 import '../widget/JBMBBigLogo.dart';
 
+/// 2022.03.08 이승훈
+/// 무료 자가진단 입장 시, 주의사항에 대해 설명하는 페이지
 class DiagnosisAlertPage extends StatefulWidget {
-  const DiagnosisAlertPage({Key? key}) : super(key: key);
+  final JBMBMemberInfo jbmbMemberInfo;
+
+  const DiagnosisAlertPage({Key? key, required this.jbmbMemberInfo})
+      : super(key: key);
 
   @override
   _DiagnosisAlertPageState createState() => _DiagnosisAlertPageState();
 }
 
 class _DiagnosisAlertPageState extends State<DiagnosisAlertPage> {
+  // Stepper Index
   int _currentStep = 0;
 
   @override
   Widget build(BuildContext context) {
-    double phoneWidth = MediaQuery.of(context).size.width;
-    double phoneHeight = MediaQuery.of(context).size.height;
-    double phonePadding = MediaQuery.of(context).padding.top;
-
     return WillPopScope(
+        // Disable BackButton
         child: Scaffold(
           backgroundColor: Colors.white,
-          appBar: AppBar(
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-            leading: IconButton(
-              icon: const Icon(Icons.cancel),
-              onPressed: () {
-                FocusManager.instance.primaryFocus?.unfocus();
-                Future.delayed(const Duration(milliseconds: 300), () {
-                  Navigator.pop(context);
-                });
-              },
-            ),
-            iconTheme: const IconThemeData(
-              color: Colors.black,
-            ),
-            title: const Text(
-              "제발모발",
-              style: TextStyle(
-                  fontSize: 23,
-                  color: Colors.black,
-                  fontFamily: 'Gugi-Regular',
-                  fontWeight: FontWeight.bold),
-            ),
-            // AppBar 내 요소 가운데 정렬
-            centerTitle: true,
-            // AppBar 그림자 제거
-          ),
-          body: Scrollbar(
+          appBar: JBMBTransparentAppbar(onPressedCancel: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+            Future.delayed(const Duration(milliseconds: 300), () {
+              Navigator.pop(context);
+            });
+          }),
+          body: SingleChildScrollView(
             child: Container(
               alignment: Alignment.center,
-              padding: EdgeInsets.all(8),
-              margin: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
+              margin: const EdgeInsets.all(8),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  JBMBBigLogo(),
+                  const JBMBBigLogo(),
                   Stepper(
-                    physics: NeverScrollableScrollPhysics(),
+                    // physics: const NeverScrollableScrollPhysics(),
+                    // Custom Stepper Button - controlsBuilder
                     controlsBuilder: (context, controlBuilder) {
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -117,10 +102,24 @@ class _DiagnosisAlertPageState extends State<DiagnosisAlertPage> {
                           _currentStep += 1;
                         });
                       } else {
+                        // when confirm all step
                         Navigator.pop(context);
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => SurveyPage1(qNum: 'Q1.', question: '\n하루에 빠지는 모발 양이 100개 이상이다.',),
-                        ));
+                        // delay for button animation
+                        Future.delayed(const Duration(milliseconds: 250), () {
+                          Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation1, animation2) =>
+                                  SurveyPage1(
+                                qNum: 'Q1.',
+                                question: '\n하루에 빠지는 모발 양이 100개 이상이다.',
+                                jbmbMemberInfo: widget.jbmbMemberInfo,
+                              ),
+                              transitionDuration: Duration.zero,
+                              reverseTransitionDuration: Duration.zero,
+                            ),
+                          );
+                        });
                       }
                     },
                     onStepCancel: () {
@@ -132,23 +131,27 @@ class _DiagnosisAlertPageState extends State<DiagnosisAlertPage> {
                         showDialog(
                             context: context,
                             builder: (_) => CupertinoAlertDialog(
-                                  title: Text("주의"),
-                                  content: Text("현재 화면을 나가시겠습니까?"),
+                                  // ios friendly - CupertinoAlertDialog
+                                  title: const Text("주의"),
+                                  content: const Text("현재 화면을 나가시겠습니까?"),
                                   actions: [
                                     TextButton(
                                         onPressed: () {
                                           Navigator.pop(context);
                                         },
-                                        child: Text("아니오")),
+                                        child: const Text("아니오")),
                                     TextButton(
                                         onPressed: () {
                                           Navigator.pop(context);
                                           Navigator.of(context)
                                               .push(MaterialPageRoute(
-                                            builder: (context) => LoginedHome(),
+                                            builder: (context) => LoginedHome(
+                                              jbmbMemberInfo:
+                                                  widget.jbmbMemberInfo,
+                                            ),
                                           ));
                                         },
-                                        child: Text("네")),
+                                        child: const Text("네")),
                                   ],
                                 ));
                       }

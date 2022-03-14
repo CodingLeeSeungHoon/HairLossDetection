@@ -1,9 +1,19 @@
 import "package:flutter/material.dart";
+import 'package:jbmb_application/object/JBMBMemberInfo.dart';
 
-import '../widget/NavigationDrawerWidget.dart';
+import '../widget/JBMBAppBars.dart';
+import '../widget/LoginedNavigationDrawerWidget.dart';
 
+/// 2022.03.08 이승훈
+/// JBMB 커뮤니티 페이지
+/// ListView 형식으로 작성할 예정
+/// JBMBCommunityManager를 통해 DB상의 게시글을 불러옴.
 class CommunityPage extends StatefulWidget {
-  const CommunityPage({Key? key}) : super(key: key);
+  final JBMBMemberInfo jbmbMemberInfo;
+  const CommunityPage({
+    Key? key,
+    required this.jbmbMemberInfo
+  }) : super(key: key);
 
   @override
   _CommunityPageState createState() => _CommunityPageState();
@@ -24,36 +34,13 @@ class _CommunityPageState extends State<CommunityPage> {
       // sideDrawer
       endDrawer: Container(
         width: phoneWidth * 0.55,
-        child: NavigationDrawerWidget(),
+        child: LoginedNavigationDrawerWidget(jbmbMemberInfo: widget.jbmbMemberInfo,),
       ),
       // 전체 화면 바탕색 지정
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        // 최상단 앱 바
-        title: const Text(
-          "제발모발",
-          style: TextStyle(
-              fontSize: 23,
-              color: Colors.black,
-              fontFamily: 'Gugi-Regular',
-              fontWeight: FontWeight.bold),
-        ),
-        // AppBar 내 요소 가운데 정렬
-        centerTitle: true,
-        // AppBar 그림자 제거
-        elevation: 0,
-        // AppBar 바탕색 설정
-        backgroundColor: Colors.white,
-        leading: IconButton(icon: const Icon(Icons.arrow_back, color: Colors.black,), onPressed: () => Navigator.pop(context),),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.menu,
-              color: Colors.black,
-            ),
-            onPressed: () => _scaffoldKey.currentState?.openEndDrawer(),
-          )
-        ],
+      appBar: JBMBAppBarWithBackButton(
+        onPressedMenu: () => _scaffoldKey.currentState?.openEndDrawer(),
+        onPressedCancel: () => Navigator.pop(context),
       ),
       body: Container(
         // 가운데 정렬

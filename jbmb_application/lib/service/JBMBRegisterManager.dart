@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:jbmb_application/object/JBMBRegister.dart';
+import 'package:jbmb_application/object/JBMBMemberInfo.dart';
 import 'package:jbmb_application/object/JBMBRegisterResult.dart';
 
 /// 2022.03.03 이승훈
@@ -10,38 +10,43 @@ class JBMBRegisterManager {
   /// JBMB에 회원가입을 할 수 있는 메소드
   /// Returns the new JBMBRegisterResult
   /// register in JBMB with [registerInput] when you passed validation
-  JBMBRegisterResult registerJBMB(JBMBRegister registerInput){
+  JBMBRegisterResult registerJBMB(JBMBMemberInfo registerInput){
     JBMBRegisterResult jbmbRegisterResult = JBMBRegisterResult();
+    bool isInputValid = false;
 
-    switch(validRegisterInput(registerInput)){
+    switch(_validRegisterInput(registerInput)){
       case 0:
         // 유효성 검사 통과
+        isInputValid = true;
         break;
       case 1:
         // 필드 중 null 값 존재
         jbmbRegisterResult.setResultCode = 1;
-        jbmbRegisterResult.setResult = "빈 칸이 존재하거나, 유효하지 않은 입력입니다.";
+        jbmbRegisterResult.setResult = "  빈 칸이 존재하거나, 유효하지 않은 입력입니다.";
         break;
       case 2:
         // ID/PW 유효성 불통
         jbmbRegisterResult.setResultCode = 2;
-        jbmbRegisterResult.setResult = "ID/PW를 4자리 이상 입력해주세요.";
+        jbmbRegisterResult.setResult = "  ID/PW를 4자리 이상 입력해주세요.";
         break;
       case 3:
         // 핸드폰 번호 유효성 불통
         jbmbRegisterResult.setResultCode = 3;
-        jbmbRegisterResult.setResult = "유효하지 않은 핸드폰 번호입니다.";
+        jbmbRegisterResult.setResult = "  유효하지 않은 핸드폰 번호입니다.";
         break;
       case 4:
         // 이메일 정규표현식 유효성 불통
         jbmbRegisterResult.setResultCode = 4;
-        jbmbRegisterResult.setResult = "유효하지 않은 이메일 형식입니다.";
+        jbmbRegisterResult.setResult = "  유효하지 않은 이메일 형식입니다.";
         break;
     }
 
-    // TODO : api 찌를 것
-    jbmbRegisterResult.setResultCode = 0;
-    jbmbRegisterResult.setResult = "회원가입이 완료되었습니다.";
+    if (isInputValid){
+      // TODO : api 찌를 것
+      jbmbRegisterResult.setResultCode = 0;
+      jbmbRegisterResult.setResult = "  회원가입이 완료되었습니다.";
+    }
+
     return jbmbRegisterResult;
   }
 
@@ -52,7 +57,7 @@ class JBMBRegisterManager {
   /// 2 : ID / PW 4자리 이상 입력
   /// 3 : 핸드폰 번호 11자리, 앞 010 유지 확인
   /// 4 : 이메일 양식 맞는지 확인
-  int validRegisterInput(JBMBRegister registerInput){
+  int _validRegisterInput(JBMBMemberInfo registerInput){
     String? inputID = registerInput.getID;
     String? inputPW = registerInput.getPW;
     String? inputPhone = registerInput.getPhone;
@@ -77,22 +82,19 @@ class JBMBRegisterManager {
     if (isNull){
       return 1;
     }
-    
     // inputID와 inputPW 4자리 이상 입력 권장
-    if (inputID!.length < 4 && inputPW!.length < 4){
+    else if (inputID!.length < 4 && inputPW!.length < 4){
       return 2;
     }
-
     // 핸드폰 번호 유효성 체크
-    if (inputPhone!.length != 11 || inputPhone.substring(0, 3) != "010"){
+    else if (inputPhone!.length != 11 || inputPhone.substring(0, 3) != "010"){
       return 3;
     }
-
     // 이메일 양식 확인
-    if (!regExp.hasMatch(inputEmail!)){
+    else if (!regExp.hasMatch(inputEmail!)){
       return 4;
     }
-
+    // 모든 유효성 검사 통과
     return 0;
   }
 }
