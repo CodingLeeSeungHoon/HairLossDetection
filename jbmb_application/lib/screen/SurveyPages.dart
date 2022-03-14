@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jbmb_application/object/JBMBMemberInfo.dart';
 import 'package:jbmb_application/screen/SurveyCustomPage.dart';
 import 'package:jbmb_application/screen/UploadImageGuidePage.dart';
 
@@ -7,8 +8,8 @@ import 'package:jbmb_application/screen/UploadImageGuidePage.dart';
 class SurveyPage1 extends StatelessWidget {
   final String qNum;
   final String question;
-
-  const SurveyPage1({Key? key, required this.qNum, required this.question})
+  final JBMBMemberInfo jbmbMemberInfo;
+  const SurveyPage1({Key? key, required this.qNum, required this.question, required this.jbmbMemberInfo})
       : super(key: key);
 
   @override
@@ -21,9 +22,10 @@ class SurveyPage1 extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => const SurveyPage2(
+              pageBuilder: (context, animation1, animation2) => SurveyPage2(
                 qNum: 'Q2.',
                 question: '\n전보다 점점 이마가 넓어지는 느낌이 든다',
+                jbmbMemberInfo: jbmbMemberInfo,
               ),
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,
@@ -36,9 +38,10 @@ class SurveyPage1 extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => const SurveyPage2(
+              pageBuilder: (context, animation1, animation2) => SurveyPage2(
                 qNum: 'Q2.',
                 question: '\n전보다 점점 이마가 넓어지는 느낌이 든다',
+                jbmbMemberInfo: jbmbMemberInfo,
               ),
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,
@@ -56,8 +59,8 @@ class SurveyPage1 extends StatelessWidget {
 class SurveyPage2 extends StatelessWidget {
   final String qNum;
   final String question;
-
-  const SurveyPage2({Key? key, required this.qNum, required this.question})
+  final JBMBMemberInfo jbmbMemberInfo;
+  const SurveyPage2({Key? key, required this.qNum, required this.question, required this.jbmbMemberInfo})
       : super(key: key);
 
   @override
@@ -70,9 +73,10 @@ class SurveyPage2 extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => const SurveyPage3(
+              pageBuilder: (context, animation1, animation2) => SurveyPage3(
                 qNum: 'Q3.',
                 question: '\n가늘고 힘이 없는 머리가 빠지기 시작한다.',
+                jbmbMemberInfo: jbmbMemberInfo,
               ),
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,
@@ -85,9 +89,10 @@ class SurveyPage2 extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => const SurveyPage3(
+              pageBuilder: (context, animation1, animation2) => SurveyPage3(
                 qNum: 'Q3.',
                 question: '\n가늘고 힘이 없는 머리가 빠지기 시작한다.',
+                jbmbMemberInfo: jbmbMemberInfo,
               ),
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,
@@ -105,8 +110,8 @@ class SurveyPage2 extends StatelessWidget {
 class SurveyPage3 extends StatelessWidget {
   final String qNum;
   final String question;
-
-  const SurveyPage3({Key? key, required this.qNum, required this.question})
+  final JBMBMemberInfo jbmbMemberInfo;
+  const SurveyPage3({Key? key, required this.qNum, required this.question, required this.jbmbMemberInfo})
       : super(key: key);
 
   @override
@@ -119,9 +124,10 @@ class SurveyPage3 extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => const SurveyPage4(
+              pageBuilder: (context, animation1, animation2) => SurveyPage4(
                 qNum: 'Q4.',
                 question: '\n모발이 가늘고 부드러워진다.',
+                jbmbMemberInfo: jbmbMemberInfo,
               ),
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,
@@ -134,9 +140,10 @@ class SurveyPage3 extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => const SurveyPage4(
+              pageBuilder: (context, animation1, animation2) => SurveyPage4(
                 qNum: 'Q4.',
                 question: '\n모발이 가늘고 부드러워진다.',
+                jbmbMemberInfo: jbmbMemberInfo,
               ),
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,
@@ -154,8 +161,8 @@ class SurveyPage3 extends StatelessWidget {
 class SurveyPage4 extends StatelessWidget {
   final String qNum;
   final String question;
-
-  const SurveyPage4({Key? key, required this.qNum, required this.question})
+  final JBMBMemberInfo jbmbMemberInfo;
+  const SurveyPage4({Key? key, required this.qNum, required this.question, required this.jbmbMemberInfo})
       : super(key: key);
 
   @override
@@ -168,9 +175,10 @@ class SurveyPage4 extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => const SurveyPage5(
+              pageBuilder: (context, animation1, animation2) => SurveyPage5(
                 qNum: 'Q5.',
                 question: '\n두피를 누르면 통증이 있다.',
+                jbmbMemberInfo: jbmbMemberInfo,
               ),
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,
@@ -183,9 +191,10 @@ class SurveyPage4 extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => const SurveyPage5(
+              pageBuilder: (context, animation1, animation2) => SurveyPage5(
                 qNum: 'Q5.',
                 question: '\n두피를 누르면 통증이 있다.',
+                jbmbMemberInfo: jbmbMemberInfo,
               ),
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,
@@ -203,8 +212,8 @@ class SurveyPage4 extends StatelessWidget {
 class SurveyPage5 extends StatelessWidget {
   final String qNum;
   final String question;
-
-  const SurveyPage5({Key? key, required this.qNum, required this.question})
+  final JBMBMemberInfo jbmbMemberInfo;
+  const SurveyPage5({Key? key, required this.qNum, required this.question, required this.jbmbMemberInfo})
       : super(key: key);
 
   @override
@@ -217,9 +226,10 @@ class SurveyPage5 extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => const SurveyPage6(
+              pageBuilder: (context, animation1, animation2) => SurveyPage6(
                 qNum: 'Q6.',
                 question: '\n앞 머리와 뒷 머리의 굵기 차이가 있다',
+                jbmbMemberInfo: jbmbMemberInfo,
               ),
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,
@@ -232,9 +242,10 @@ class SurveyPage5 extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => const SurveyPage6(
+              pageBuilder: (context, animation1, animation2) => SurveyPage6(
                 qNum: 'Q6.',
                 question: '\n앞 머리와 뒷 머리의 굵기 차이가 있다',
+                jbmbMemberInfo: jbmbMemberInfo,
               ),
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,
@@ -252,8 +263,8 @@ class SurveyPage5 extends StatelessWidget {
 class SurveyPage6 extends StatelessWidget {
   final String qNum;
   final String question;
-
-  const SurveyPage6({Key? key, required this.qNum, required this.question})
+  final JBMBMemberInfo jbmbMemberInfo;
+  const SurveyPage6({Key? key, required this.qNum, required this.question, required this.jbmbMemberInfo})
       : super(key: key);
 
   @override
@@ -266,9 +277,10 @@ class SurveyPage6 extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => const SurveyPage7(
+              pageBuilder: (context, animation1, animation2) => SurveyPage7(
                 qNum: 'Q7.',
                 question: '\n몸의 털이 갑자기 굵어진다',
+                jbmbMemberInfo: jbmbMemberInfo,
               ),
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,
@@ -281,9 +293,10 @@ class SurveyPage6 extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => const SurveyPage7(
+              pageBuilder: (context, animation1, animation2) => SurveyPage7(
                 qNum: 'Q7.',
                 question: '\n몸의 털이 갑자기 굵어진다',
+                jbmbMemberInfo: jbmbMemberInfo,
               ),
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,
@@ -301,8 +314,8 @@ class SurveyPage6 extends StatelessWidget {
 class SurveyPage7 extends StatelessWidget {
   final String qNum;
   final String question;
-
-  const SurveyPage7({Key? key, required this.qNum, required this.question})
+  final JBMBMemberInfo jbmbMemberInfo;
+  const SurveyPage7({Key? key, required this.qNum, required this.question, required this.jbmbMemberInfo})
       : super(key: key);
 
   @override
@@ -315,9 +328,10 @@ class SurveyPage7 extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => const SurveyPage8(
+              pageBuilder: (context, animation1, animation2) => SurveyPage8(
                 qNum: 'Q8.',
                 question: '\n이마라인과 정수리 부분의 유난히 번들거린다',
+                jbmbMemberInfo: jbmbMemberInfo,
               ),
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,
@@ -330,9 +344,10 @@ class SurveyPage7 extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => const SurveyPage8(
+              pageBuilder: (context, animation1, animation2) => SurveyPage8(
                 qNum: 'Q8.',
                 question: '\n이마라인과 정수리 부분의 유난히 번들거린다',
+                jbmbMemberInfo: jbmbMemberInfo,
               ),
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,
@@ -350,8 +365,9 @@ class SurveyPage7 extends StatelessWidget {
 class SurveyPage8 extends StatelessWidget {
   final String qNum;
   final String question;
+  final JBMBMemberInfo jbmbMemberInfo;
 
-  const SurveyPage8({Key? key, required this.qNum, required this.question})
+  const SurveyPage8({Key? key, required this.qNum, required this.question, required this.jbmbMemberInfo})
       : super(key: key);
 
   @override
@@ -364,9 +380,10 @@ class SurveyPage8 extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => const SurveyPage9(
+              pageBuilder: (context, animation1, animation2) => SurveyPage9(
                 qNum: 'Q9.',
                 question: '\n두피의 피지량이 갑자기 늘어났다',
+                jbmbMemberInfo: jbmbMemberInfo,
               ),
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,
@@ -379,9 +396,10 @@ class SurveyPage8 extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => const SurveyPage9(
+              pageBuilder: (context, animation1, animation2) => SurveyPage9(
                 qNum: 'Q9.',
                 question: '\n두피의 피지량이 갑자기 늘어났다',
+                jbmbMemberInfo: jbmbMemberInfo,
               ),
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,
@@ -399,8 +417,8 @@ class SurveyPage8 extends StatelessWidget {
 class SurveyPage9 extends StatelessWidget {
   final String qNum;
   final String question;
-
-  const SurveyPage9({Key? key, required this.qNum, required this.question})
+  final JBMBMemberInfo jbmbMemberInfo;
+  const SurveyPage9({Key? key, required this.qNum, required this.question, required this.jbmbMemberInfo})
       : super(key: key);
 
   @override
@@ -413,9 +431,10 @@ class SurveyPage9 extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => const SurveyPage10(
+              pageBuilder: (context, animation1, animation2) => SurveyPage10(
                 qNum: 'Q10.',
                 question: '\n비듬이 많아지고 두피가 가렵다',
+                jbmbMemberInfo: jbmbMemberInfo,
               ),
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,
@@ -428,9 +447,10 @@ class SurveyPage9 extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => const SurveyPage10(
+              pageBuilder: (context, animation1, animation2) => SurveyPage10(
                 qNum: 'Q10.',
                 question: '\n비듬이 많아지고 두피가 가렵다',
+                jbmbMemberInfo: jbmbMemberInfo,
               ),
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,
@@ -448,8 +468,8 @@ class SurveyPage9 extends StatelessWidget {
 class SurveyPage10 extends StatelessWidget {
   final String qNum;
   final String question;
-
-  const SurveyPage10({Key? key, required this.qNum, required this.question})
+  final JBMBMemberInfo jbmbMemberInfo;
+  const SurveyPage10({Key? key, required this.qNum, required this.question, required this.jbmbMemberInfo})
       : super(key: key);
 
   @override
@@ -462,7 +482,7 @@ class SurveyPage10 extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => const UploadImageGuidePage(),
+              pageBuilder: (context, animation1, animation2) => UploadImageGuidePage(jbmbMemberInfo: jbmbMemberInfo,),
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,
             ),
@@ -474,7 +494,7 @@ class SurveyPage10 extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
-              pageBuilder: (context, animation1, animation2) => const UploadImageGuidePage(),
+              pageBuilder: (context, animation1, animation2) => UploadImageGuidePage(jbmbMemberInfo: jbmbMemberInfo,),
               transitionDuration: Duration.zero,
               reverseTransitionDuration: Duration.zero,
             ),

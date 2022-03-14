@@ -83,19 +83,32 @@ class _JBMBUploadedImageState extends State<JBMBUploadedImage> {
                         _pickImage(ImageSource.gallery);
                       },
                     ),
-                    SizedBox(height: 30,)
+                    SizedBox(
+                      height: 30,
+                    )
                   ],
                 )));
   }
 
   Future _pickImage(ImageSource source) async {
-    final pickedFile = await _picker.pickImage(source: source, imageQuality: 50);
-    if (pickedFile == null){
+    final pickedFile =
+        await _picker.pickImage(source: source, imageQuality: 50, preferredCameraDevice: CameraDevice.front);
+    if (pickedFile == null) {
       return;
     }
 
-    var file = await ImageCropper().cropImage(sourcePath: pickedFile.path,);
-    if (file == null){
+    var file = await ImageCropper().cropImage(
+        sourcePath: pickedFile.path,
+        androidUiSettings: const AndroidUiSettings(
+            toolbarTitle: '편집',
+            toolbarColor: Colors.grey,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        iosUiSettings: const IOSUiSettings(
+          title: '편집',
+        ));
+    if (file == null) {
       return;
     }
 
@@ -105,8 +118,10 @@ class _JBMBUploadedImageState extends State<JBMBUploadedImage> {
   }
 
   Future<File> compressImage(String path, int quality) async {
-    final newPath = p.join((await getTemporaryDirectory()).path, '${DateTime.now()}.${p.extension(path)}');
-    final result = await FlutterImageCompress.compressAndGetFile(path, newPath, quality: quality);
+    final newPath = p.join((await getTemporaryDirectory()).path,
+        '${DateTime.now()}.${p.extension(path)}');
+    final result = await FlutterImageCompress.compressAndGetFile(path, newPath,
+        quality: quality);
     return result!;
   }
 

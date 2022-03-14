@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:jbmb_application/object/JBMBMemberInfo.dart';
 import 'package:jbmb_application/screen/UploadImagePage.dart';
 import 'package:jbmb_application/widget/JBMBOutlinedButton.dart';
 
 class UploadImageGuidePage extends StatelessWidget {
-  const UploadImageGuidePage({Key? key}) : super(key: key);
+  final JBMBMemberInfo jbmbMemberInfo;
+  const UploadImageGuidePage({
+    Key? key,
+    required this.jbmbMemberInfo
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +51,14 @@ class UploadImageGuidePage extends StatelessWidget {
                           children: const [
                             Text(
                               "\n이미지 업로드\n"
-                              "가이드라인 \n",
+                              "가이드라인 ",
                               style: TextStyle(
                                   fontSize: 23,
                                   color: Colors.black54,
                                   fontFamily: 'NanumGothic-Regular',
                                   fontWeight: FontWeight.bold),
                             ),
+                            SizedBox(height: 10,),
                             Divider(
                               thickness: 2,
                             )
@@ -95,7 +101,7 @@ class UploadImageGuidePage extends StatelessWidget {
                                 PageRouteBuilder(
                                   pageBuilder:
                                       (context, animation1, animation2) =>
-                                          const UploadImagePage(),
+                                          UploadImagePage(jbmbMemberInfo: jbmbMemberInfo,),
                                   transitionDuration: Duration.zero,
                                   reverseTransitionDuration: Duration.zero,
                                 ),

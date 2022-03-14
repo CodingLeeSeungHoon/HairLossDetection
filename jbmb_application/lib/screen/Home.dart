@@ -180,29 +180,6 @@ class _HomeState extends State<Home> {
             )));
   }
 
-  /// Move Page by [currentIndex] when clicked CarouselSlider Button
-  void movePageByCurrentIndex(int currentIndex) {
-    switch (currentIndex) {
-      case 0:
-        break;
-      case 1:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ShampooPage(),
-        ));
-        break;
-      case 2:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => HospitalPage(),
-        ));
-        break;
-      case 3:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => CommunityPage(),
-        ));
-        break;
-    }
-  }
-
   /// display Button Text by [index]
   String getButtonTextByIndex(int index) {
     String retval = "";

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jbmb_application/object/JBMBMemberInfo.dart';
 import 'package:jbmb_application/screen/DiagnosisAlertPage.dart';
 import 'package:jbmb_application/screen/HospitalPage.dart';
 import 'package:jbmb_application/screen/InfoPage.dart';
@@ -11,6 +12,11 @@ import '../screen/JoinPage.dart';
 
 /// 2020.03.07 이승훈 개발
 class LoginedNavigationDrawerWidget extends StatelessWidget {
+  final JBMBMemberInfo jbmbMemberInfo;
+  LoginedNavigationDrawerWidget({
+    Key? key,
+    required this.jbmbMemberInfo
+  }) : super(key: key);
   final padding = EdgeInsets.symmetric(horizontal: 3);
 
   @override
@@ -104,7 +110,7 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
         break;
       case 1:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => DiagnosisAlertPage(),
+          builder: (context) => DiagnosisAlertPage(jbmbMemberInfo: jbmbMemberInfo,),
         ));
         // diagnose
         break;
@@ -114,19 +120,19 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
       case 3:
       // shampoo
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ShampooPage(),
+          builder: (context) => ShampooPage(jbmbMemberInfo: jbmbMemberInfo,),
         ));
         break;
       case 4:
       // hospital
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => HospitalPage(),
+          builder: (context) => HospitalPage(jbmbMemberInfo: jbmbMemberInfo,),
         ));
         break;
       case 5:
       // jbmb community
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => CommunityPage(),
+          builder: (context) => CommunityPage(jbmbMemberInfo: jbmbMemberInfo,),
         ));
         break;
       case 6:

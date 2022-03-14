@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jbmb_application/object/JBMBMemberInfo.dart';
 import 'package:jbmb_application/screen/LoginedHome.dart';
 import 'package:jbmb_application/screen/SurveyCustomPage.dart';
 import 'package:jbmb_application/screen/SurveyPages.dart';
@@ -9,7 +10,10 @@ import '../widget/JBMBBigLogo.dart';
 /// 2022.03.08 이승훈
 /// 무료 자가진단 입장 시, 주의사항에 대해 설명하는 페이지
 class DiagnosisAlertPage extends StatefulWidget {
-  const DiagnosisAlertPage({Key? key}) : super(key: key);
+  final JBMBMemberInfo jbmbMemberInfo;
+
+  const DiagnosisAlertPage({Key? key, required this.jbmbMemberInfo})
+      : super(key: key);
 
   @override
   _DiagnosisAlertPageState createState() => _DiagnosisAlertPageState();
@@ -21,7 +25,8 @@ class _DiagnosisAlertPageState extends State<DiagnosisAlertPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope( // Disable BackButton
+    return WillPopScope(
+        // Disable BackButton
         child: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
@@ -120,11 +125,16 @@ class _DiagnosisAlertPageState extends State<DiagnosisAlertPage> {
                         // when confirm all step
                         Navigator.pop(context);
                         // delay for button animation
-                        Future.delayed(const Duration(milliseconds: 250), (){
+                        Future.delayed(const Duration(milliseconds: 250), () {
                           Navigator.pushReplacement(
                             context,
                             PageRouteBuilder(
-                              pageBuilder: (context, animation1, animation2) => const SurveyPage1(qNum: 'Q1.', question: '\n하루에 빠지는 모발 양이 100개 이상이다.',),
+                              pageBuilder: (context, animation1, animation2) =>
+                                  SurveyPage1(
+                                qNum: 'Q1.',
+                                question: '\n하루에 빠지는 모발 양이 100개 이상이다.',
+                                jbmbMemberInfo: widget.jbmbMemberInfo,
+                              ),
                               transitionDuration: Duration.zero,
                               reverseTransitionDuration: Duration.zero,
                             ),
@@ -141,7 +151,7 @@ class _DiagnosisAlertPageState extends State<DiagnosisAlertPage> {
                         showDialog(
                             context: context,
                             builder: (_) => CupertinoAlertDialog(
-                              // ios friendly - CupertinoAlertDialog
+                                  // ios friendly - CupertinoAlertDialog
                                   title: const Text("주의"),
                                   content: const Text("현재 화면을 나가시겠습니까?"),
                                   actions: [
@@ -155,7 +165,10 @@ class _DiagnosisAlertPageState extends State<DiagnosisAlertPage> {
                                           Navigator.pop(context);
                                           Navigator.of(context)
                                               .push(MaterialPageRoute(
-                                            builder: (context) => const LoginedHome(),
+                                            builder: (context) => LoginedHome(
+                                              jbmbMemberInfo:
+                                                  widget.jbmbMemberInfo,
+                                            ),
                                           ));
                                         },
                                         child: const Text("네")),

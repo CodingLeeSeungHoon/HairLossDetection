@@ -3,8 +3,14 @@ import 'package:jbmb_application/screen/DiagnosisResultPage.dart';
 import 'package:jbmb_application/widget/JBMBOutlinedButton.dart';
 import 'package:jbmb_application/widget/JBMBUploadedImage.dart';
 
+import '../object/JBMBMemberInfo.dart';
+
 class UploadImagePage extends StatefulWidget {
-  const UploadImagePage({Key? key}) : super(key: key);
+  final JBMBMemberInfo jbmbMemberInfo;
+  const UploadImagePage({
+    Key? key,
+    required this.jbmbMemberInfo
+  }) : super(key: key);
 
   @override
   _UploadImagePageState createState() => _UploadImagePageState();
@@ -48,13 +54,14 @@ class _UploadImagePageState extends State<UploadImagePage> {
                             children: const [
                               Text(
                                 "탈모로 의심가는 이미지를\n"
-                                "촬영하거나 갤러리에서 \n업로드 해주세요.\n",
+                                "촬영하거나 갤러리에서 \n업로드 해주세요.",
                                 style: TextStyle(
                                     fontSize: 23,
                                     color: Colors.black54,
                                     fontFamily: 'NanumGothic-Regular',
                                     fontWeight: FontWeight.bold),
                               ),
+                              SizedBox(height: 10,),
                               Divider(
                                 thickness: 2,
                               )
@@ -81,7 +88,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
                                   Navigator.pushReplacement(
                                     context,
                                     PageRouteBuilder(
-                                      pageBuilder: (context, animation1, animation2) => const DiagnosisResultPage(),
+                                      pageBuilder: (context, animation1, animation2) => DiagnosisResultPage(jbmbMemberInfo: widget.jbmbMemberInfo,),
                                       transitionDuration: Duration.zero,
                                       reverseTransitionDuration: Duration.zero,
                                     ),

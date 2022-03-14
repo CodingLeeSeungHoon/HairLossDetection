@@ -6,6 +6,7 @@ import 'package:jbmb_application/screen/ShampooPage.dart';
 import 'package:jbmb_application/widget/LoginedMainDescription.dart';
 import 'package:jbmb_application/widget/LoginedNavigationDrawerWidget.dart';
 import 'package:jbmb_application/widget/MainDescription.dart';
+import '../object/JBMBMemberInfo.dart';
 import '../widget/JBMBOutlinedButton.dart';
 import '../widget/NavigationDrawerWidget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -15,10 +16,17 @@ import 'package:carousel_slider/carousel_slider.dart';
 /// AppBar - 중간 문구 - 구분선 - 슬라이더(이미지 + 버튼) 구조
 /// LoginedMainDescription, LoginedNavigationDrawerWidget 사용 주의
 class LoginedHome extends StatefulWidget {
-  const LoginedHome({Key? key}) : super(key: key);
+  // use this widget.jbmbMemberInfo in build function returns.
+  JBMBMemberInfo jbmbMemberInfo;
+
+  LoginedHome({
+    Key? key,
+    required this.jbmbMemberInfo
+  }) : super(key: key);
 
   @override
   _LoginedHomeState createState() => _LoginedHomeState();
+
 }
 
 class _LoginedHomeState extends State<LoginedHome> {
@@ -42,7 +50,6 @@ class _LoginedHomeState extends State<LoginedHome> {
 
   @override
   Widget build(BuildContext context) {
-
     double phoneWidth = MediaQuery.of(context).size.width;
     double phoneHeight = MediaQuery.of(context).size.height;
     double phonePadding = MediaQuery.of(context).padding.top;
@@ -52,7 +59,7 @@ class _LoginedHomeState extends State<LoginedHome> {
         // sideDrawer
         endDrawer: Container(
           width: phoneWidth * 0.55,
-          child: LoginedNavigationDrawerWidget(),
+          child: LoginedNavigationDrawerWidget(jbmbMemberInfo: widget.jbmbMemberInfo,),
         ),
         // 전체 화면 바탕색 지정
         backgroundColor: Colors.white,
@@ -92,7 +99,7 @@ class _LoginedHomeState extends State<LoginedHome> {
             // 내부 위젯 레이아웃 세로 배치
             child: Column(
               children: <Widget>[
-                const LoginedMainDescription(),
+                LoginedMainDescription(userName: widget.jbmbMemberInfo.getName!,),
                 SizedBox(
                   height: phoneHeight * 0.02,
                 ),
@@ -178,22 +185,22 @@ class _LoginedHomeState extends State<LoginedHome> {
     switch(currentIndex) {
       case 0:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => DiagnosisAlertPage(),
+          builder: (context) => DiagnosisAlertPage(jbmbMemberInfo: widget.jbmbMemberInfo,),
         ));
         break;
       case 1:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ShampooPage(),
+          builder: (context) => ShampooPage(jbmbMemberInfo: widget.jbmbMemberInfo,),
         ));
         break;
       case 2:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => HospitalPage(),
+          builder: (context) => HospitalPage(jbmbMemberInfo: widget.jbmbMemberInfo,),
         ));
         break;
       case 3:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => CommunityPage(),
+          builder: (context) => CommunityPage(jbmbMemberInfo: widget.jbmbMemberInfo,),
         ));
         break;
     }

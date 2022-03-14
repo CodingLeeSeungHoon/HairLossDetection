@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:jbmb_application/object/JBMBMemberInfo.dart';
 import 'package:jbmb_application/screen/LoginedHome.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class DiagnosisResultPage extends StatefulWidget {
-  const DiagnosisResultPage({Key? key}) : super(key: key);
+  final JBMBMemberInfo jbmbMemberInfo;
+  const DiagnosisResultPage({
+    Key? key,
+    required this.jbmbMemberInfo
+  }) : super(key: key);
 
   @override
   _DiagnosisResultPageState createState() => _DiagnosisResultPageState();
@@ -51,7 +56,7 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
                     context,
                     PageRouteBuilder(
                       pageBuilder: (context, animation1, animation2) =>
-                          const LoginedHome(),
+                          LoginedHome(jbmbMemberInfo: widget.jbmbMemberInfo,),
                       transitionDuration: Duration.zero,
                       reverseTransitionDuration: Duration.zero,
                     ),
@@ -76,7 +81,7 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
                     ),
                     Row(
                       children: [
-                        Text("민들레", style: mildTitleTextStyle),
+                        Text(widget.jbmbMemberInfo.getName!, style: mildTitleTextStyle),
                         Text(" 님의", style: titleTextStyle)
                       ],
                     ),
