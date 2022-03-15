@@ -42,14 +42,14 @@
    │  │               │   │   └── FeedbackController.java
    │  │               │   └── service
    │  │               │       └── FeedbackService.java
-   │  │               ├── board
-   │  │               │   ├── controller
-   │  │               │   │   └── BoardController.java
-   │  │               │   ├── domain
-   │  │               │   │   └── Board.java
-   │  │               │   ├── dto
-   │  │               │   │   └── BoardRequestDto.java
-   │  │               │   ├── repository
-   │  │               │   │   └── BoardRepository.java
-   │  │               │   └── service
-   │  │               │       └── BoardService.java
+   │  │               └── board
+   │  │                   ├── controller
+   │  │                   │   └── BoardController.java
+   │  │                   ├── domain
+   │  │                   │   └── Board.java
+   │  │                   ├── dto
+   │  │                   │   └── BoardRequestDto.java
+   │  │                   ├── repository
+   │  │                   │   └── BoardRepository.java
+   │  │                   └── service
+   │  │                       └── BoardService.java
