@@ -66,8 +66,7 @@ public class JwtTokenProvider {
 
     // Request의 Header에서 token 값을 가져옵니다. "X-AUTH-TOKEN" : "TOKEN값'
     public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("Authorization");
-        //return request.getHeader("X-AUTH-TOKEN");
+        return request.getHeader("X-AUTH-TOKEN");
     }
 
     // 토큰의 유효성 + 만료일자 확인
@@ -85,23 +84,19 @@ public class JwtTokenProvider {
         return claims.getBody().getExpiration();
     }
 
-    public boolean checkAlreadyLogout(String jwtToken) {
-
+    public Integer checkAlreadyLogout(String jwtToken) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
             boolean isNotExpire = claims.getBody().getExpiration().after(new Date());
-
             if (null != redisTemplate.opsForValue().get(jwtToken)) {
                 log.info("이미 로그아웃 처리된 사용자");
-                System.out.println("이미 로그아웃");
-                return false;
+                return 1;
             }
-            return isNotExpire;
+            return 0;
         } catch(
         Exception e) {
-            System.out.println("토큰이 좀 이상한듯");
             log.info("token is not valid");
-            return false;
+            return 2;
         }
     }
 }
