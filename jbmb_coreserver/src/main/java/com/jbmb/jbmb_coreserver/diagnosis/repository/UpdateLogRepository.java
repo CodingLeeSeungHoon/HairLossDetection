@@ -1,0 +1,21 @@
+package com.jbmb.jbmb_coreserver.diagnosis.repository;
+
+import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisLog;
+import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisSurvey;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import java.util.Optional;
+
+@Repository
+public interface UpdateLogRepository extends JpaRepository<DiagnosisLog, Long> {
+
+    @Query("select l.id from DiagnosisLog l where l.userNum=?1 and l.active=0")
+    Integer findLogByUserNum(Integer userNum);
+    // active 
+    // 0:설문조사 진행 중
+    // 1:설문조사 완료 및 이미지 미제출
+    // 2:이미지 제출
+}

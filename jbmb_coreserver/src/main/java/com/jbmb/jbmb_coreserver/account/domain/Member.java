@@ -41,7 +41,7 @@ public class Member implements UserDetails {
     private String phone;
 
     @Column(name = "user_sex", nullable = false, columnDefinition = "TINYINT")
-    private String sex;
+    private Integer sex;
 
     @Column(name = "user_age", nullable = false)
     private Integer age;

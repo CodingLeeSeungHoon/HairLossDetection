@@ -1,7 +1,9 @@
 package com.jbmb.jbmb_coreserver.account.controller;
 
+import com.jbmb.jbmb_coreserver.account.dto.Login;
+import com.jbmb.jbmb_coreserver.account.dto.Logout;
 import com.jbmb.jbmb_coreserver.account.domain.Member;
-import com.jbmb.jbmb_coreserver.account.domain.Response;
+import com.jbmb.jbmb_coreserver.account.dto.Signup;
 import com.jbmb.jbmb_coreserver.account.service.MemberService;
 import groovy.util.logging.Slf4j;
 import lombok.RequiredArgsConstructor;
@@ -21,19 +23,19 @@ public class MemberController {
 
     // 회원가입
     @PostMapping("/signup")
-    public Response joinInJBMB(@RequestBody Member user) {
+    public Signup joinInJBMB(@RequestBody Member user) {
         return memberService.joinService(user);
     }
 
     // 로그인
     @PostMapping("/login")
-    public Response loginInJBMB(@RequestBody Member user) {
+    public Login loginInJBMB(@RequestBody Member user) {
         return memberService.loginService(user);
     }
 
     // 로그아웃
     @PostMapping("/logout")
-    public Response logoutFromJBMB(HttpServletRequest req) {
+    public Logout logoutFromJBMB(HttpServletRequest req) {
         return memberService.logoutService(req);
     }
 }

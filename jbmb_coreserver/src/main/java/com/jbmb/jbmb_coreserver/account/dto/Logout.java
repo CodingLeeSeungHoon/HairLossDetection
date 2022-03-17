@@ -1,13 +1,11 @@
-package com.jbmb.jbmb_coreserver.account.domain;
+package com.jbmb.jbmb_coreserver.account.dto;
 
 import lombok.*;
 
-@ToString
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Response {
+public class Logout {
     private Integer resultCode;
-    private String jwt;
 }
