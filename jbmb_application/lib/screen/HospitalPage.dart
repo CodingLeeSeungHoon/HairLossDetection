@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'dart:collection';
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import "package:flutter/material.dart";
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -47,7 +47,8 @@ class _HospitalPageState extends State<HospitalPage> {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.low);
 
-    var googlePlace = GooglePlace("AIzaSyCCsOJZYBvqoX87gwG65NyKiErx3ZqcvAY");
+    var googlePlace = GooglePlace(env['SUPER_SECRET_API_KEY']!);
+
     int markerId = 1;
     int iterated = 0;
 
