@@ -38,10 +38,24 @@ dependencies:
   path_provider: ^2.0.2
   flutter_image_compress: ^1.0.0
   camera: ^0.9.4+14
+
+  # Diagnosis Result Gauges
   syncfusion_flutter_gauges: ^19.4.55
+
+  # AWS S3 Storage
   http: ^0.13.4
   simple_s3: 0.3.2
+
+  # Google Maps & Location API
   google_maps_flutter: ^2.1.2
+  geolocator: ^8.2.0
+  google_place: ^0.4.7
+
+  # url_launcher
+  url_launcher: ^6.0.20
+
+  # managing open api keys
+  flutter_dotenv: ^4.0.0-nullsafety.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -71,6 +85,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - .env
     - images/community.png
     - images/hair-comb.png
     - images/hospital.png
