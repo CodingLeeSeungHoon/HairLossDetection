@@ -1,5 +1,6 @@
 package com.jbmb.jbmb_coreserver.diagnosis.controller;
 
+import com.jbmb.jbmb_coreserver.diagnosis.dto.DisabledRequest;
 import com.jbmb.jbmb_coreserver.diagnosis.dto.UpdateSurveyResponse;
 import com.jbmb.jbmb_coreserver.diagnosis.dto.UpdateSurveyRequest;
 import com.jbmb.jbmb_coreserver.diagnosis.service.DiagnosisService;
@@ -21,6 +22,12 @@ public class DiagnosisController {
 
     @Autowired
     private DiagnosisService diagnosisService;
+
+    // 기록 삭제
+    @PostMapping("/disabled")
+    public UpdateSurveyResponse deleteDisabledSurveyByUserId(@RequestBody DisabledRequest disabled) {
+        return diagnosisService.disabledService(disabled);
+    }
 
     // 설문조사 업데이트
     @PostMapping("/update_survey")
