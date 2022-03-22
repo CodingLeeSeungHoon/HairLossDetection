@@ -4,6 +4,7 @@ import com.jbmb.jbmb_coreserver.account.jwt.JwtTokenProvider;
 import com.jbmb.jbmb_coreserver.account.repository.MemberRepository;
 import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisLog;
 import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisSurvey;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.DisabledRequest;
 import com.jbmb.jbmb_coreserver.diagnosis.dto.UpdateSurveyRequest;
 import com.jbmb.jbmb_coreserver.diagnosis.dto.UpdateSurveyResponse;
 import com.jbmb.jbmb_coreserver.diagnosis.repository.UpdateLogRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Slf4j
@@ -28,17 +30,41 @@ public class DiagnosisService {
     private final UpdateSurveyResponse response = new UpdateSurveyResponse();
 
     /**
+     * 설문조사 하다가 중간에 튕겼을 때 삭제를 위한
+     * resultCode 0:성공 , 1:진단기록 없음 , 2:아이디 틀림
+     * @param DisabledRequest
+     * @return UpdateSurveyResponse
+     */
+    public UpdateSurveyResponse disabledService(DisabledRequest disalbed){
+        try{
+            Integer userNum = memberRepository.findById(disalbed.getId()).get().getUserNum();
+            Integer diagnosisID = updateLogRepository.findLogByUserNum(userNum);
+            updateLogRepository.deleteById(diagnosisID);
+            updateSurveyRepository.deleteById(diagnosisID);
+        }catch (NoSuchElementException e){
+            return response.builder().resultCode(2).build();
+        }
+        catch (Exception e){
+            return response.builder().resultCode(1).build();
+        }
+        return response.builder().resultCode(0).build();
+    }
+
+    /**
      * 설문조사 페이지 하나 넘길 때마다
      * resultCode 0:성공 , 1:실패
-     *
      * @param UpdateSurveyRequest
      * @return UpdateSurveyResponse
      */
     public UpdateSurveyResponse updateService(ServletRequest request, UpdateSurveyRequest survey) {
-        String id = jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken((HttpServletRequest) request));
-        Integer userNum = memberRepository.findById(id).get().getUserNum();
+        Integer userNum;
+        try {
+            String id = jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken((HttpServletRequest) request));
+            userNum = memberRepository.findById(id).get().getUserNum();
+        }catch (Exception e){
+            return response.builder().resultCode(1).build();
+        }
         Integer diagnosisID = updateLogRepository.findLogByUserNum(userNum);
-        System.out.println("진단 아이디는 : " + diagnosisID);
         if (diagnosisID == null) {  // 설문을 처음 진행할 경우
             diagnosisID = updateLogRepository.save(DiagnosisLog.builder()
                     .userNum(userNum)
