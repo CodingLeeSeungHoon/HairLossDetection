@@ -1,13 +1,9 @@
 package com.jbmb.jbmb_coreserver.diagnosis.repository;
 
 import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisLog;
-import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisSurvey;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import java.util.Optional;
 
 @Repository
 public interface UpdateLogRepository extends JpaRepository<DiagnosisLog, Integer> {

@@ -6,6 +6,6 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Logout {
+public class SignupResponse {
     private Integer resultCode;
 }

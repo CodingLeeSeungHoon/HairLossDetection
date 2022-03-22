@@ -1,10 +1,10 @@
 package com.jbmb.jbmb_coreserver.account.service;
 
-import com.jbmb.jbmb_coreserver.account.dto.Information;
-import com.jbmb.jbmb_coreserver.account.dto.Login;
-import com.jbmb.jbmb_coreserver.account.dto.Logout;
+import com.jbmb.jbmb_coreserver.account.dto.InformationResponse;
+import com.jbmb.jbmb_coreserver.account.dto.LoginResponse;
+import com.jbmb.jbmb_coreserver.account.dto.LogoutResponse;
 import com.jbmb.jbmb_coreserver.account.domain.Member;
-import com.jbmb.jbmb_coreserver.account.dto.Signup;
+import com.jbmb.jbmb_coreserver.account.dto.SignupResponse;
 import com.jbmb.jbmb_coreserver.account.jwt.JwtTokenProvider;
 import com.jbmb.jbmb_coreserver.account.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
-import javax.sound.sampled.Line;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -29,10 +28,10 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final RedisTemplate<String, Object> redisTemplate;
 
-    private final Signup signup = new Signup();
-    private final Login login = new Login();
-    private final Logout logout = new Logout();
-    private final Information information = new Information();
+    private final SignupResponse signup = new SignupResponse();
+    private final LoginResponse login = new LoginResponse();
+    private final LogoutResponse logout = new LogoutResponse();
+    private final InformationResponse information = new InformationResponse();
 
     /**
      * 회원가입 버튼 클릭 시
@@ -40,7 +39,7 @@ public class MemberService {
      * @param Member
      * @return Signup
      */
-    public Signup joinService(Member user){
+    public SignupResponse joinService(Member user){
         if(memberRepository.findById(user.getId()).isPresent()) return signup
                 .builder()
                 .resultCode(1)
@@ -77,7 +76,7 @@ public class MemberService {
      * @param Member
      * @return Login
      */
-    public Login loginService(Member user){
+    public LoginResponse loginService(Member user){
         Optional<Member> member=memberRepository.findById(user.getId());
         if (!member.isPresent()) return login
                                         .builder()
@@ -101,7 +100,7 @@ public class MemberService {
      * @param HttpServletRequest
      * @return Logout
      */
-    public Logout logoutService(HttpServletRequest req){
+    public LogoutResponse logoutService(HttpServletRequest req){
         String token = jwtTokenProvider.resolveToken(req);
         Integer re=jwtTokenProvider.checkAlreadyLogout(token);
         if (re==0) {
@@ -125,7 +124,7 @@ public class MemberService {
      * @param ServeletRequest
      * @return Logout
      */
-    public Information getInfoService(ServletRequest req){
+    public InformationResponse getInfoService(ServletRequest req){
         Optional<Member> member;
         try {
             String id = jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken((HttpServletRequest) req));
