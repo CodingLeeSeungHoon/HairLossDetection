@@ -1,5 +1,6 @@
 package com.jbmb.jbmb_coreserver.account.service;
 
+import com.jbmb.jbmb_coreserver.account.dto.Information;
 import com.jbmb.jbmb_coreserver.account.dto.Login;
 import com.jbmb.jbmb_coreserver.account.dto.Logout;
 import com.jbmb.jbmb_coreserver.account.domain.Member;
@@ -12,7 +13,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
+import javax.sound.sampled.Line;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -29,6 +32,7 @@ public class MemberService {
     private final Signup signup = new Signup();
     private final Login login = new Login();
     private final Logout logout = new Logout();
+    private final Information information = new Information();
 
     /**
      * 회원가입 버튼 클릭 시
@@ -111,6 +115,32 @@ public class MemberService {
         return logout
                 .builder()
                 .resultCode(re)
+                .build();
+    }
+
+    /**
+     * 회원정보 가져오기
+     * resultCode 0:성공 , 1:실패
+     * 성공 시 id, name, phoneNumber, sex, age, hairType 리턴
+     * @param ServeletRequest
+     * @return Logout
+     */
+    public Information getInfoService(ServletRequest req){
+        Optional<Member> member;
+        try {
+            String id = jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken((HttpServletRequest) req));
+            member=memberRepository.findById(id);
+        }catch (Exception e){
+            return information.builder().resultCode(1).build();
+        }
+        return information.builder()
+                .resultCode(0)
+                .id(member.get().getId())
+                .name(member.get().getName())
+                .phoneNumber(member.get().getPhone())
+                .sex(member.get().getSex())
+                .age(member.get().getAge())
+                .hairType(member.get().getHairType())
                 .build();
     }
 }

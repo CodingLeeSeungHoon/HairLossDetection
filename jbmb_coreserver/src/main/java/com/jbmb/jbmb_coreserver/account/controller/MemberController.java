@@ -1,5 +1,6 @@
 package com.jbmb.jbmb_coreserver.account.controller;
 
+import com.jbmb.jbmb_coreserver.account.dto.Information;
 import com.jbmb.jbmb_coreserver.account.dto.Login;
 import com.jbmb.jbmb_coreserver.account.dto.Logout;
 import com.jbmb.jbmb_coreserver.account.domain.Member;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
@@ -37,5 +39,11 @@ public class MemberController {
     @PostMapping("/logout")
     public Logout logoutFromJBMB(HttpServletRequest req) {
         return memberService.logoutService(req);
+    }
+
+    // 회원정보 가져오기
+    @GetMapping("/info")
+    public Information getInfo(ServletRequest req) {
+        return memberService.getInfoService(req);
     }
 }
