@@ -1,10 +1,10 @@
 package com.jbmb.jbmb_coreserver.account.controller;
 
-import com.jbmb.jbmb_coreserver.account.dto.Information;
-import com.jbmb.jbmb_coreserver.account.dto.Login;
-import com.jbmb.jbmb_coreserver.account.dto.Logout;
+import com.jbmb.jbmb_coreserver.account.dto.InformationResponse;
+import com.jbmb.jbmb_coreserver.account.dto.LoginResponse;
+import com.jbmb.jbmb_coreserver.account.dto.LogoutResponse;
 import com.jbmb.jbmb_coreserver.account.domain.Member;
-import com.jbmb.jbmb_coreserver.account.dto.Signup;
+import com.jbmb.jbmb_coreserver.account.dto.SignupResponse;
 import com.jbmb.jbmb_coreserver.account.service.MemberService;
 import groovy.util.logging.Slf4j;
 import lombok.RequiredArgsConstructor;
@@ -25,25 +25,25 @@ public class MemberController {
 
     // 회원가입
     @PostMapping("/signup")
-    public Signup joinInJBMB(@RequestBody Member user) {
+    public SignupResponse joinInJBMB(@RequestBody Member user) {
         return memberService.joinService(user);
     }
 
     // 로그인
     @PostMapping("/login")
-    public Login loginInJBMB(@RequestBody Member user) {
+    public LoginResponse loginInJBMB(@RequestBody Member user) {
         return memberService.loginService(user);
     }
 
     // 로그아웃
     @PostMapping("/logout")
-    public Logout logoutFromJBMB(HttpServletRequest req) {
+    public LogoutResponse logoutFromJBMB(HttpServletRequest req) {
         return memberService.logoutService(req);
     }
 
     // 회원정보 가져오기
     @GetMapping("/info")
-    public Information getInfo(ServletRequest req) {
+    public InformationResponse getInfo(ServletRequest req) {
         return memberService.getInfoService(req);
     }
 }

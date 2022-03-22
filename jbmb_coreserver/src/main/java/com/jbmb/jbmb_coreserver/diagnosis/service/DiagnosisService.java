@@ -2,16 +2,20 @@ package com.jbmb.jbmb_coreserver.diagnosis.service;
 
 import com.jbmb.jbmb_coreserver.account.jwt.JwtTokenProvider;
 import com.jbmb.jbmb_coreserver.account.repository.MemberRepository;
+import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisImage;
 import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisLog;
 import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisSurvey;
 import com.jbmb.jbmb_coreserver.diagnosis.dto.DisabledRequest;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.ImageLinkRequest;
 import com.jbmb.jbmb_coreserver.diagnosis.dto.UpdateSurveyRequest;
 import com.jbmb.jbmb_coreserver.diagnosis.dto.UpdateSurveyResponse;
+import com.jbmb.jbmb_coreserver.diagnosis.repository.ImageLinkRepository;
 import com.jbmb.jbmb_coreserver.diagnosis.repository.UpdateLogRepository;
 import com.jbmb.jbmb_coreserver.diagnosis.repository.UpdateSurveyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +31,7 @@ public class DiagnosisService {
     private final MemberRepository memberRepository;
     private final UpdateLogRepository updateLogRepository;
     private final UpdateSurveyRepository updateSurveyRepository;
+    private final ImageLinkRepository imageLinkRepository;
     private final UpdateSurveyResponse response = new UpdateSurveyResponse();
 
     /**
@@ -51,20 +56,31 @@ public class DiagnosisService {
     }
 
     /**
+     * 토큰 정보로 사용자 유저 번호를 가져옴
+     * @param ServletRequest
+     * @return userNum
+     */
+    private Integer getUserNum(ServletRequest request){
+        Integer userNum;
+        try {
+            String id = jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken((HttpServletRequest) request));
+            userNum = memberRepository.findById(id).get().getUserNum();
+        }catch (Exception e){
+            return 0;
+        }
+        return userNum;
+    }
+
+    /**
      * 설문조사 페이지 하나 넘길 때마다
      * resultCode 0:성공 , 1:실패
      * @param UpdateSurveyRequest
      * @return UpdateSurveyResponse
      */
     public UpdateSurveyResponse updateService(ServletRequest request, UpdateSurveyRequest survey) {
-        Integer userNum;
-        try {
-            String id = jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken((HttpServletRequest) request));
-            userNum = memberRepository.findById(id).get().getUserNum();
-        }catch (Exception e){
-            return response.builder().resultCode(1).build();
-        }
-        Integer diagnosisID = updateLogRepository.findLogByUserNum(userNum);
+        Integer userNum=getUserNum(request); // 유저 번호 받아오기
+        if(userNum==0) return response.builder().resultCode(1).build(); // 사용자 번호가 존재하지 않을 경우
+        Integer diagnosisID = updateLogRepository.findLogByUserNum(userNum); // 진단기록 가져오기
         if (diagnosisID == null) {  // 설문을 처음 진행할 경우
             diagnosisID = updateLogRepository.save(DiagnosisLog.builder()
                     .userNum(userNum)
@@ -103,6 +119,30 @@ public class DiagnosisService {
                 .survey8(checkNum[8])
                 .survey9(checkNum[9])
                 .survey10(checkNum[10])
+                .build());
+
+        return response.builder().resultCode(0).build();
+    }
+
+    /**
+     * 이미지 링크 DB에 저장
+     * resultCode 0:성공 , 1:실패
+     * @param ImageLinkRequest
+     * @return UpdateSurveyResponse
+     */
+    public UpdateSurveyResponse imageLinkService(ServletRequest request, ImageLinkRequest imageLink){
+        Integer userNum=getUserNum(request); // 유저 번호 받아오기
+        if(userNum==0) return response.builder().resultCode(1).build(); // 사용자 번호가 존재하지 않을 경우
+        Integer diagnosisID = updateLogRepository.findLogByUserNum(userNum); // 진단기록 가져오기
+        if(diagnosisID==null)return response.builder().resultCode(1).build();
+        imageLinkRepository.save(DiagnosisImage.builder() // 이미지 링크 저장
+                .id(diagnosisID)
+                .diagnosisImage(imageLink.getImageLink())
+                .build());
+        updateLogRepository.save(DiagnosisLog.builder() // 이미지까지 저장했으므로 active를 1로
+                .id(diagnosisID)
+                .userNum(userNum)
+                .active(1)
                 .build());
 
         return response.builder().resultCode(0).build();

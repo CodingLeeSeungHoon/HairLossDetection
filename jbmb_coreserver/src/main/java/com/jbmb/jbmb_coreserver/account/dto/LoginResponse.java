@@ -6,7 +6,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Login {
+public class LoginResponse {
     private Integer resultCode;
     private String jwt;
 }

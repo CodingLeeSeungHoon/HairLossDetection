@@ -7,6 +7,6 @@ import lombok.ToString;
 @Getter
 @ToString
 @NoArgsConstructor
-public class DisabledRequest {
-    private String id;
+public class ImageLinkRequest {
+    private String imageLink;
 }
