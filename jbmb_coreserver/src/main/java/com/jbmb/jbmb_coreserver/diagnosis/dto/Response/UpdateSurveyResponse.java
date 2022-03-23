@@ -1,4 +1,4 @@
-package com.jbmb.jbmb_coreserver.diagnosis.dto;
+package com.jbmb.jbmb_coreserver.diagnosis.dto.Response;
 
 import lombok.*;
 
@@ -9,4 +9,5 @@ import lombok.*;
 @NoArgsConstructor
 public class UpdateSurveyResponse {
     private Integer resultCode;
+    private Integer diagnosisID;
 }

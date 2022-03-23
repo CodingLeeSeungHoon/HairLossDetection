@@ -1,9 +1,12 @@
 package com.jbmb.jbmb_coreserver.diagnosis.controller;
 
-import com.jbmb.jbmb_coreserver.diagnosis.dto.DisabledRequest;
-import com.jbmb.jbmb_coreserver.diagnosis.dto.ImageLinkRequest;
-import com.jbmb.jbmb_coreserver.diagnosis.dto.UpdateSurveyResponse;
-import com.jbmb.jbmb_coreserver.diagnosis.dto.UpdateSurveyRequest;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Request.DisabledRequest;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Request.HairLossBySurveyRequest;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Request.ImageLinkRequest;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Request.UpdateSurveyRequest;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.HairLossBySurveyResponse;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.Response;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.UpdateSurveyResponse;
 import com.jbmb.jbmb_coreserver.diagnosis.service.DiagnosisService;
 import groovy.util.logging.Slf4j;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +29,7 @@ public class DiagnosisController {
 
     // 기록 삭제
     @PostMapping("/disabled")
-    public UpdateSurveyResponse deleteDisabledSurveyByUserId(@RequestBody DisabledRequest disabled) {
+    public Response deleteDisabledSurveyByUserId(@RequestBody DisabledRequest disabled) {
         return diagnosisService.disabledService(disabled);
     }
 
@@ -38,8 +41,14 @@ public class DiagnosisController {
 
     // 이미지 링크 DB 저장
     @PostMapping("/image_link")
-    public UpdateSurveyResponse updateUserImageLink(ServletRequest request, @RequestBody ImageLinkRequest imageLink) {
+    public Response updateUserImageLink(ServletRequest request, @RequestBody ImageLinkRequest imageLink) {
         return diagnosisService.imageLinkService(request, imageLink);
+    }
+
+    // 설문 분석
+    @PostMapping("/hair_loss_survey")
+    public HairLossBySurveyResponse diagnoseHairLossBySurvey(@RequestBody HairLossBySurveyRequest hairLossBySurvey) {
+        return diagnosisService.hairLossBySurveyService(hairLossBySurvey);
     }
 
 }

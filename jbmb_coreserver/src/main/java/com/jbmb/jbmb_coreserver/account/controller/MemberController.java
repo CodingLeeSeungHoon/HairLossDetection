@@ -41,9 +41,12 @@ public class MemberController {
         return memberService.logoutService(req);
     }
 
-    // 회원정보 가져오기
+    // 회원정보 수정 때 쓰일 것 (Deprecated 어노테이션 지우고)
     @GetMapping("/info")
+    @Deprecated
     public InformationResponse getInfo(ServletRequest req) {
         return memberService.getInfoService(req);
     }
+
+    
 }

@@ -9,4 +9,5 @@ import lombok.*;
 public class LoginResponse {
     private Integer resultCode;
     private String jwt;
+    private String id;
 }
