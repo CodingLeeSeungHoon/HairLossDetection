@@ -5,17 +5,13 @@ import com.jbmb.jbmb_coreserver.account.repository.MemberRepository;
 import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisImage;
 import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisLog;
 import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisSurvey;
-import com.jbmb.jbmb_coreserver.diagnosis.dto.DisabledRequest;
-import com.jbmb.jbmb_coreserver.diagnosis.dto.ImageLinkRequest;
-import com.jbmb.jbmb_coreserver.diagnosis.dto.UpdateSurveyRequest;
-import com.jbmb.jbmb_coreserver.diagnosis.dto.UpdateSurveyResponse;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.*;
 import com.jbmb.jbmb_coreserver.diagnosis.repository.ImageLinkRepository;
 import com.jbmb.jbmb_coreserver.diagnosis.repository.UpdateLogRepository;
 import com.jbmb.jbmb_coreserver.diagnosis.repository.UpdateSurveyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -32,15 +28,16 @@ public class DiagnosisService {
     private final UpdateLogRepository updateLogRepository;
     private final UpdateSurveyRepository updateSurveyRepository;
     private final ImageLinkRepository imageLinkRepository;
-    private final UpdateSurveyResponse response = new UpdateSurveyResponse();
+    private final Response response = new Response();
+    private final UpdateSurveyResponse updateSurveyresponse = new UpdateSurveyResponse();
 
     /**
      * 설문조사 하다가 중간에 튕겼을 때 삭제를 위한
      * resultCode 0:성공 , 1:진단기록 없음 , 2:아이디 틀림
      * @param DisabledRequest
-     * @return UpdateSurveyResponse
+     * @return Response
      */
-    public UpdateSurveyResponse disabledService(DisabledRequest disalbed){
+    public Response disabledService(DisabledRequest disalbed){
         try{
             Integer userNum = memberRepository.findById(disalbed.getId()).get().getUserNum();
             Integer diagnosisID = updateLogRepository.findLogByUserNum(userNum);
@@ -79,7 +76,7 @@ public class DiagnosisService {
      */
     public UpdateSurveyResponse updateService(ServletRequest request, UpdateSurveyRequest survey) {
         Integer userNum=getUserNum(request); // 유저 번호 받아오기
-        if(userNum==0) return response.builder().resultCode(1).build(); // 사용자 번호가 존재하지 않을 경우
+        if(userNum==0) return updateSurveyresponse.builder().resultCode(1).build(); // 사용자 번호가 존재하지 않을 경우
         Integer diagnosisID = updateLogRepository.findLogByUserNum(userNum); // 진단기록 가져오기
         if (diagnosisID == null) {  // 설문을 처음 진행할 경우
             diagnosisID = updateLogRepository.save(DiagnosisLog.builder()
@@ -121,16 +118,16 @@ public class DiagnosisService {
                 .survey10(checkNum[10])
                 .build());
 
-        return response.builder().resultCode(0).build();
+        return updateSurveyresponse.builder().resultCode(0).diagnosisID(diagnosisID).build();
     }
 
     /**
      * 이미지 링크 DB에 저장
      * resultCode 0:성공 , 1:실패
      * @param ImageLinkRequest
-     * @return UpdateSurveyResponse
+     * @return Response
      */
-    public UpdateSurveyResponse imageLinkService(ServletRequest request, ImageLinkRequest imageLink){
+    public Response imageLinkService(ServletRequest request, ImageLinkRequest imageLink){
         Integer userNum=getUserNum(request); // 유저 번호 받아오기
         if(userNum==0) return response.builder().resultCode(1).build(); // 사용자 번호가 존재하지 않을 경우
         Integer diagnosisID = updateLogRepository.findLogByUserNum(userNum); // 진단기록 가져오기

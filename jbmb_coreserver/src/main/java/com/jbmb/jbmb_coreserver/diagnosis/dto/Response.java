@@ -7,7 +7,6 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateSurveyResponse {
+public class Response {
     private Integer resultCode;
-    private Integer diagnosisID;
 }
