@@ -1,6 +1,12 @@
 package com.jbmb.jbmb_coreserver.diagnosis.controller;
 
-import com.jbmb.jbmb_coreserver.diagnosis.dto.*;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Request.DisabledRequest;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Request.HairLossBySurveyRequest;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Request.ImageLinkRequest;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Request.UpdateSurveyRequest;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.HairLossBySurveyResponse;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.Response;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.UpdateSurveyResponse;
 import com.jbmb.jbmb_coreserver.diagnosis.service.DiagnosisService;
 import groovy.util.logging.Slf4j;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +43,12 @@ public class DiagnosisController {
     @PostMapping("/image_link")
     public Response updateUserImageLink(ServletRequest request, @RequestBody ImageLinkRequest imageLink) {
         return diagnosisService.imageLinkService(request, imageLink);
+    }
+
+    // 설문 분석
+    @PostMapping("/hair_loss_survey")
+    public HairLossBySurveyResponse diagnoseHairLossBySurvey(@RequestBody HairLossBySurveyRequest hairLossBySurvey) {
+        return diagnosisService.hairLossBySurveyService(hairLossBySurvey);
     }
 
 }

@@ -5,7 +5,13 @@ import com.jbmb.jbmb_coreserver.account.repository.MemberRepository;
 import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisImage;
 import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisLog;
 import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisSurvey;
-import com.jbmb.jbmb_coreserver.diagnosis.dto.*;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Request.DisabledRequest;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Request.HairLossBySurveyRequest;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Request.ImageLinkRequest;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Request.UpdateSurveyRequest;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.HairLossBySurveyResponse;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.Response;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.UpdateSurveyResponse;
 import com.jbmb.jbmb_coreserver.diagnosis.repository.ImageLinkRepository;
 import com.jbmb.jbmb_coreserver.diagnosis.repository.UpdateLogRepository;
 import com.jbmb.jbmb_coreserver.diagnosis.repository.UpdateSurveyRepository;
@@ -30,6 +36,7 @@ public class DiagnosisService {
     private final ImageLinkRepository imageLinkRepository;
     private final Response response = new Response();
     private final UpdateSurveyResponse updateSurveyresponse = new UpdateSurveyResponse();
+    private final HairLossBySurveyResponse hairLossBySurveyResponse = new HairLossBySurveyResponse();
 
     /**
      * 설문조사 하다가 중간에 튕겼을 때 삭제를 위한
@@ -70,6 +77,7 @@ public class DiagnosisService {
 
     /**
      * 설문조사 페이지 하나 넘길 때마다
+     * checked 0:미체크 , 1:없다 , 2:있다
      * resultCode 0:성공 , 1:실패
      * @param UpdateSurveyRequest
      * @return UpdateSurveyResponse
@@ -145,4 +153,28 @@ public class DiagnosisService {
         return response.builder().resultCode(0).build();
     }
 
+    /**
+     * DB에 저장된 설문 내용으로 설문 분석 리턴
+     * resultCode 0:성공 , 1:실패
+     * @param hairLossBySurvey
+     * @return
+     */
+    public HairLossBySurveyResponse hairLossBySurveyService(HairLossBySurveyRequest hairLossBySurvey){
+        Optional<DiagnosisSurvey> result = updateSurveyRepository.findById(hairLossBySurvey.getDiagnosisID());
+        if(!result.isPresent()) return hairLossBySurveyResponse.builder().resultCode(1).build();
+        Integer sum=result.get().getSurvey1()
+                +result.get().getSurvey2()
+                +result.get().getSurvey3()
+                +result.get().getSurvey4()
+                +result.get().getSurvey5()
+                +result.get().getSurvey6()
+                +result.get().getSurvey7()
+                +result.get().getSurvey8()
+                +result.get().getSurvey9()
+                +result.get().getSurvey10()-10;
+        if (sum<3) return hairLossBySurveyResponse.builder().resultCode(0).state(0).build();
+        else if(sum<4) return hairLossBySurveyResponse.builder().resultCode(0).state(1).build();
+        else if(sum<6) return hairLossBySurveyResponse.builder().resultCode(0).state(2).build();
+        return hairLossBySurveyResponse.builder().resultCode(0).state(3).build();
+    }
 }

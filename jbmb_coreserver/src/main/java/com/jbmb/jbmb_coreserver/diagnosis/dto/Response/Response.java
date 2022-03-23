@@ -1,4 +1,4 @@
-package com.jbmb.jbmb_coreserver.diagnosis.dto;
+package com.jbmb.jbmb_coreserver.diagnosis.dto.Response;
 
 import lombok.*;
 
