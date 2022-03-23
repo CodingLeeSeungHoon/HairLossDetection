@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Deprecated //회원정보 수정 때 쓰일 것 (어노테이션 지우고)
 public class InformationResponse {
     private Integer resultCode;
     private String id;
