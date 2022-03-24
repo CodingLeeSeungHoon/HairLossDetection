@@ -16,36 +16,37 @@ import java.util.stream.Collectors;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-//@Table(name = "member") // 테이블 이름이 같다면 굳이 써줄 필요는 없음
+@Table(name = "member") // 테이블 이름이 같다면 굳이 써줄 필요는 없음
 @Entity
 public class Member implements UserDetails {
 
     @Id
+    @Column(name = "user_num")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userNum;
 
-    @Column(length = 20, nullable = false, unique = true, updatable = false)
+    @Column(name = "user_id", length = 20, nullable = false, unique = true, updatable = false)
     private String id;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(name = "user_pw", nullable = false, columnDefinition = "TEXT")
     private String password;
 
-    @Column(length = 20, nullable = false)
+    @Column(name = "user_name", length = 10, nullable = false)
     private String name;
 
-    @Column(nullable = false, columnDefinition = "TEXT", unique = true)
+    @Column(name = "user_email", nullable = false, columnDefinition = "TEXT", unique = true)
     private String email;
 
-    @Column(length = 16, nullable = false)
+    @Column(name = "user_phone", length = 16, nullable = false)
     private String phone;
 
-    @Column(nullable = false, columnDefinition = "TINYINT(1)")
-    private String sex;
+    @Column(name = "user_sex", nullable = false, columnDefinition = "TINYINT")
+    private Integer sex;
 
-    @Column(nullable = false)
+    @Column(name = "user_age", nullable = false)
     private Integer age;
 
-    @Column(nullable = false)
+    @Column(name = "user_hairtype")
     private Integer hairType;
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -83,4 +84,5 @@ public class Member implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }

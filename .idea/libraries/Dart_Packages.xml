@@ -149,6 +149,20 @@
             </list>
           </value>
         </entry>
+        <entry key="google_maps_flutter">
+          <value>
+            <list>
+              <option value="$USER_HOME$/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter-2.1.2/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="google_maps_flutter_platform_interface">
+          <value>
+            <list>
+              <option value="$USER_HOME$/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter_platform_interface-2.1.5/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="http">
           <value>
             <list>
@@ -450,6 +464,8 @@
       <root url="file://$USER_HOME$/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_image_compress-1.1.0/lib" />
       <root url="file://$USER_HOME$/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-1.0.4/lib" />
       <root url="file://$USER_HOME$/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-2.0.5/lib" />
+      <root url="file://$USER_HOME$/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter-2.1.2/lib" />
+      <root url="file://$USER_HOME$/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter_platform_interface-2.1.5/lib" />
       <root url="file://$USER_HOME$/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/http-0.13.4/lib" />
       <root url="file://$USER_HOME$/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/http_parser-4.0.0/lib" />
       <root url="file://$USER_HOME$/flutter/flutter/.pub-cache/hosted/pub.dartlang.org/image_cropper-1.5.0/lib" />

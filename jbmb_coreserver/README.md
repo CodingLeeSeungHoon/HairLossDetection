@@ -11,13 +11,16 @@
    │  │               ├── jbmbCoreserverApplication.java
    │  │               ├── account
    │  │               │   ├── config
+   │  │               │   │   ├── RedisConfig.java
    │  │               │   │   └── WebSecurityConfig.java
    │  │               │   ├── controller
    │  │               │   │   └── MemberController.java
    │  │               │   ├── domain
    │  │               │   │   └── Member.java
    │  │               │   ├── dto
-   │  │               │   │   └── UserRequestDto.java
+   │  │               │   │   ├── Login.java
+   │  │               │   │   ├── Logout.java
+   │  │               │   │   └── Signup.java
    │  │               │   ├── jwt
    │  │               │   │   ├── JwtAuthenticationFilter.java
    │  │               │   │   └── JwtTokenProvider.java
@@ -30,11 +33,16 @@
    │  │               │   ├── controller
    │  │               │   │   └── DiagnosisController.java
    │  │               │   ├── domain
-   │  │               │   │   └── Diagnosis.java
+   │  │               │   │   ├── DiagnosisImage.java
+   │  │               │   │   ├── DiagnosisLog.java
+   │  │               │   │   ├── DiagnosisResultImage.java
+   │  │               │   │   └── DiagnosisSurvey.java
    │  │               │   ├── dto
-   │  │               │   │   └── DiagnosisRequestDto.java
+   │  │               │   │   ├── UpdateSurveyRequest.java
+   │  │               │   │   └── UpdateSurveyResponse.java
    │  │               │   ├── repository
-   │  │               │   │   └── DiagnosisRepository.java
+   │  │               │   │   ├── UpdateLogRepository.java
+   │  │               │   │   └── UpdateSurveyRepository.java
    │  │               │   └── service
    │  │               │       └── DiagnosisService.java
    │  │               ├── feedback
@@ -42,14 +50,14 @@
    │  │               │   │   └── FeedbackController.java
    │  │               │   └── service
    │  │               │       └── FeedbackService.java
-   │  │               ├── board
-   │  │               │   ├── controller
-   │  │               │   │   └── BoardController.java
-   │  │               │   ├── domain
-   │  │               │   │   └── Board.java
-   │  │               │   ├── dto
-   │  │               │   │   └── BoardRequestDto.java
-   │  │               │   ├── repository
-   │  │               │   │   └── BoardRepository.java
-   │  │               │   └── service
-   │  │               │       └── BoardService.java
+   │  │               └── board
+   │  │                   ├── controller
+   │  │                   │   └── BoardController.java
+   │  │                   ├── domain
+   │  │                   │   └── Board.java
+   │  │                   ├── dto
+   │  │                   │   └── BoardRequestDto.java
+   │  │                   ├── repository
+   │  │                   │   └── BoardRepository.java
+   │  │                   └── service
+   │  │                       └── BoardService.java
