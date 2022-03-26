@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:jbmb_application/object/JBMBMemberInfo.dart';
-import 'package:jbmb_application/object/JBMBRegisterResult.dart';
+import 'package:jbmb_application/object/JBMBRegisterResponse.dart';
 import 'package:jbmb_application/service/JBMBRegisterManager.dart';
 import 'package:jbmb_application/widget/JBMBBigLogo.dart';
 import 'package:jbmb_application/widget/JBMBOutlinedButton.dart';
@@ -228,10 +228,7 @@ class _JoinPageState extends State<JoinPage> {
                         buttonText: '취소',
                         iconData: Icons.cancel,
                         onPressed: () {
-                          FocusManager.instance.primaryFocus?.unfocus();
-                          Future.delayed(const Duration(milliseconds: 300), () {
-                            Navigator.pop(context);
-                          });
+                          _clickedCancelButton(context);
                         },
                         backgroundColor: Colors.black12,
                       ),
@@ -240,35 +237,15 @@ class _JoinPageState extends State<JoinPage> {
                         iconData: Icons.account_box,
                         onPressed: () {
                           setState(() {
-                            jbmbMemberInfo.setID = idController.text;
-                            jbmbMemberInfo.setPW = pwController.text;
-                            jbmbMemberInfo.setName = nameController.text;
-                            jbmbMemberInfo.setPhone = phoneController.text;
-                            jbmbMemberInfo.setEmail = emailController.text;
-                            jbmbMemberInfo.setAge = int.tryParse(ageController.text);
-                            jbmbMemberInfo.setSex = _selectedGender;
+                            _getValueFromTextField();
                           });
-
                           JBMBRegisterResult registerResult = jbmbRegisterManager.registerJBMB(jbmbMemberInfo);
-                          FocusManager.instance.primaryFocus?.unfocus();
-                          Future.delayed(const Duration(milliseconds:  300), () {
-                            if (registerResult.getResultCode == 0){
-                              Navigator.pop(context);
-                            }
-                            Future.delayed(const Duration(milliseconds: 200), () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Row(
-                                    children: [
-                                      if (registerResult.getResultCode == 0)
-                                        const Icon(Icons.check, color: Colors.white,),
-                                      if (registerResult.getResultCode != 0)
-                                        const Icon(Icons.cancel_outlined, color: Colors.redAccent,),
-                                      Text(registerResult.getResult),
-                                    ],
-                                  ))
-                              );
-                            });
-                          });
+                          if (registerResult.getResultCode == 0){
+                            // when success register
+                            _doAfterSuccessRegister(context, registerResult);
+                          } else {
+                            _doAfterFailRegister(context, registerResult);
+                          }
                         },
                         backgroundColor: Colors.black45,
                         elementColor: Colors.white,
@@ -283,6 +260,60 @@ class _JoinPageState extends State<JoinPage> {
             ),
           ),
         ));
+  }
+
+  /// 회원가입 취소 버튼을 눌렀을 때의 Motion
+  _clickedCancelButton(BuildContext context){
+    FocusManager.instance.primaryFocus?.unfocus();
+    Future.delayed(const Duration(milliseconds: 300), () {
+      Navigator.pop(context);
+    });
+  }
+
+  /// TextField로 부터 값을 가져와 State를 변경하는 메소드
+  _getValueFromTextField(){
+    jbmbMemberInfo.setID = idController.text;
+    jbmbMemberInfo.setPW = pwController.text;
+    jbmbMemberInfo.setName = nameController.text;
+    jbmbMemberInfo.setPhone = phoneController.text;
+    jbmbMemberInfo.setEmail = emailController.text;
+    jbmbMemberInfo.setAge = int.tryParse(ageController.text);
+    jbmbMemberInfo.setSex = _selectedGender;
+  }
+
+  /// register에 성공한 후의 Motion
+  _doAfterSuccessRegister(BuildContext context, JBMBRegisterResult registerResult){
+    FocusManager.instance.primaryFocus?.unfocus();
+    Future.delayed(const Duration(milliseconds:  300), () {
+      Navigator.pop(context);
+      Future.delayed(const Duration(milliseconds: 200), () {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Row(
+              children: [
+                const Icon(Icons.check, color: Colors.white,),
+                Text(registerResult.getResult),
+              ],
+            ))
+        );
+      });
+    });
+  }
+
+  /// register에 실패한 후의 Motion
+  _doAfterFailRegister(BuildContext context, JBMBRegisterResult registerResult){
+    FocusManager.instance.primaryFocus?.unfocus();
+    Future.delayed(const Duration(milliseconds:  300), () {
+      Future.delayed(const Duration(milliseconds: 200), () {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Row(
+              children: [
+                const Icon(Icons.cancel_outlined, color: Colors.redAccent,),
+                Text(registerResult.getResult),
+              ],
+            ))
+        );
+      });
+    });
   }
 }
 
