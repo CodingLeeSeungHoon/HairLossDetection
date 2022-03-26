@@ -119,13 +119,11 @@ public class MemberService {
     }
 
     /**
-     * 회원정보 수정 때 쓰일 것 (어노테이션 지우고)
      * resultCode 0:성공 , 1:실패
      * 성공 시 id, name, phoneNumber, sex, age, hairType 리턴
      * @param ServeletRequest
      * @return Logout
      */
-    @Deprecated
     public InformationResponse getInfoService(ServletRequest req){
         Optional<Member> member;
         try {

@@ -4,14 +4,13 @@ import com.jbmb.jbmb_coreserver.account.jwt.JwtTokenProvider;
 import com.jbmb.jbmb_coreserver.account.repository.MemberRepository;
 import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisImage;
 import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisLog;
+import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisResult;
 import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisSurvey;
-import com.jbmb.jbmb_coreserver.diagnosis.dto.Request.DisabledRequest;
-import com.jbmb.jbmb_coreserver.diagnosis.dto.Request.HairLossBySurveyRequest;
-import com.jbmb.jbmb_coreserver.diagnosis.dto.Request.ImageLinkRequest;
-import com.jbmb.jbmb_coreserver.diagnosis.dto.Request.UpdateSurveyRequest;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Request.*;
 import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.HairLossBySurveyResponse;
 import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.Response;
 import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.UpdateSurveyResponse;
+import com.jbmb.jbmb_coreserver.diagnosis.repository.DiagnosisResultRepository;
 import com.jbmb.jbmb_coreserver.diagnosis.repository.ImageLinkRepository;
 import com.jbmb.jbmb_coreserver.diagnosis.repository.UpdateLogRepository;
 import com.jbmb.jbmb_coreserver.diagnosis.repository.UpdateSurveyRepository;
@@ -34,6 +33,7 @@ public class DiagnosisService {
     private final UpdateLogRepository updateLogRepository;
     private final UpdateSurveyRepository updateSurveyRepository;
     private final ImageLinkRepository imageLinkRepository;
+    private final DiagnosisResultRepository diagnosisResultRepository;
     private final Response response = new Response();
     private final UpdateSurveyResponse updateSurveyresponse = new UpdateSurveyResponse();
     private final HairLossBySurveyResponse hairLossBySurveyResponse = new HairLossBySurveyResponse();
@@ -157,7 +157,7 @@ public class DiagnosisService {
      * DB에 저장된 설문 내용으로 설문 분석 리턴
      * resultCode 0:성공 , 1:실패
      * @param hairLossBySurvey
-     * @return
+     * @return HairLossBySurveyResponse
      */
     public HairLossBySurveyResponse hairLossBySurveyService(HairLossBySurveyRequest hairLossBySurvey){
         Optional<DiagnosisSurvey> result = updateSurveyRepository.findById(hairLossBySurvey.getDiagnosisID());
@@ -176,5 +176,28 @@ public class DiagnosisService {
         else if(sum<4) return hairLossBySurveyResponse.builder().resultCode(0).state(1).build();
         else if(sum<6) return hairLossBySurveyResponse.builder().resultCode(0).state(2).build();
         return hairLossBySurveyResponse.builder().resultCode(0).state(3).build();
+    }
+
+    /**
+     * 진단 결과를 DB에 저장
+     * resultCode 0:성공 , 1:실패
+     * @param UpdateDiagnosisRequest
+     * @return Response
+     */
+    public Response updateDiagnosisService(UpdateDiagnosisRequest updateDiagnosisRequest){
+        try{
+            diagnosisResultRepository.save(DiagnosisResult.builder()
+                    .id(updateDiagnosisRequest.getDiagnosisID())
+                    .resultCode(updateDiagnosisRequest.getResultCode())
+                    .result0(updateDiagnosisRequest.getPercent().get(0))
+                    .result1(updateDiagnosisRequest.getPercent().get(1))
+                    .result2(updateDiagnosisRequest.getPercent().get(2))
+                    .result3(updateDiagnosisRequest.getPercent().get(3))
+                    .build());
+            return response.builder().resultCode(0).build();
+        }catch (Exception e){
+            return response.builder().resultCode(1).build();
+        }
+
     }
 }
