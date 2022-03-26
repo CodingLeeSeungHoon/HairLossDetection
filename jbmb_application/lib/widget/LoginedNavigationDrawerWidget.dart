@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jbmb_application/object/JBMBMemberInfo.dart';
 import 'package:jbmb_application/screen/DiagnosisAlertPage.dart';
+import 'package:jbmb_application/screen/DiagnosisLogPage.dart';
 import 'package:jbmb_application/screen/HospitalPage.dart';
 import 'package:jbmb_application/screen/InfoPage.dart';
 import 'package:jbmb_application/screen/LoginPage.dart';
@@ -115,7 +116,9 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
         // diagnose
         break;
       case 2:
-        // diagnose log
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => DiagnosisLogPage(jbmbMemberInfo: jbmbMemberInfo,),
+        ));
         break;
       case 3:
       // shampoo

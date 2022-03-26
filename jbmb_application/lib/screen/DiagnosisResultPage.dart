@@ -7,9 +7,11 @@ import '../widget/JBMBAppBars.dart';
 
 class DiagnosisResultPage extends StatefulWidget {
   final JBMBMemberInfo jbmbMemberInfo;
+  final int way;
   const DiagnosisResultPage({
     Key? key,
-    required this.jbmbMemberInfo
+    required this.jbmbMemberInfo,
+    required this.way
   }) : super(key: key);
 
   @override
@@ -50,17 +52,21 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
         child: Scaffold(
           extendBodyBehindAppBar: true,
           appBar: JBMBTransparentAppbar(onPressedCancel: () {
-            Future.delayed(const Duration(milliseconds: 250), () {
-              Navigator.pushReplacement(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation1, animation2) =>
-                      LoginedHome(jbmbMemberInfo: widget.jbmbMemberInfo,),
-                  transitionDuration: Duration.zero,
-                  reverseTransitionDuration: Duration.zero,
-                ),
-              );
-            });
+            if (widget.way == 1){
+              Future.delayed(const Duration(milliseconds: 250), () {
+                Navigator.pushReplacement(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation1, animation2) =>
+                        LoginedHome(jbmbMemberInfo: widget.jbmbMemberInfo,),
+                    transitionDuration: Duration.zero,
+                    reverseTransitionDuration: Duration.zero,
+                  ),
+                );
+              });
+            } else {
+              Navigator.of(context).pop();
+            }
           }),
           body: Scrollbar(
             child: SingleChildScrollView(

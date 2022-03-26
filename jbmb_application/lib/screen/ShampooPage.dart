@@ -19,9 +19,33 @@ class ShampooPage extends StatefulWidget {
 class _ShampooPageState extends State<ShampooPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  final controller = ScrollController();
+  List<String> items = List.generate(15, (index) => '샴푸 ${index + 1}');
+
+  @override
+  void initState() {
+    super.initState();
+    controller.addListener(() {
+      if (controller.position.maxScrollExtent == controller.offset) {
+        fetch();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  Future fetch() async {
+    setState(() {
+      items.addAll(['샴푸 A', '샴푸 B', '샴푸 C', '샴푸 D']);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-
     double phoneWidth = MediaQuery.of(context).size.width;
     double phoneHeight = MediaQuery.of(context).size.height;
     double phonePadding = MediaQuery.of(context).padding.top;
@@ -42,15 +66,114 @@ class _ShampooPageState extends State<ShampooPage> {
           onPressedCancel: () => Navigator.pop(context),
         ),
         body: Scrollbar(
-          child: SingleChildScrollView(
-            child: Container(
-              // 가운데 정렬
-              alignment: AlignmentDirectional.center,
-              // 패딩과 마진 값
-              padding: EdgeInsets.all(phonePadding * 0.33),
-              margin: EdgeInsets.all(phonePadding * 0.33),
-              // 내부 위젯 레이아웃 세로 배치
-            ),
+          controller: controller,
+          child: ListView.builder(
+            controller: controller,
+            padding: const EdgeInsets.all(8),
+            itemCount: items.length + 1,
+            itemBuilder: (context, index) {
+              if (index < items.length) {
+                final item = items[index];
+                return Card(
+                    clipBehavior: Clip.antiAlias,
+                    child: Container(
+                      height: 150,
+                      padding: const EdgeInsets.all(0),
+                      child: Row(children: [
+                        Expanded(
+                          flex: 6,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image:
+                                        Image.asset("images/shampoo.png").image,
+                                    )),
+                          ),
+                        ),
+                        const Spacer(
+                          flex: 1,
+                        ),
+                        Expanded(
+                            flex: 14,
+                            child: Container(
+                                padding: const EdgeInsets.only(top: 5),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[
+                                    Text(item,
+                                        style: const TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold)),
+                                    Row(
+                                      children: const <Widget>[
+                                        Text(
+                                          '샴푸 유형 : ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          "지성",
+                                          style: TextStyle(fontSize: 15.0),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: const <Widget>[
+                                        Text(
+                                          '평점 : ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15),
+                                        ),
+                                        Icon(Icons.star_outlined, color: Colors.yellow,),
+                                        Text(
+                                          '(5/5)',
+                                          style: TextStyle(fontSize: 15),
+                                        )
+                                      ],
+                                    ),
+                                    Row(
+                                      children: const <Widget>[
+                                        Text(
+                                          '가격 : ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15),
+                                        ),
+                                        Text(
+                                          '10,000원',
+                                          style: TextStyle(fontSize: 15),
+                                        )
+                                      ],
+                                    ),
+                                    Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: <Widget>[
+                                          TextButton(
+                                              onPressed: (){},
+                                              child: const Text("구매 페이지로 연결")),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                )))
+                      ]),
+                    ));
+              } else {
+                return const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 32),
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.black45,
+                    ),
+                  ),
+                );
+              }
+            },
           ),
         ));
   }

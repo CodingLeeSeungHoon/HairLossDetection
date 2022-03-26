@@ -1,8 +1,8 @@
 
 import 'package:jbmb_application/object/JBMBMemberInfo.dart';
 
-import '../object/JBMBLoginInput.dart';
-import '../object/JBMBLoginResult.dart';
+import '../object/JBMBLoginRequestObject.dart';
+import '../object/JBMBLoginResponseObject.dart';
 
 /// 2022.03.14 이승훈
 /// 로그인 컨트롤러
@@ -11,8 +11,8 @@ class JBMBLoginManager{
   /// 로그인 요청하는 메소드
   /// ID, PW 담고 있는 [loginInput]을 파라미터로 받고,
   /// 로그인 결과(JBMBLoginResult)를 리턴한다.
-  JBMBLoginResult requestLogin(JBMBLoginInput loginInput){
-    JBMBLoginResult jbmbLoginResult = JBMBLoginResult();
+  JBMBLoginResponseObject requestLogin(JBMBLoginRequestObject loginInput){
+    JBMBLoginResponseObject jbmbLoginResult = JBMBLoginResponseObject();
 
     if (checkLoginField(loginInput)){
 
@@ -22,7 +22,7 @@ class JBMBLoginManager{
   }
 
   /// Login 페이지의 텍스트 필드 유효성을 확인하는 메소드
-  bool checkLoginField(JBMBLoginInput loginInput){
+  bool checkLoginField(JBMBLoginRequestObject loginInput){
     if (loginInput.getID != null && loginInput.getPW != null){
       return true;
     }

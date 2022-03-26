@@ -70,7 +70,7 @@ class _HospitalPageState extends State<HospitalPage> {
     ];
     keywords.forEach((key) async {
       NearBySearchResponse? result = await googlePlace.search.getNearBySearch(
-          Location(lat: position.latitude, lng: position.longitude), 50000,
+          Location(lat: position.latitude, lng: position.longitude), 10000,
           keyword: key, language: "ko", type: "doctor");
 
       result?.results?.forEach((element) {
@@ -101,6 +101,7 @@ class _HospitalPageState extends State<HospitalPage> {
       if (iterated == keywords.length) {
         setState(() {
           isLoading = false;
+          print(_markers.length);
         });
       }
     });

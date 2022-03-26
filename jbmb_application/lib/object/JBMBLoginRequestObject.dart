@@ -1,6 +1,6 @@
 /// 2022.03.14 이승훈
 /// 로그인 텍스트 필드에서 아이디와 비밀번호를 담는 오브젝트
-class JBMBLoginInput{
+class JBMBLoginRequestObject{
   String? _id;
   String? _pw;
 
