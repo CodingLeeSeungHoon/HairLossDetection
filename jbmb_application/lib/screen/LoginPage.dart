@@ -1,31 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:jbmb_application/object/JBMBLoginRequestObject.dart';
 import 'package:jbmb_application/screen/JoinPage.dart';
 import 'package:jbmb_application/screen/LoginedHome.dart';
+import 'package:jbmb_application/service/JBMBJwtManager.dart';
 import 'package:jbmb_application/service/JBMBLoginManager.dart';
 import 'package:jbmb_application/widget/JBMBBigLogo.dart';
 import 'package:jbmb_application/widget/JBMBOutlinedButton.dart';
 import 'package:jbmb_application/widget/JBMBTextField.dart';
 
+import '../object/JBMBLoginResponseObject.dart';
+import '../object/JBMBMemberInfo.dart';
 import '../widget/JBMBAppBars.dart';
 
 /// 2022.03.08 이승훈
 /// 로그인 화면
 /// JBMBLoginManager에 의해 로직 관리
-class LoginPage extends StatelessWidget {
-  final JBMBLoginManager jbmbLoginManager = JBMBLoginManager();
-
-  LoginPage({
+class LoginPage extends StatefulWidget {
+  const LoginPage({
     Key? key,
   }) : super(key: key);
+
+  @override
+  _LoginPageState createState() {
+    return _LoginPageState();
+  }
+}
+
+class _LoginPageState extends State<LoginPage> {
+  TextEditingController idController = TextEditingController();
+  TextEditingController pwController = TextEditingController();
+  JBMBLoginManager jbmbLoginManager = JBMBLoginManager();
+  JBMBLoginRequestObject jbmbLoginRequestObject = JBMBLoginRequestObject();
 
   @override
   Widget build(BuildContext context) {
     double phoneWidth = MediaQuery.of(context).size.width;
     double phoneHeight = MediaQuery.of(context).size.height;
     double phonePadding = MediaQuery.of(context).padding.top;
-
-    TextEditingController idController = TextEditingController();
-    TextEditingController pwController = TextEditingController();
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -48,7 +59,6 @@ class LoginPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // TODO : Logo Image Resolution
                 const JBMBBigLogo(),
                 SizedBox(
                   height: phoneHeight * 0.043,
@@ -81,35 +91,33 @@ class LoginPage extends StatelessWidget {
                     JBMBOutlinedButton(
                       buttonText: '로그인',
                       iconData: Icons.login,
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Future.delayed(const Duration(milliseconds: 250), () {
-                          Navigator.pushReplacement(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder: (context, animation1, animation2) =>
-                                  // TODO : change variable
-                                  LoginedHome(
-                                jbmbMemberInfo: jbmbLoginManager
-                                    .getMemberInfoByUserID(idController.text),
-                              ),
-                              transitionDuration: Duration.zero,
-                              reverseTransitionDuration: Duration.zero,
-                            ),
-                          );
+                      onPressed: () async {
+                        setState(() {
+                          _getValueFromTextField();
                         });
+                        JBMBLoginResponseObject loginResponse =
+                            await jbmbLoginManager
+                                .requestLogin(jbmbLoginRequestObject);
+                        if (loginResponse.getResultCode == 0) {
+                          // 로그인 응답에 성공한 경우
+                          try {
+                            JBMBMemberInfo memberInfo = await jbmbLoginManager
+                                .getMemberInfoByUserID(loginResponse.getID!);
+                            _doAfterSuccessLogin(context, memberInfo, loginResponse);
+                          } catch (e) {
+                            _doAfterFailGetMemberInfo(context);
+                          }
+                        } else {
+                          // 로그인 응답에 성공하지 못 한 경우
+                          _doAfterFailLogin(context, loginResponse);
+                        }
                       },
                     ),
                     JBMBOutlinedButton(
                       buttonText: '회원가입',
                       iconData: Icons.account_box,
                       onPressed: () {
-                        FocusManager.instance.primaryFocus?.unfocus();
-                        Future.delayed(const Duration(milliseconds: 180), () {
-                          Navigator.pop(context);
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => JoinPage()));
-                        });
+                        _goJoinPage(context);
                       },
                     ),
                   ],
@@ -118,5 +126,93 @@ class LoginPage extends StatelessWidget {
             ),
           )),
     );
+  }
+
+  // 텍스트 필드로부터 값을 가져온다.
+  _getValueFromTextField() {
+    jbmbLoginRequestObject.setID = idController.text;
+    jbmbLoginRequestObject.setPW = pwController.text;
+  }
+
+  // 로그인 성공 및 MemberInfo를 받아오기에 성공하면, 호출되는 메소드
+  // 로그인된 홈 페이지로 이동
+  _doAfterSuccessLogin(BuildContext context, JBMBMemberInfo jbmbMemberInfo, JBMBLoginResponseObject loginResponse) {
+    JBMBJwtManager jwtManager = JBMBJwtManager();
+    jwtManager.saveToken(loginResponse.getJWT!);
+
+    Navigator.pop(context);
+    Future.delayed(const Duration(milliseconds: 250), () {
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (context, animation1, animation2) => LoginedHome(
+            jbmbMemberInfo: jbmbMemberInfo,
+          ),
+          transitionDuration: Duration.zero,
+          reverseTransitionDuration: Duration.zero,
+        ),
+      );
+    });
+  }
+
+  // 멤버 정보를 가져오지 못 한 경우, 호출되는 메소드 (스낵바 소환)
+  _doAfterFailGetMemberInfo(BuildContext context) {
+    FocusManager.instance.primaryFocus?.unfocus();
+    Future.delayed(const Duration(milliseconds: 300), () {
+      Future.delayed(const Duration(milliseconds: 200), () {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Row(
+              children: const [
+              Icon(
+                Icons.cancel_outlined,
+                color: Colors.redAccent,
+              ),
+              Text("  JBMB 서버의 접속이 원활하지 않습니다."),
+            ],
+        )));
+      });
+    });
+  }
+
+// 로그인에 실패한 경우 호출되는 메소드 (스낵바 소환)
+  _doAfterFailLogin(BuildContext context, JBMBLoginResponseObject loginResponseObject) {
+    String snackBarText = "";
+    switch(loginResponseObject.getResultCode){
+      case 1:
+        snackBarText = "  존재하지 않는 ID입니다. 다시 확인해주세요.";
+        break;
+      case 2:
+        snackBarText = "  비밀번호 오류입니다. 다시 확인해주세요.";
+        break;
+      case 3:
+        snackBarText = "  JBMB 서버의 동작이 원활하지 않습니다.";
+        break;
+    }
+
+    FocusManager.instance.primaryFocus?.unfocus();
+    Future.delayed(const Duration(milliseconds: 300), () {
+      Future.delayed(const Duration(milliseconds: 200), () {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Row(
+              children: [
+                const Icon(
+                  Icons.cancel_outlined,
+                  color: Colors.redAccent,
+                ),
+                Text(snackBarText),
+              ],
+            )));
+      });
+    });
+  }
+
+  // 회원가입 버튼을 클릭했을 때 호출되는 메소드 (페이지 이동)
+  _goJoinPage(BuildContext context){
+    FocusManager.instance.primaryFocus?.unfocus();
+    Future.delayed(const Duration(milliseconds: 180), () {
+      Navigator.pop(context);
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => const JoinPage()));
+    });
   }
 }

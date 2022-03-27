@@ -197,6 +197,7 @@ class _LoginedHomeState extends State<LoginedHome> {
     }
   }
 
+  /// 샴푸 botomSheet 생성하는 메소드
   Widget buildSheet() => Container(
       padding: EdgeInsets.all(8),
       margin: EdgeInsets.all(8),
@@ -219,7 +220,8 @@ class _LoginedHomeState extends State<LoginedHome> {
                   IconButton(
                     onPressed: () {},
                     icon: const Icon(Icons.info_outline),
-                    tooltip: '\n일반적으로 두피 역시 피부이기 때문에 \n건성 피부는 건성 두피, 지성 피부는 지성 두피를\n 가질 확률이 높습니다.\n'
+                    tooltip:
+                        '\n일반적으로 두피 역시 피부이기 때문에 \n건성 피부는 건성 두피, 지성 피부는 지성 두피를\n 가질 확률이 높습니다.\n'
                         '건성 두피는 각질과 비듬이 많은 두피,\n지성 두피는 유분이 많은 두피를 의미합니다.\n'
                         '샴푸를 한 지 반나절 내에 기름지고 축 가라앉는다면 지성,\n 비듬이나 각질 가루가 많이 떨어지는 두피는 건성입니다.\n',
                   ),

@@ -235,11 +235,13 @@ class _JoinPageState extends State<JoinPage> {
                       JBMBOutlinedButton(
                         buttonText: '회원가입',
                         iconData: Icons.account_box,
-                        onPressed: () {
+                        onPressed: () async {
                           setState(() {
                             _getValueFromTextField();
                           });
-                          JBMBRegisterResult registerResult = jbmbRegisterManager.registerJBMB(jbmbMemberInfo);
+                          JBMBRegisterResult registerResult = await jbmbRegisterManager.registerJBMB(jbmbMemberInfo);
+                          // print(registerResult.getResultCode);
+                          // print(registerResult.getResult);
                           if (registerResult.getResultCode == 0){
                             // when success register
                             _doAfterSuccessRegister(context, registerResult);
@@ -291,7 +293,7 @@ class _JoinPageState extends State<JoinPage> {
             SnackBar(content: Row(
               children: [
                 const Icon(Icons.check, color: Colors.white,),
-                Text(registerResult.getResult),
+                Text(registerResult.getResult ?? "JBMB 서버 통신 오류"),
               ],
             ))
         );
@@ -308,7 +310,7 @@ class _JoinPageState extends State<JoinPage> {
             SnackBar(content: Row(
               children: [
                 const Icon(Icons.cancel_outlined, color: Colors.redAccent,),
-                Text(registerResult.getResult),
+                Text(registerResult.getResult ?? "  JBMB 서버의 접속이 원활하지 않습니다."),
               ],
             ))
         );

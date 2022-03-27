@@ -1,46 +1,123 @@
+import 'dart:developer';
 
+import 'package:jbmb_application/object/JBMBLogoutResponseObject.dart';
 import 'package:jbmb_application/object/JBMBMemberInfo.dart';
 
 import '../object/JBMBLoginRequestObject.dart';
 import '../object/JBMBLoginResponseObject.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 /// 2022.03.14 이승훈
 /// 로그인 컨트롤러
-class JBMBLoginManager{
-
+class JBMBLoginManager {
   /// 로그인 요청하는 메소드
   /// ID, PW 담고 있는 [loginInput]을 파라미터로 받고,
   /// 로그인 결과(JBMBLoginResult)를 리턴한다.
-  JBMBLoginResponseObject requestLogin(JBMBLoginRequestObject loginInput){
+  Future<JBMBLoginResponseObject> requestLogin(
+      JBMBLoginRequestObject loginInput) async {
     JBMBLoginResponseObject jbmbLoginResult = JBMBLoginResponseObject();
-
-    if (checkLoginField(loginInput)){
-
+    if (_checkLoginField(loginInput)) {
+      try {
+        JBMBLoginResponseObject response = await _tryLogin(loginInput);
+        return response;
+      } catch (e) {
+        log("[JBMBLoginManager] JBMB Server Error (RequestCode Not 200)");
+        jbmbLoginResult.setResultCode = 3;
+      }
     }
-
     return jbmbLoginResult;
   }
 
   /// Login 페이지의 텍스트 필드 유효성을 확인하는 메소드
-  bool checkLoginField(JBMBLoginRequestObject loginInput){
-    if (loginInput.getID != null && loginInput.getPW != null){
+  bool _checkLoginField(JBMBLoginRequestObject loginInput) {
+    if (loginInput.getID != null && loginInput.getPW != null) {
       return true;
     }
     return false;
   }
 
+  /// use Login API
+  Future<JBMBLoginResponseObject> _tryLogin(
+      JBMBLoginRequestObject loginRequestObject) async {
+    // log(jsonEncode(loginRequestObject.toJson()));
+    final response = await http.post(
+      Uri.parse('http://jebalmobal.site/user/account/login'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(loginRequestObject.toJson()),
+    );
+
+    // check response
+    // log(response.statusCode.toString());
+    // log(response.body);
+
+    if (response.statusCode / 100 == 2) {
+      log("[JBMBLoginManager] API Response StatusCode 200 (tryLogin)");
+      // log(jsonDecode(response.body));
+      return JBMBLoginResponseObject.fromJson(jsonDecode(response.body));
+    } else {
+      log("[JBMBLoginManager] API Response StatusCode is not 200 (tryLogin), throw Exception");
+      throw Exception('[Error:Server] 서버 측 오류로 로그인에 실패했습니다.');
+    }
+  }
+
   /// requestLogin의 코드가 승인인 경우 호출되는 메소드
-  /// [UserID]를 통해 MemberInfo를 DB로부터 받아오는 메소드
+  /// [userID]를 통해 MemberInfo를 DB로부터 받아오는 메소드
   /// LoginedHome에 MemberInfo를 넘겨주기 위해 존재.
-  JBMBMemberInfo getMemberInfoByUserID(String UserID){
-    JBMBMemberInfo memberInfo = JBMBMemberInfo();
-    memberInfo.setID = 'andy8569';
-    memberInfo.setPW = 'gg112828273';
-    memberInfo.setSex = 'male';
-    memberInfo.setAge = 25;
-    memberInfo.setEmail = 'free_minkya@naver.com';
-    memberInfo.setPhone = '01068538569';
-    memberInfo.setName = '이승훈';
+  Future<JBMBMemberInfo> getMemberInfoByUserID(String userID) async {
+    JBMBMemberInfo memberInfo = await _tryGetMemberInfo(userID);
     return memberInfo;
+  }
+
+  /// get MemberInfo using API
+  Future<JBMBMemberInfo> _tryGetMemberInfo(String userID) async {
+    final response = await http.post(
+      Uri.parse('http://jebalmobal.site/user/account/info'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode("{'id': $userID}"),
+    );
+
+    log(jsonEncode("{'id': $userID}"));
+
+    // check response
+    // log(response.statusCode.toString());
+    // log(response.body);
+
+    if (response.statusCode / 100 == 2) {
+      log("[JBMBLoginManager] API Response StatusCode 200 (tryGetMemberInfo)");
+      // log(jsonDecode(response.body));
+      return JBMBMemberInfo.fromJson(jsonDecode(response.body));
+    } else {
+      log("[JBMBLoginManager] API Response StatusCode is not 200 (tryGetMemberInfo), throw Exception");
+      throw Exception('[Error:Server] 서버 측 오류로 회원정보 얻어오기를 실패했습니다.');
+    }
+  }
+
+  /// try Logout using API
+  Future<JBMBLogoutResponseObject> _tryLogout(String userID) async {
+    final response = await http.post(
+      Uri.parse('http://jebalmobal.site/user/account/logout'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode("{'id': $userID}"),
+    );
+
+    // check response
+    // log(response.statusCode.toString());
+    // log(response.body);
+
+    if (response.statusCode / 100 == 2) {
+      log("[JBMBLoginManager] API Response StatusCode 200 (tryLogout)");
+      // log(jsonDecode(response.body));
+      return JBMBLogoutResponseObject.fromJson(jsonDecode(response.body));
+    } else {
+      log("[JBMBLoginManager] API Response StatusCode is not 200 (tryLogout), throw Exception");
+      throw Exception('[Error:Server] 서버 측 오류로 로그아웃을 실패했습니다.');
+    }
   }
 }

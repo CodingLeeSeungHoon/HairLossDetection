@@ -1,9 +1,15 @@
-import 'package:flutter/cupertino.dart';
-
 /// 2022.03.08 이승훈
-/// JBMBMemberInfo
-/// 회원가입 각 필드 값 모두 저장하는 객체, API RequestBody로 JSON Parsing을 거쳐 사용될 예정
+/// 회원가입 각 필드 값 모두 저장하는 객체, API RequestBody로 사용
+/// [id] String userID
+/// [passWord] String userPW
+/// [name] String userName
+/// [phoneNumber] String user phoneNumber
+/// [email] String user email
+/// [age] int user age
+/// [sex] String user sex
+/// [hairType] int user hairType
 class JBMBMemberInfo {
+  // member variable
   String? id;
   String? passWord;
   String? name;
@@ -13,10 +19,10 @@ class JBMBMemberInfo {
   String? sex;
   int? hairType;
 
-  /// empty constructor
+  // empty constructor
   JBMBMemberInfo();
 
-  /// getter, setter
+  // getter & setter
   String? get getID => id;
   set setID(String? inputID) => id = inputID;
 
@@ -41,25 +47,27 @@ class JBMBMemberInfo {
   int? get getHairType => hairType;
   set setHairType(int? inputHairType) => hairType = inputHairType;
 
-  /// fromJson
+  // fromJson
   JBMBMemberInfo.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        passWord = json['passWord'],
+        passWord = json['password'],
         name = json['name'],
-        phoneNumber = json['phoneNumber'],
-        sex = json['sex'],
+        phoneNumber = json['phone'],
+        sex = json['sex'] == 1 ? 'male' : 'female',
         age = json['age'],
-        hairType = json['hairType'];
+        hairType = json['hairType'],
+        email = json['email'];
 
-  /// toJson
+  // toJson
   Map<String, dynamic> toJson() => {
     'id' : id,
-    'passWord' : passWord,
+    'password' : passWord,
     'name' : name,
-    'phoneNumber' : phoneNumber,
-    'sex' : sex,
+    'phone' : phoneNumber,
+    'sex' : sex == 'male' ? 1 : 0,
     'age' : age,
-    'hairType' : hairType
+    'hairType' : hairType,
+    'email' : email
   };
 
 }
