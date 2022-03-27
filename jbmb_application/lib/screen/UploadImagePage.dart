@@ -76,7 +76,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
                                   Navigator.pushReplacement(
                                     context,
                                     PageRouteBuilder(
-                                      pageBuilder: (context, animation1, animation2) => DiagnosisResultPage(jbmbMemberInfo: widget.jbmbMemberInfo,),
+                                      pageBuilder: (context, animation1, animation2) => DiagnosisResultPage(jbmbMemberInfo: widget.jbmbMemberInfo, way: 1,),
                                       transitionDuration: Duration.zero,
                                       reverseTransitionDuration: Duration.zero,
                                     ),

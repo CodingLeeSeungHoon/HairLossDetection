@@ -1,12 +1,12 @@
-package com.jbmb.jbmb_coreserver.account.dto;
+package com.jbmb.jbmb_coreserver.diagnosis.dto.Response;
 
 import lombok.*;
 
+@ToString
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Login {
+public class Response {
     private Integer resultCode;
-    private String jwt;
 }

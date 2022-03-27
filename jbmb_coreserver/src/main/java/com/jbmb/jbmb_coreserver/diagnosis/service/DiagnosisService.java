@@ -2,10 +2,16 @@ package com.jbmb.jbmb_coreserver.diagnosis.service;
 
 import com.jbmb.jbmb_coreserver.account.jwt.JwtTokenProvider;
 import com.jbmb.jbmb_coreserver.account.repository.MemberRepository;
+import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisImage;
 import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisLog;
+import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisResult;
 import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisSurvey;
-import com.jbmb.jbmb_coreserver.diagnosis.dto.UpdateSurveyRequest;
-import com.jbmb.jbmb_coreserver.diagnosis.dto.UpdateSurveyResponse;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Request.*;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.HairLossBySurveyResponse;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.Response;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.UpdateSurveyResponse;
+import com.jbmb.jbmb_coreserver.diagnosis.repository.DiagnosisResultRepository;
+import com.jbmb.jbmb_coreserver.diagnosis.repository.ImageLinkRepository;
 import com.jbmb.jbmb_coreserver.diagnosis.repository.UpdateLogRepository;
 import com.jbmb.jbmb_coreserver.diagnosis.repository.UpdateSurveyRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Slf4j
@@ -25,20 +32,60 @@ public class DiagnosisService {
     private final MemberRepository memberRepository;
     private final UpdateLogRepository updateLogRepository;
     private final UpdateSurveyRepository updateSurveyRepository;
-    private final UpdateSurveyResponse response = new UpdateSurveyResponse();
+    private final ImageLinkRepository imageLinkRepository;
+    private final DiagnosisResultRepository diagnosisResultRepository;
+    private final Response response = new Response();
+    private final UpdateSurveyResponse updateSurveyresponse = new UpdateSurveyResponse();
+    private final HairLossBySurveyResponse hairLossBySurveyResponse = new HairLossBySurveyResponse();
+
+    /**
+     * 설문조사 하다가 중간에 튕겼을 때 삭제를 위한
+     * resultCode 0:성공 , 1:진단기록 없음 , 2:아이디 틀림
+     * @param DisabledRequest
+     * @return Response
+     */
+    public Response disabledService(DisabledRequest disalbed){
+        try{
+            Integer userNum = memberRepository.findById(disalbed.getId()).get().getUserNum();
+            Integer diagnosisID = updateLogRepository.findLogByUserNum(userNum);
+            updateLogRepository.deleteById(diagnosisID);
+            updateSurveyRepository.deleteById(diagnosisID);
+        }catch (NoSuchElementException e){
+            return response.builder().resultCode(2).build();
+        }
+        catch (Exception e){
+            return response.builder().resultCode(1).build();
+        }
+        return response.builder().resultCode(0).build();
+    }
+
+    /**
+     * 토큰 정보로 사용자 유저 번호를 가져옴
+     * @param ServletRequest
+     * @return userNum
+     */
+    private Integer getUserNum(ServletRequest request){
+        Integer userNum;
+        try {
+            String id = jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken((HttpServletRequest) request));
+            userNum = memberRepository.findById(id).get().getUserNum();
+        }catch (Exception e){
+            return 0;
+        }
+        return userNum;
+    }
 
     /**
      * 설문조사 페이지 하나 넘길 때마다
+     * checked 0:미체크 , 1:없다 , 2:있다
      * resultCode 0:성공 , 1:실패
-     *
      * @param UpdateSurveyRequest
      * @return UpdateSurveyResponse
      */
     public UpdateSurveyResponse updateService(ServletRequest request, UpdateSurveyRequest survey) {
-        String id = jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken((HttpServletRequest) request));
-        Integer userNum = memberRepository.findById(id).get().getUserNum();
-        Integer diagnosisID = updateLogRepository.findLogByUserNum(userNum);
-        System.out.println("진단 아이디는 : " + diagnosisID);
+        Integer userNum=getUserNum(request); // 유저 번호 받아오기
+        if(userNum==0) return updateSurveyresponse.builder().resultCode(1).build(); // 사용자 번호가 존재하지 않을 경우
+        Integer diagnosisID = updateLogRepository.findLogByUserNum(userNum); // 진단기록 가져오기
         if (diagnosisID == null) {  // 설문을 처음 진행할 경우
             diagnosisID = updateLogRepository.save(DiagnosisLog.builder()
                     .userNum(userNum)
@@ -79,7 +126,78 @@ public class DiagnosisService {
                 .survey10(checkNum[10])
                 .build());
 
+        return updateSurveyresponse.builder().resultCode(0).diagnosisID(diagnosisID).build();
+    }
+
+    /**
+     * 이미지 링크 DB에 저장
+     * resultCode 0:성공 , 1:실패
+     * @param ImageLinkRequest
+     * @return Response
+     */
+    public Response imageLinkService(ServletRequest request, ImageLinkRequest imageLink){
+        Integer userNum=getUserNum(request); // 유저 번호 받아오기
+        if(userNum==0) return response.builder().resultCode(1).build(); // 사용자 번호가 존재하지 않을 경우
+        Integer diagnosisID = updateLogRepository.findLogByUserNum(userNum); // 진단기록 가져오기
+        if(diagnosisID==null)return response.builder().resultCode(1).build();
+        imageLinkRepository.save(DiagnosisImage.builder() // 이미지 링크 저장
+                .id(diagnosisID)
+                .diagnosisImage(imageLink.getImageLink())
+                .build());
+        updateLogRepository.save(DiagnosisLog.builder() // 이미지까지 저장했으므로 active를 1로
+                .id(diagnosisID)
+                .userNum(userNum)
+                .active(1)
+                .build());
+
         return response.builder().resultCode(0).build();
     }
 
+    /**
+     * DB에 저장된 설문 내용으로 설문 분석 리턴
+     * resultCode 0:성공 , 1:실패
+     * @param hairLossBySurvey
+     * @return HairLossBySurveyResponse
+     */
+    public HairLossBySurveyResponse hairLossBySurveyService(HairLossBySurveyRequest hairLossBySurvey){
+        Optional<DiagnosisSurvey> result = updateSurveyRepository.findById(hairLossBySurvey.getDiagnosisID());
+        if(!result.isPresent()) return hairLossBySurveyResponse.builder().resultCode(1).build();
+        Integer sum=result.get().getSurvey1()
+                +result.get().getSurvey2()
+                +result.get().getSurvey3()
+                +result.get().getSurvey4()
+                +result.get().getSurvey5()
+                +result.get().getSurvey6()
+                +result.get().getSurvey7()
+                +result.get().getSurvey8()
+                +result.get().getSurvey9()
+                +result.get().getSurvey10()-10;
+        if (sum<3) return hairLossBySurveyResponse.builder().resultCode(0).state(0).build();
+        else if(sum<4) return hairLossBySurveyResponse.builder().resultCode(0).state(1).build();
+        else if(sum<6) return hairLossBySurveyResponse.builder().resultCode(0).state(2).build();
+        return hairLossBySurveyResponse.builder().resultCode(0).state(3).build();
+    }
+
+    /**
+     * 진단 결과를 DB에 저장
+     * resultCode 0:성공 , 1:실패
+     * @param UpdateDiagnosisRequest
+     * @return Response
+     */
+    public Response updateDiagnosisService(UpdateDiagnosisRequest updateDiagnosisRequest){
+        try{
+            diagnosisResultRepository.save(DiagnosisResult.builder()
+                    .id(updateDiagnosisRequest.getDiagnosisID())
+                    .resultCode(updateDiagnosisRequest.getResultCode())
+                    .result0(updateDiagnosisRequest.getPercent().get(0))
+                    .result1(updateDiagnosisRequest.getPercent().get(1))
+                    .result2(updateDiagnosisRequest.getPercent().get(2))
+                    .result3(updateDiagnosisRequest.getPercent().get(3))
+                    .build());
+            return response.builder().resultCode(0).build();
+        }catch (Exception e){
+            return response.builder().resultCode(1).build();
+        }
+
+    }
 }

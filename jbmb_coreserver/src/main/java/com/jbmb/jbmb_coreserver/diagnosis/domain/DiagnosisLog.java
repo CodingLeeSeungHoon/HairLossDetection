@@ -22,4 +22,8 @@ public class DiagnosisLog {
 
     @Column(name = "active", columnDefinition = "TINYINT", nullable = false)
     private Integer active;
+
+    public void changeActive(Integer id){
+        active=1;
+    }
 }
