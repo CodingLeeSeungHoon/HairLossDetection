@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import '../object/JBMBMemberInfo.dart';
+import '../service/JBMBMemberManager.dart';
 import '../widget/JBMBAppBars.dart';
 import '../widget/LoginedNavigationDrawerWidget.dart';
 import 'DiagnosisResultPage.dart';
 
 class DiagnosisLogPage extends StatefulWidget {
-  final JBMBMemberInfo jbmbMemberInfo;
+  final JBMBMemberManager memberManager;
 
-  const DiagnosisLogPage({Key? key, required this.jbmbMemberInfo})
+  const DiagnosisLogPage({Key? key, required this.memberManager})
       : super(key: key);
 
   @override
@@ -53,7 +54,7 @@ class _DiagnosisLogPageState extends State<DiagnosisLogPage> {
         endDrawer: SizedBox(
           width: phoneWidth * 0.55,
           child: LoginedNavigationDrawerWidget(
-            jbmbMemberInfo: widget.jbmbMemberInfo,
+            memberManager: widget.memberManager,
           ),
         ),
         backgroundColor: Colors.white,
@@ -83,7 +84,7 @@ class _DiagnosisLogPageState extends State<DiagnosisLogPage> {
                         Navigator.push(
                           context,
                           PageRouteBuilder(
-                            pageBuilder: (context, animation1, animation2) => DiagnosisResultPage(jbmbMemberInfo: widget.jbmbMemberInfo, way: 2,),
+                            pageBuilder: (context, animation1, animation2) => DiagnosisResultPage(memberManager: widget.memberManager, way: 2,),
                             transitionDuration: Duration.zero,
                             reverseTransitionDuration: Duration.zero,
                           ),

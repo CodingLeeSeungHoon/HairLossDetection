@@ -1,4 +1,4 @@
-class JBMBLogoutResponseObject{
+class JBMBDefaultResponseObject{
   // member variable
   int? _resultCode;
 
@@ -8,6 +8,6 @@ class JBMBLogoutResponseObject{
   set setResultCode(int? resultCode) => _resultCode = resultCode;
 
   // fromJson
-  JBMBLogoutResponseObject.fromJson(Map<String, dynamic> json)
+  JBMBDefaultResponseObject.fromJson(Map<String, dynamic> json)
       : _resultCode = json['resultCode'];
 }

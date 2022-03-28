@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jbmb_application/screen/DiagnosisResultPage.dart';
+import 'package:jbmb_application/service/JBMBMemberManager.dart';
 import 'package:jbmb_application/widget/JBMBOutlinedButton.dart';
 import 'package:jbmb_application/widget/JBMBUploadedImage.dart';
 
@@ -7,10 +8,10 @@ import '../object/JBMBMemberInfo.dart';
 import '../widget/JBMBAppBars.dart';
 
 class UploadImagePage extends StatefulWidget {
-  final JBMBMemberInfo jbmbMemberInfo;
+  final JBMBMemberManager memberManager;
   const UploadImagePage({
     Key? key,
-    required this.jbmbMemberInfo
+    required this.memberManager
   }) : super(key: key);
 
   @override
@@ -76,7 +77,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
                                   Navigator.pushReplacement(
                                     context,
                                     PageRouteBuilder(
-                                      pageBuilder: (context, animation1, animation2) => DiagnosisResultPage(jbmbMemberInfo: widget.jbmbMemberInfo, way: 1,),
+                                      pageBuilder: (context, animation1, animation2) => DiagnosisResultPage(memberManager: widget.memberManager, way: 1,),
                                       transitionDuration: Duration.zero,
                                       reverseTransitionDuration: Duration.zero,
                                     ),

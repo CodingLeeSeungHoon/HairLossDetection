@@ -82,7 +82,6 @@ class JBMBRegisterManager {
 
     if (response.statusCode / 100 == 2) {
       log("[JBMBRegisterManager] API Response StatusCode 200");
-      log(jsonDecode(response.body));
       return JBMBRegisterResponseObject.fromJson(jsonDecode(response.body));
     } else {
       log("[JBMBRegisterManager] API Response StatusCode is not 200, throw exception");
@@ -144,7 +143,7 @@ class JBMBRegisterManager {
             break;
         }
       } catch (e) {
-        log('[JBMBRegisterManager] catched Exception : $e');
+        log('[JBMBRegisterManager] caught Exception : $e');
         jbmbRegisterResult.setResultCode = 6;
         jbmbRegisterResult.setResult = "  서버의 오류로 회원가입이 실패했습니다.";
       }

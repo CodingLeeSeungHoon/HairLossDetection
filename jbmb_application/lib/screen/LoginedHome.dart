@@ -9,6 +9,7 @@ import 'package:jbmb_application/widget/LoginedMainDescription.dart';
 import 'package:jbmb_application/widget/LoginedNavigationDrawerWidget.dart';
 import 'package:jbmb_application/widget/MainDescription.dart';
 import '../object/JBMBMemberInfo.dart';
+import '../service/JBMBMemberManager.dart';
 import '../widget/JBMBOutlinedButton.dart';
 import '../widget/NavigationDrawerWidget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -18,10 +19,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 /// AppBar - 중간 문구 - 구분선 - 슬라이더(이미지 + 버튼) 구조
 /// LoginedMainDescription, LoginedNavigationDrawerWidget 사용 주의
 class LoginedHome extends StatefulWidget {
-  // use this widget.jbmbMemberInfo in build function returns.
-  JBMBMemberInfo jbmbMemberInfo;
+  // use this widget.memberManager in build function returns.
+  JBMBMemberManager memberManager;
 
-  LoginedHome({Key? key, required this.jbmbMemberInfo}) : super(key: key);
+  LoginedHome({Key? key, required this.memberManager}) : super(key: key);
 
   @override
   _LoginedHomeState createState() => _LoginedHomeState();
@@ -59,7 +60,7 @@ class _LoginedHomeState extends State<LoginedHome> {
             endDrawer: Container(
               width: phoneWidth * 0.55,
               child: LoginedNavigationDrawerWidget(
-                jbmbMemberInfo: widget.jbmbMemberInfo,
+                memberManager: widget.memberManager,
               ),
             ),
             // 전체 화면 바탕색 지정
@@ -78,7 +79,7 @@ class _LoginedHomeState extends State<LoginedHome> {
                 child: Column(
                   children: <Widget>[
                     LoginedMainDescription(
-                      userName: widget.jbmbMemberInfo.getName!,
+                      userName: widget.memberManager.memberInfo.getName!,
                     ),
                     SizedBox(
                       height: phoneHeight * 0.02,
@@ -172,7 +173,7 @@ class _LoginedHomeState extends State<LoginedHome> {
       case 0:
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => DiagnosisAlertPage(
-            jbmbMemberInfo: widget.jbmbMemberInfo,
+            memberManager: widget.memberManager,
           ),
         ));
         break;
@@ -183,14 +184,14 @@ class _LoginedHomeState extends State<LoginedHome> {
       case 2:
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => HospitalPage(
-            jbmbMemberInfo: widget.jbmbMemberInfo,
+            memberManager: widget.memberManager,
           ),
         ));
         break;
       case 3:
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => CommunityPage(
-            jbmbMemberInfo: widget.jbmbMemberInfo,
+            memberManager: widget.memberManager,
           ),
         ));
         break;
@@ -243,7 +244,7 @@ class _LoginedHomeState extends State<LoginedHome> {
                 onPressed: () {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => ShampooPage(
-                      jbmbMemberInfo: widget.jbmbMemberInfo,
+                      memberManager: widget.memberManager,
                     ),
                   ));
                 },
@@ -255,7 +256,7 @@ class _LoginedHomeState extends State<LoginedHome> {
                 onPressed: () {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => ShampooPage(
-                      jbmbMemberInfo: widget.jbmbMemberInfo,
+                      memberManager: widget.memberManager,
                     ),
                   ));
                 },
