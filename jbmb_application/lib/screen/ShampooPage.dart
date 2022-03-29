@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jbmb_application/object/JBMBMemberInfo.dart';
+import 'package:jbmb_application/service/JBMBMemberManager.dart';
 import 'package:jbmb_application/widget/JBMBShampooListTile.dart';
 
 import '../widget/JBMBAppBars.dart';
@@ -8,9 +9,9 @@ import '../widget/LoginedNavigationDrawerWidget.dart';
 /// 2022.03.08 이승훈
 /// 두피에 따른 샴푸 검색 및 구매 페이지 유도
 class ShampooPage extends StatefulWidget {
-  final JBMBMemberInfo jbmbMemberInfo;
+  final JBMBMemberManager memberManager;
 
-  const ShampooPage({Key? key, required this.jbmbMemberInfo}) : super(key: key);
+  const ShampooPage({Key? key, required this.memberManager}) : super(key: key);
 
   @override
   _ShampooPageState createState() => _ShampooPageState();
@@ -56,7 +57,7 @@ class _ShampooPageState extends State<ShampooPage> {
         endDrawer: Container(
           width: phoneWidth * 0.55,
           child: LoginedNavigationDrawerWidget(
-            jbmbMemberInfo: widget.jbmbMemberInfo,
+            memberManager: widget.memberManager,
           ),
         ),
         // 전체 화면 바탕색 지정

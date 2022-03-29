@@ -4,7 +4,13 @@ import 'package:http/http.dart' as http;
 /// 2022.03.14 이승훈
 /// Survey 컨트롤러
 class JBMBSurveyManager{
-  
+
+  /// 2022.03.27 이승훈
+  /// 설문조사 시작 전, inActive 상태인 survey 모두 제거
+  initSurveyState(){
+
+  }
+
   /// 각 설문조사 결과를 DB에 저장하는 메소드
   bool saveSurveyInput(int surveyId, String qNum, bool answer){
     int surveyNum = int.parse(qNum.substring(1, qNum.length-1));

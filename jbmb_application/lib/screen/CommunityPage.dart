@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import 'package:jbmb_application/object/JBMBMemberInfo.dart';
 import 'package:jbmb_application/widget/JBMBOutlinedButton.dart';
 
+import '../service/JBMBMemberManager.dart';
 import '../widget/JBMBAppBars.dart';
 import '../widget/LoginedNavigationDrawerWidget.dart';
 
@@ -10,9 +11,9 @@ import '../widget/LoginedNavigationDrawerWidget.dart';
 /// ListView 형식으로 작성할 예정
 /// JBMBCommunityManager를 통해 DB상의 게시글을 불러옴.
 class CommunityPage extends StatefulWidget {
-  final JBMBMemberInfo jbmbMemberInfo;
+  final JBMBMemberManager memberManager;
 
-  const CommunityPage({Key? key, required this.jbmbMemberInfo})
+  const CommunityPage({Key? key, required this.memberManager})
       : super(key: key);
 
   @override
@@ -58,7 +59,7 @@ class _CommunityPageState extends State<CommunityPage> {
         endDrawer: Container(
           width: phoneWidth * 0.55,
           child: LoginedNavigationDrawerWidget(
-            jbmbMemberInfo: widget.jbmbMemberInfo,
+            memberManager: widget.memberManager,
           ),
         ),
         // 전체 화면 바탕색 지정

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:jbmb_application/object/JBMBMemberInfo.dart';
 import 'package:jbmb_application/screen/DiagnosisAlertPage.dart';
@@ -6,6 +8,8 @@ import 'package:jbmb_application/screen/HospitalPage.dart';
 import 'package:jbmb_application/screen/InfoPage.dart';
 import 'package:jbmb_application/screen/LoginPage.dart';
 import 'package:jbmb_application/screen/ShampooPage.dart';
+import 'package:jbmb_application/service/JBMBLoginManager.dart';
+import 'package:jbmb_application/service/JBMBMemberManager.dart';
 
 import '../screen/CommunityPage.dart';
 import '../screen/Home.dart';
@@ -13,10 +17,10 @@ import '../screen/JoinPage.dart';
 
 /// 2020.03.07 이승훈 개발
 class LoginedNavigationDrawerWidget extends StatelessWidget {
-  final JBMBMemberInfo jbmbMemberInfo;
+  final JBMBMemberManager memberManager;
   LoginedNavigationDrawerWidget({
     Key? key,
-    required this.jbmbMemberInfo
+    required this.memberManager
   }) : super(key: key);
   final padding = EdgeInsets.symmetric(horizontal: 3);
 
@@ -90,7 +94,7 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
     );
   }
 
-  void selectedItem(BuildContext context, int index) {
+  Future<void> selectedItem(BuildContext context, int index) async {
     // 새 창 들어가면 SideDrawer 닫도록
     Navigator.of(context).pop();
 
@@ -98,6 +102,13 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
       case 0:
         // logout
         // Navigator.of(context).popUntil((route) => route.isFirst);
+        try{
+          String token = await memberManager.jwtManager.getToken();
+          JBMBLoginManager().tryLogout(token);
+          log("[Logout] success logout with valid token");
+        } catch (e) {
+          log("[Logout] token was invalid but success logout : $e");
+        }
         Future.delayed(const Duration(milliseconds: 250), (){
           Navigator.pushReplacement(
             context,
@@ -111,31 +122,31 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
         break;
       case 1:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => DiagnosisAlertPage(jbmbMemberInfo: jbmbMemberInfo,),
+          builder: (context) => DiagnosisAlertPage(memberManager: memberManager,),
         ));
         // diagnose
         break;
       case 2:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => DiagnosisLogPage(jbmbMemberInfo: jbmbMemberInfo,),
+          builder: (context) => DiagnosisLogPage(memberManager: memberManager,),
         ));
         break;
       case 3:
       // shampoo
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ShampooPage(jbmbMemberInfo: jbmbMemberInfo,),
+          builder: (context) => ShampooPage(memberManager: memberManager,),
         ));
         break;
       case 4:
       // hospital
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => HospitalPage(jbmbMemberInfo: jbmbMemberInfo,),
+          builder: (context) => HospitalPage(memberManager: memberManager,),
         ));
         break;
       case 5:
       // jbmb community
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => CommunityPage(jbmbMemberInfo: jbmbMemberInfo,),
+          builder: (context) => CommunityPage(memberManager: memberManager,),
         ));
         break;
       case 6:

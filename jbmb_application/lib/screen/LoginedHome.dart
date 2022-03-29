@@ -9,6 +9,7 @@ import 'package:jbmb_application/widget/LoginedMainDescription.dart';
 import 'package:jbmb_application/widget/LoginedNavigationDrawerWidget.dart';
 import 'package:jbmb_application/widget/MainDescription.dart';
 import '../object/JBMBMemberInfo.dart';
+import '../service/JBMBMemberManager.dart';
 import '../widget/JBMBOutlinedButton.dart';
 import '../widget/NavigationDrawerWidget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -18,10 +19,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 /// AppBar - 중간 문구 - 구분선 - 슬라이더(이미지 + 버튼) 구조
 /// LoginedMainDescription, LoginedNavigationDrawerWidget 사용 주의
 class LoginedHome extends StatefulWidget {
-  // use this widget.jbmbMemberInfo in build function returns.
-  JBMBMemberInfo jbmbMemberInfo;
+  // use this widget.memberManager in build function returns.
+  JBMBMemberManager memberManager;
 
-  LoginedHome({Key? key, required this.jbmbMemberInfo}) : super(key: key);
+  LoginedHome({Key? key, required this.memberManager}) : super(key: key);
 
   @override
   _LoginedHomeState createState() => _LoginedHomeState();
@@ -59,7 +60,7 @@ class _LoginedHomeState extends State<LoginedHome> {
             endDrawer: Container(
               width: phoneWidth * 0.55,
               child: LoginedNavigationDrawerWidget(
-                jbmbMemberInfo: widget.jbmbMemberInfo,
+                memberManager: widget.memberManager,
               ),
             ),
             // 전체 화면 바탕색 지정
@@ -78,7 +79,7 @@ class _LoginedHomeState extends State<LoginedHome> {
                 child: Column(
                   children: <Widget>[
                     LoginedMainDescription(
-                      userName: widget.jbmbMemberInfo.getName!,
+                      userName: widget.memberManager.memberInfo.getName!,
                     ),
                     SizedBox(
                       height: phoneHeight * 0.02,
@@ -172,7 +173,7 @@ class _LoginedHomeState extends State<LoginedHome> {
       case 0:
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => DiagnosisAlertPage(
-            jbmbMemberInfo: widget.jbmbMemberInfo,
+            memberManager: widget.memberManager,
           ),
         ));
         break;
@@ -183,20 +184,21 @@ class _LoginedHomeState extends State<LoginedHome> {
       case 2:
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => HospitalPage(
-            jbmbMemberInfo: widget.jbmbMemberInfo,
+            memberManager: widget.memberManager,
           ),
         ));
         break;
       case 3:
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => CommunityPage(
-            jbmbMemberInfo: widget.jbmbMemberInfo,
+            memberManager: widget.memberManager,
           ),
         ));
         break;
     }
   }
 
+  /// 샴푸 botomSheet 생성하는 메소드
   Widget buildSheet() => Container(
       padding: EdgeInsets.all(8),
       margin: EdgeInsets.all(8),
@@ -219,7 +221,8 @@ class _LoginedHomeState extends State<LoginedHome> {
                   IconButton(
                     onPressed: () {},
                     icon: const Icon(Icons.info_outline),
-                    tooltip: '\n일반적으로 두피 역시 피부이기 때문에 \n건성 피부는 건성 두피, 지성 피부는 지성 두피를\n 가질 확률이 높습니다.\n'
+                    tooltip:
+                        '\n일반적으로 두피 역시 피부이기 때문에 \n건성 피부는 건성 두피, 지성 피부는 지성 두피를\n 가질 확률이 높습니다.\n'
                         '건성 두피는 각질과 비듬이 많은 두피,\n지성 두피는 유분이 많은 두피를 의미합니다.\n'
                         '샴푸를 한 지 반나절 내에 기름지고 축 가라앉는다면 지성,\n 비듬이나 각질 가루가 많이 떨어지는 두피는 건성입니다.\n',
                   ),
@@ -241,7 +244,7 @@ class _LoginedHomeState extends State<LoginedHome> {
                 onPressed: () {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => ShampooPage(
-                      jbmbMemberInfo: widget.jbmbMemberInfo,
+                      memberManager: widget.memberManager,
                     ),
                   ));
                 },
@@ -253,7 +256,7 @@ class _LoginedHomeState extends State<LoginedHome> {
                 onPressed: () {
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => ShampooPage(
-                      jbmbMemberInfo: widget.jbmbMemberInfo,
+                      memberManager: widget.memberManager,
                     ),
                   ));
                 },
