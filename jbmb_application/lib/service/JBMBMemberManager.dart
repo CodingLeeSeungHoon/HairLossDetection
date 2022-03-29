@@ -42,7 +42,7 @@ class JBMBMemberManager {
     if (response.statusCode / 100 == 2) {
       log("[JBMBMemberManager] API Response StatusCode 200");
       log(jsonDecode(response.body));
-      return JBMBDefaultResponseObject.fromJson(jsonDecode(response.body));
+      return JBMBDefaultResponseObject.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
     } else {
       log("[JBMBMemberManager] API Response StatusCode is not 200, throw exception");
       throw Exception('[Error:Server] 서버 측 오류로 정보 업데이트에 실패했습니다.');

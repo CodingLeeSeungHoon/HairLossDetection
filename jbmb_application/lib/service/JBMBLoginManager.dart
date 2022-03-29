@@ -56,7 +56,7 @@ class JBMBLoginManager {
 
     if (response.statusCode / 100 == 2) {
       log("[JBMBLoginManager] API Response StatusCode 200 (tryLogin)");
-      return JBMBLoginResponseObject.fromJson(jsonDecode(response.body));
+      return JBMBLoginResponseObject.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
     } else {
       log("[JBMBLoginManager] API Response StatusCode is not 200 (tryLogin), throw Exception");
       throw Exception('[Error:Server] 서버 측 오류로 로그인에 실패했습니다.');
@@ -87,7 +87,7 @@ class JBMBLoginManager {
 
     if (response.statusCode / 100 == 2) {
       log("[JBMBLoginManager] API Response StatusCode 200 (tryGetMemberInfo)");
-      return JBMBMemberInfo.fromJson(jsonDecode(response.body));
+      return JBMBMemberInfo.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
     } else {
       log("[JBMBLoginManager] API Response StatusCode is not 200 (tryGetMemberInfo), throw Exception");
       throw Exception('[Error:Server] 서버 측 오류로 회원정보 얻어오기를 실패했습니다.');
@@ -110,7 +110,7 @@ class JBMBLoginManager {
 
     if (response.statusCode / 100 == 2) {
       log("[JBMBLoginManager] API Response StatusCode 200 (tryLogout)");
-      return JBMBDefaultResponseObject.fromJson(jsonDecode(response.body));
+      return JBMBDefaultResponseObject.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
     } else {
       int statusCode = response.statusCode;
       log("[JBMBLoginManager] API Response StatusCode is not 200 (tryLogout), throw Exception");

@@ -42,6 +42,7 @@ class _LoginPageState extends State<LoginPage> {
     double phonePadding = MediaQuery.of(context).padding.top;
 
     return Scaffold(
+      // resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.white,
       appBar: JBMBTransparentAppbar(onPressedCancel: () {
@@ -58,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
           padding: EdgeInsets.all(phonePadding * 0.33),
           margin: EdgeInsets.all(phonePadding * 0.33),
           child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
+            // physics: const BouncingScrollPhysics(),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -108,7 +109,8 @@ class _LoginPageState extends State<LoginPage> {
                             JBMBMemberInfo memberInfo = await jbmbLoginManager
                                 .getMemberInfoByToken(loginResponse.getJWT!);
                             log("success get info");
-                            _doAfterSuccessLogin(context, memberInfo, loginResponse);
+                            _doAfterSuccessLogin(
+                                context, memberInfo, loginResponse);
                           } catch (e) {
                             log("fail get info");
                             _doAfterFailGetMemberInfo(context);
@@ -142,10 +144,12 @@ class _LoginPageState extends State<LoginPage> {
 
   // 로그인 성공 및 MemberInfo를 받아오기에 성공하면, 호출되는 메소드
   // 로그인된 홈 페이지로 이동
-  _doAfterSuccessLogin(BuildContext context, JBMBMemberInfo jbmbMemberInfo, JBMBLoginResponseObject loginResponse) async {
+  _doAfterSuccessLogin(BuildContext context, JBMBMemberInfo jbmbMemberInfo,
+      JBMBLoginResponseObject loginResponse) async {
     JBMBJwtManager jwtManager = JBMBJwtManager();
     jwtManager.saveToken(loginResponse.getJWT!);
-    JBMBMemberManager memberManager = JBMBMemberManager(jbmbMemberInfo, jwtManager);
+    JBMBMemberManager memberManager =
+        JBMBMemberManager(jbmbMemberInfo, jwtManager);
 
     FocusManager.instance.primaryFocus?.unfocus();
     // Navigator.pop(context);
@@ -168,20 +172,21 @@ class _LoginPageState extends State<LoginPage> {
     FocusManager.instance.primaryFocus?.unfocus();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Row(
-          children: const [
-            Icon(
-              Icons.cancel_outlined,
-              color: Colors.redAccent,
-            ),
-            Text("  JBMB 서버의 접속이 원활하지 않습니다."),
-          ],
-        )));
+      children: const [
+        Icon(
+          Icons.cancel_outlined,
+          color: Colors.redAccent,
+        ),
+        Text("  JBMB 서버의 접속이 원활하지 않습니다."),
+      ],
+    )));
   }
 
 // 로그인에 실패한 경우 호출되는 메소드 (스낵바 소환)
-  _doAfterFailLogin(BuildContext context, JBMBLoginResponseObject loginResponseObject) {
+  _doAfterFailLogin(
+      BuildContext context, JBMBLoginResponseObject loginResponseObject) {
     String snackBarText = "";
-    switch(loginResponseObject.getResultCode){
+    switch (loginResponseObject.getResultCode) {
       case 1:
         snackBarText = "  존재하지 않는 ID입니다. 다시 확인해주세요.";
         break;
@@ -196,21 +201,21 @@ class _LoginPageState extends State<LoginPage> {
     FocusManager.instance.primaryFocus?.unfocus();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Row(
-          children: [
-            const Icon(
-              Icons.cancel_outlined,
-              color: Colors.redAccent,
-            ),
-            Text(snackBarText),
-          ],
-        )));
+      children: [
+        const Icon(
+          Icons.cancel_outlined,
+          color: Colors.redAccent,
+        ),
+        Text(snackBarText),
+      ],
+    )));
   }
 
   // 회원가입 버튼을 클릭했을 때 호출되는 메소드 (페이지 이동)
-  _goJoinPage(BuildContext context){
+  _goJoinPage(BuildContext context) {
     FocusManager.instance.primaryFocus?.unfocus();
     Navigator.pop(context);
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => const JoinPage()));
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const JoinPage()));
   }
 }
