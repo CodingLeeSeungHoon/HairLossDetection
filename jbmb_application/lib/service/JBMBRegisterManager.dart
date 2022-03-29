@@ -1,7 +1,10 @@
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:jbmb_application/object/JBMBMemberInfo.dart';
-import 'package:jbmb_application/object/JBMBRegisterResult.dart';
+import 'package:jbmb_application/object/JBMBRegisterResponse.dart';
+import 'package:http/http.dart' as http;
+
 
 /// 2022.03.03 이승훈
 /// 회원가입에 대한 전반적인 로직을 포함한 클래스
@@ -42,12 +45,50 @@ class JBMBRegisterManager {
     }
 
     if (isInputValid){
-      // TODO : api 찌를 것
-      jbmbRegisterResult.setResultCode = 0;
-      jbmbRegisterResult.setResult = "  회원가입이 완료되었습니다.";
+      try {
+        Future<JBMBRegisterResponseObject> response = tryRegisterJBMB(registerInput);
+        response.then((rp) {
+          switch(rp.getResultCode){
+            case 0:
+              jbmbRegisterResult.setResultCode = 0;
+              jbmbRegisterResult.setResult = "  회원가입이 완료되었습니다.";
+              break;
+            case 1:
+              jbmbRegisterResult.setResultCode = 5;
+              jbmbRegisterResult.setResult = "  중복된 아이디가 존재합니다.";
+              break;
+            case 2:
+              jbmbRegisterResult.setResultCode = 6;
+              jbmbRegisterResult.setResult = "  서버의 오류로 회원가입이 실패했습니다.";
+              break;
+          }
+        });
+      } catch (e) {
+        print(e.toString());
+        jbmbRegisterResult.setResultCode = 6;
+        jbmbRegisterResult.setResult = "  서버의 오류로 회원가입이 실패했습니다.";
+      }
     }
 
     return jbmbRegisterResult;
+  }
+
+  /// 2022.03.22 이승훈
+  /// 회원가입 API를 통해 등록한다.
+  Future<JBMBRegisterResponseObject> tryRegisterJBMB(JBMBMemberInfo memberInfo) async {
+    final response = await http.post(
+      Uri.parse('https://jebalmobal.site/user/account/signup'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: memberInfo.toJson(),
+    );
+
+    if (response.statusCode == 201) {
+      return JBMBRegisterResponseObject.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('[Error:Server] 서버 측 오류로 회원가입에 실패했습니다.');
+    }
   }
 
   /// [registerInput]내의 값을 통해 회원가입에 적합한지 유효성 검사하는 메소드
