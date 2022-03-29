@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 const JBMBBigLogo(),
                 SizedBox(
-                  height: phoneHeight * 0.043,
+                  height: phoneHeight * 0.021,
                 ),
                 SizedBox(
                     width: phoneWidth * 0.832,

@@ -15,7 +15,7 @@ class JBMBAppRoundImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(height / 2),
+      borderRadius: BorderRadius.circular(1),
       child: Image(
         image: provider,
         height: height,

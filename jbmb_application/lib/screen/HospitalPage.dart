@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -159,6 +160,10 @@ class _HospitalPageState extends State<HospitalPage> {
   Widget build(BuildContext context) {
     double phoneWidth = MediaQuery.of(context).size.width;
     double phonePadding = MediaQuery.of(context).padding.top;
+
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      AndroidGoogleMapsFlutter.useAndroidViewSurface = true;
+    }
 
     return Scaffold(
         key: _scaffoldKey,

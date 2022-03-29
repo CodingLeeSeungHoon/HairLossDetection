@@ -9,19 +9,19 @@ import 'package:path_provider/path_provider.dart';
 import 'package:simple_s3/simple_s3.dart';
 import 'JBMBAppRoundImage.dart';
 
-class JBMBUploadedImage extends StatefulWidget {
+class JBMBUploadedImageWidget extends StatefulWidget {
   final Function(String imageUrl) onFileChanged;
 
-  const JBMBUploadedImage({
+  const JBMBUploadedImageWidget({
     Key? key,
     required this.onFileChanged,
   });
 
   @override
-  _JBMBUploadedImageState createState() => _JBMBUploadedImageState();
+  _JBMBUploadedImageWidgetState createState() => _JBMBUploadedImageWidgetState();
 }
 
-class _JBMBUploadedImageState extends State<JBMBUploadedImage> {
+class _JBMBUploadedImageWidgetState extends State<JBMBUploadedImageWidget> {
   final ImagePicker _picker = ImagePicker();
   bool isLoading = false;
   String? imageUrl;
@@ -110,7 +110,9 @@ class _JBMBUploadedImageState extends State<JBMBUploadedImage> {
                 )));
   }
 
+  /// 이미지 선택 혹은 촬영 - 편집 - 업로드가 모두 포함된 메소드
   Future _pickImage(ImageSource source) async {
+    // 이미지 선택 혹은 촬영
     final pickedFile = await _picker.pickImage(
         source: source,
         imageQuality: 50,
@@ -119,6 +121,7 @@ class _JBMBUploadedImageState extends State<JBMBUploadedImage> {
       return;
     }
 
+    // 이미지 편집
     var file = await ImageCropper().cropImage(
         sourcePath: pickedFile.path,
         androidUiSettings: const AndroidUiSettings(
@@ -136,9 +139,11 @@ class _JBMBUploadedImageState extends State<JBMBUploadedImage> {
 
     file = await compressImage(file.path, 35);
 
+    // 이미지 업로드
     await _uploadFile(file);
   }
 
+  /// 이미지 압축하는 메소드
   Future<File> compressImage(String path, int quality) async {
     final newPath = p.join((await getTemporaryDirectory()).path,
         '${DateTime.now()}.${p.extension(path)}');
@@ -147,6 +152,7 @@ class _JBMBUploadedImageState extends State<JBMBUploadedImage> {
     return result!;
   }
 
+  /// 이미지 파일을 S3에 업로드하는 메소드
   Future _uploadFile(File file) async {
     setState(() {
       isLoading = true;

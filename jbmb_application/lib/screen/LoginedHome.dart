@@ -5,11 +5,10 @@ import 'package:jbmb_application/screen/HospitalPage.dart';
 import 'package:jbmb_application/screen/ShampooPage.dart';
 import 'package:jbmb_application/widget/JBMBAppBars.dart';
 import 'package:jbmb_application/widget/JBMBBigButton.dart';
-import 'package:jbmb_application/widget/LoginedMainDescription.dart';
 import 'package:jbmb_application/widget/LoginedNavigationDrawerWidget.dart';
-import 'package:jbmb_application/widget/MainDescription.dart';
 import '../object/JBMBMemberInfo.dart';
 import '../service/JBMBMemberManager.dart';
+import '../widget/JBMBDescription.dart';
 import '../widget/JBMBOutlinedButton.dart';
 import '../widget/NavigationDrawerWidget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -109,7 +108,7 @@ class _LoginedHomeState extends State<LoginedHome> {
                           builder: (BuildContext context) {
                             return Container(
                                 alignment: Alignment.center,
-                                margin: EdgeInsets.symmetric(horizontal: 10.0),
+                                margin: const EdgeInsets.symmetric(horizontal: 10.0),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [

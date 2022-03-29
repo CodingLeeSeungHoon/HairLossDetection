@@ -61,7 +61,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          JBMBUploadedImage(
+                          JBMBUploadedImageWidget(
                             onFileChanged: (imageUrl) {
                               setState(() {
                                 this.imageUrl = imageUrl;
