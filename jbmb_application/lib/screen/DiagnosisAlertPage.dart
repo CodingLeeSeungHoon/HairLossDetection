@@ -4,6 +4,7 @@ import 'package:jbmb_application/object/JBMBMemberInfo.dart';
 import 'package:jbmb_application/screen/LoginedHome.dart';
 import 'package:jbmb_application/screen/SurveyCustomPage.dart';
 import 'package:jbmb_application/screen/SurveyPages.dart';
+import 'package:jbmb_application/service/JBMBMemberManager.dart';
 
 import '../widget/JBMBAppBars.dart';
 import '../widget/JBMBBigLogo.dart';
@@ -11,9 +12,9 @@ import '../widget/JBMBBigLogo.dart';
 /// 2022.03.08 이승훈
 /// 무료 자가진단 입장 시, 주의사항에 대해 설명하는 페이지
 class DiagnosisAlertPage extends StatefulWidget {
-  final JBMBMemberInfo jbmbMemberInfo;
+  final JBMBMemberManager memberManager;
 
-  const DiagnosisAlertPage({Key? key, required this.jbmbMemberInfo})
+  const DiagnosisAlertPage({Key? key, required this.memberManager})
       : super(key: key);
 
   @override
@@ -113,7 +114,7 @@ class _DiagnosisAlertPageState extends State<DiagnosisAlertPage> {
                                   SurveyPage1(
                                 qNum: 'Q1.',
                                 question: '\n하루에 빠지는 모발 양이 100개 이상이다.',
-                                jbmbMemberInfo: widget.jbmbMemberInfo,
+                                memberManager: widget.memberManager,
                               ),
                               transitionDuration: Duration.zero,
                               reverseTransitionDuration: Duration.zero,
@@ -146,8 +147,8 @@ class _DiagnosisAlertPageState extends State<DiagnosisAlertPage> {
                                           Navigator.of(context)
                                               .push(MaterialPageRoute(
                                             builder: (context) => LoginedHome(
-                                              jbmbMemberInfo:
-                                                  widget.jbmbMemberInfo,
+                                              memberManager:
+                                                  widget.memberManager,
                                             ),
                                           ));
                                         },

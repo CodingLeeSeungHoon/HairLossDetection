@@ -156,7 +156,8 @@ class _JBMBUploadedImageState extends State<JBMBUploadedImage> {
     String result = await _simpleS3.uploadFile(file, 'jbmbbucket',
         "us-east-1:39989318-c9e2-4070-bd62-d0a52df01d88", AWSRegions.usEast1,
         debugLog: true);
-    print(result);
+
+    // 'https://jbmbbucket.s3.amazonaws.com/' + fileName
 
     setState(() {
       imageUrl = file.path;

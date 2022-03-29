@@ -6,6 +6,7 @@ import "package:flutter/material.dart";
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
 import 'package:jbmb_application/object/JBMBMemberInfo.dart';
+import 'package:jbmb_application/service/JBMBMemberManager.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../widget/JBMBAppBars.dart';
@@ -15,9 +16,9 @@ import '../widget/LoginedNavigationDrawerWidget.dart';
 /// 위치 기반 탈모 전문 병원 안내 페이지
 /// Google Maps API 사용
 class HospitalPage extends StatefulWidget {
-  final JBMBMemberInfo jbmbMemberInfo;
+  final JBMBMemberManager memberManager;
 
-  const HospitalPage({Key? key, required this.jbmbMemberInfo})
+  const HospitalPage({Key? key, required this.memberManager})
       : super(key: key);
 
   @override
@@ -165,7 +166,7 @@ class _HospitalPageState extends State<HospitalPage> {
         endDrawer: SizedBox(
           width: phoneWidth * 0.55,
           child: LoginedNavigationDrawerWidget(
-            jbmbMemberInfo: widget.jbmbMemberInfo,
+            memberManager: widget.memberManager,
           ),
         ),
         // 전체 화면 바탕색 지정

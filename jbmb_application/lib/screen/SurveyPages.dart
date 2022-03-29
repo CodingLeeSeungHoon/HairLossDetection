@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jbmb_application/object/JBMBMemberInfo.dart';
 import 'package:jbmb_application/screen/SurveyCustomPage.dart';
 import 'package:jbmb_application/screen/UploadImageGuidePage.dart';
+import 'package:jbmb_application/service/JBMBMemberManager.dart';
 
 /// 2022.03.14 이승훈
 /// 설문조사 버튼 누른 후 모션 메소드화 (애니메이션 제거, 페이지 변환)
@@ -26,12 +27,12 @@ class JBMBSurveyCustomMotion {
 class SurveyPage1 extends StatelessWidget {
   final String qNum;
   final String question;
-  final JBMBMemberInfo jbmbMemberInfo;
+  final JBMBMemberManager memberManager;
 
   const SurveyPage1({Key? key,
     required this.qNum,
     required this.question,
-    required this.jbmbMemberInfo})
+    required this.memberManager})
       : super(key: key);
 
   @override
@@ -43,14 +44,14 @@ class SurveyPage1 extends StatelessWidget {
         JBMBSurveyCustomMotion().anyButtonPressed(context, SurveyPage2(
           qNum: 'Q2.',
           question: '\n전보다 점점 이마가 넓어지는 느낌이 든다',
-          jbmbMemberInfo: jbmbMemberInfo,
+          memberManager: memberManager,
         ));
       },
       onPressedNo: () {
         JBMBSurveyCustomMotion().anyButtonPressed(context, SurveyPage2(
           qNum: 'Q2.',
           question: '\n전보다 점점 이마가 넓어지는 느낌이 든다',
-          jbmbMemberInfo: jbmbMemberInfo,
+          memberManager: memberManager,
         ));
       },
     );
@@ -63,12 +64,12 @@ class SurveyPage1 extends StatelessWidget {
 class SurveyPage2 extends StatelessWidget {
   final String qNum;
   final String question;
-  final JBMBMemberInfo jbmbMemberInfo;
+  final JBMBMemberManager memberManager;
 
   const SurveyPage2({Key? key,
     required this.qNum,
     required this.question,
-    required this.jbmbMemberInfo})
+    required this.memberManager})
       : super(key: key);
 
   @override
@@ -80,14 +81,14 @@ class SurveyPage2 extends StatelessWidget {
         JBMBSurveyCustomMotion().anyButtonPressed(context, SurveyPage3(
           qNum: 'Q3.',
           question: '\n가늘고 힘이 없는 머리가 빠지기 시작한다.',
-          jbmbMemberInfo: jbmbMemberInfo,
+          memberManager: memberManager,
         ));
       },
       onPressedNo: () {
         JBMBSurveyCustomMotion().anyButtonPressed(context, SurveyPage3(
           qNum: 'Q3.',
           question: '\n가늘고 힘이 없는 머리가 빠지기 시작한다.',
-          jbmbMemberInfo: jbmbMemberInfo,
+          memberManager: memberManager,
         ));
       },
     );
@@ -100,12 +101,12 @@ class SurveyPage2 extends StatelessWidget {
 class SurveyPage3 extends StatelessWidget {
   final String qNum;
   final String question;
-  final JBMBMemberInfo jbmbMemberInfo;
+  final JBMBMemberManager memberManager;
 
   const SurveyPage3({Key? key,
     required this.qNum,
     required this.question,
-    required this.jbmbMemberInfo})
+    required this.memberManager})
       : super(key: key);
 
   @override
@@ -117,14 +118,14 @@ class SurveyPage3 extends StatelessWidget {
         JBMBSurveyCustomMotion().anyButtonPressed(context, SurveyPage4(
           qNum: 'Q4.',
           question: '\n모발이 가늘고 부드러워진다.',
-          jbmbMemberInfo: jbmbMemberInfo,
+          memberManager: memberManager,
         ));
       },
       onPressedNo: () {
         JBMBSurveyCustomMotion().anyButtonPressed(context, SurveyPage4(
           qNum: 'Q4.',
           question: '\n모발이 가늘고 부드러워진다.',
-          jbmbMemberInfo: jbmbMemberInfo,
+          memberManager: memberManager,
         ));
       },
     );
@@ -137,12 +138,12 @@ class SurveyPage3 extends StatelessWidget {
 class SurveyPage4 extends StatelessWidget {
   final String qNum;
   final String question;
-  final JBMBMemberInfo jbmbMemberInfo;
+  final JBMBMemberManager memberManager;
 
   const SurveyPage4({Key? key,
     required this.qNum,
     required this.question,
-    required this.jbmbMemberInfo})
+    required this.memberManager})
       : super(key: key);
 
   @override
@@ -154,14 +155,14 @@ class SurveyPage4 extends StatelessWidget {
         JBMBSurveyCustomMotion().anyButtonPressed(context, SurveyPage5(
           qNum: 'Q5.',
           question: '\n두피를 누르면 통증이 있다.',
-          jbmbMemberInfo: jbmbMemberInfo,
+          memberManager: memberManager,
         ));
       },
       onPressedNo: () {
         JBMBSurveyCustomMotion().anyButtonPressed(context, SurveyPage5(
           qNum: 'Q5.',
           question: '\n두피를 누르면 통증이 있다.',
-          jbmbMemberInfo: jbmbMemberInfo,
+          memberManager: memberManager,
         ));
       },
     );
@@ -174,12 +175,12 @@ class SurveyPage4 extends StatelessWidget {
 class SurveyPage5 extends StatelessWidget {
   final String qNum;
   final String question;
-  final JBMBMemberInfo jbmbMemberInfo;
+  final JBMBMemberManager memberManager;
 
   const SurveyPage5({Key? key,
     required this.qNum,
     required this.question,
-    required this.jbmbMemberInfo})
+    required this.memberManager})
       : super(key: key);
 
   @override
@@ -191,14 +192,14 @@ class SurveyPage5 extends StatelessWidget {
         JBMBSurveyCustomMotion().anyButtonPressed(context, SurveyPage6(
           qNum: 'Q6.',
           question: '\n앞 머리와 뒷 머리의 굵기 차이가 있다',
-          jbmbMemberInfo: jbmbMemberInfo,
+          memberManager: memberManager,
         ));
       },
       onPressedNo: () {
         JBMBSurveyCustomMotion().anyButtonPressed(context, SurveyPage6(
           qNum: 'Q6.',
           question: '\n앞 머리와 뒷 머리의 굵기 차이가 있다',
-          jbmbMemberInfo: jbmbMemberInfo,
+          memberManager: memberManager,
         ));
       },
     );
@@ -211,12 +212,12 @@ class SurveyPage5 extends StatelessWidget {
 class SurveyPage6 extends StatelessWidget {
   final String qNum;
   final String question;
-  final JBMBMemberInfo jbmbMemberInfo;
+  final JBMBMemberManager memberManager;
 
   const SurveyPage6({Key? key,
     required this.qNum,
     required this.question,
-    required this.jbmbMemberInfo})
+    required this.memberManager})
       : super(key: key);
 
   @override
@@ -228,14 +229,14 @@ class SurveyPage6 extends StatelessWidget {
         JBMBSurveyCustomMotion().anyButtonPressed(context, SurveyPage7(
           qNum: 'Q7.',
           question: '\n몸의 털이 갑자기 굵어진다',
-          jbmbMemberInfo: jbmbMemberInfo,
+          memberManager: memberManager,
         ));
       },
       onPressedNo: () {
         JBMBSurveyCustomMotion().anyButtonPressed(context, SurveyPage7(
           qNum: 'Q7.',
           question: '\n몸의 털이 갑자기 굵어진다',
-          jbmbMemberInfo: jbmbMemberInfo,
+          memberManager: memberManager,
         ));
       },
     );
@@ -248,12 +249,12 @@ class SurveyPage6 extends StatelessWidget {
 class SurveyPage7 extends StatelessWidget {
   final String qNum;
   final String question;
-  final JBMBMemberInfo jbmbMemberInfo;
+  final JBMBMemberManager memberManager;
 
   const SurveyPage7({Key? key,
     required this.qNum,
     required this.question,
-    required this.jbmbMemberInfo})
+    required this.memberManager})
       : super(key: key);
 
   @override
@@ -265,14 +266,14 @@ class SurveyPage7 extends StatelessWidget {
         JBMBSurveyCustomMotion().anyButtonPressed(context, SurveyPage8(
           qNum: 'Q8.',
           question: '\n이마라인과 정수리 부분의 유난히 번들거린다',
-          jbmbMemberInfo: jbmbMemberInfo,
+          memberManager: memberManager,
         ));
       },
       onPressedNo: () {
         JBMBSurveyCustomMotion().anyButtonPressed(context, SurveyPage8(
           qNum: 'Q8.',
           question: '\n이마라인과 정수리 부분의 유난히 번들거린다',
-          jbmbMemberInfo: jbmbMemberInfo,
+          memberManager: memberManager,
         ));
       },
     );
@@ -285,12 +286,12 @@ class SurveyPage7 extends StatelessWidget {
 class SurveyPage8 extends StatelessWidget {
   final String qNum;
   final String question;
-  final JBMBMemberInfo jbmbMemberInfo;
+  final JBMBMemberManager memberManager;
 
   const SurveyPage8({Key? key,
     required this.qNum,
     required this.question,
-    required this.jbmbMemberInfo})
+    required this.memberManager})
       : super(key: key);
 
   @override
@@ -302,14 +303,14 @@ class SurveyPage8 extends StatelessWidget {
         JBMBSurveyCustomMotion().anyButtonPressed(context, SurveyPage9(
           qNum: 'Q9.',
           question: '\n두피의 피지량이 갑자기 늘어났다',
-          jbmbMemberInfo: jbmbMemberInfo,
+          memberManager: memberManager,
         ));
       },
       onPressedNo: () {
         JBMBSurveyCustomMotion().anyButtonPressed(context, SurveyPage9(
           qNum: 'Q9.',
           question: '\n두피의 피지량이 갑자기 늘어났다',
-          jbmbMemberInfo: jbmbMemberInfo,
+          memberManager: memberManager,
         ));
       },
     );
@@ -322,12 +323,12 @@ class SurveyPage8 extends StatelessWidget {
 class SurveyPage9 extends StatelessWidget {
   final String qNum;
   final String question;
-  final JBMBMemberInfo jbmbMemberInfo;
+  final JBMBMemberManager memberManager;
 
   const SurveyPage9({Key? key,
     required this.qNum,
     required this.question,
-    required this.jbmbMemberInfo})
+    required this.memberManager})
       : super(key: key);
 
   @override
@@ -339,14 +340,14 @@ class SurveyPage9 extends StatelessWidget {
         JBMBSurveyCustomMotion().anyButtonPressed(context, SurveyPage10(
           qNum: 'Q10.',
           question: '\n비듬이 많아지고 두피가 가렵다',
-          jbmbMemberInfo: jbmbMemberInfo,
+          memberManager: memberManager,
         ));
       },
       onPressedNo: () {
         JBMBSurveyCustomMotion().anyButtonPressed(context, SurveyPage10(
           qNum: 'Q10.',
           question: '\n비듬이 많아지고 두피가 가렵다',
-          jbmbMemberInfo: jbmbMemberInfo,
+          memberManager: memberManager,
         ));
       },
     );
@@ -359,12 +360,12 @@ class SurveyPage9 extends StatelessWidget {
 class SurveyPage10 extends StatelessWidget {
   final String qNum;
   final String question;
-  final JBMBMemberInfo jbmbMemberInfo;
+  final JBMBMemberManager memberManager;
 
   const SurveyPage10({Key? key,
     required this.qNum,
     required this.question,
-    required this.jbmbMemberInfo})
+    required this.memberManager})
       : super(key: key);
 
   @override
@@ -374,12 +375,12 @@ class SurveyPage10 extends StatelessWidget {
       question: question,
       onPressedYes: () {
         JBMBSurveyCustomMotion().anyButtonPressed(context, UploadImageGuidePage(
-          jbmbMemberInfo: jbmbMemberInfo,
+          memberManager: memberManager,
         ));
       },
       onPressedNo: () {
         JBMBSurveyCustomMotion().anyButtonPressed(context, UploadImageGuidePage(
-          jbmbMemberInfo: jbmbMemberInfo,
+          memberManager: memberManager,
         ));
       },
     );

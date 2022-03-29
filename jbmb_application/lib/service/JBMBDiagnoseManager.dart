@@ -1,16 +1,15 @@
+import 'package:http/http.dart' as http;
 
+import '../object/JBMBMemberInfo.dart';
+
+/// 2022.03.27 이승훈
+/// 진단 관련 API와 메소드를 관장하는 클래스
 class JBMBDiagnoseManager {
-  /// 2022.03.22 이승훈
-  /// DB에 null이 포함된 진단 기록을 폐기.
-  _checkNonActiveDiagnosisLog(){
 
-  }
-
-  /// 2022.03.22 이승훈
   /// 새로운 진단을 시작.
   /// returns the int (진단 번호)
-   int _createNewDiagnosis(){
+  _createNewDiagnosis(JBMBMemberInfo memberInfo) async {
     return 0;
   }
-  
+
 }
