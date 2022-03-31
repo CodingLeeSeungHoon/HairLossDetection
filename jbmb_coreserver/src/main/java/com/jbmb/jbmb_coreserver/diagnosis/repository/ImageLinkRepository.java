@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ImageLinkRepository extends JpaRepository<DiagnosisImage, String> {
+public interface ImageLinkRepository extends JpaRepository<DiagnosisImage, Integer> {
 }

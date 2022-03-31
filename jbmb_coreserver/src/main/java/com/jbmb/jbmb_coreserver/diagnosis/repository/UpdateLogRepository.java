@@ -16,6 +16,6 @@ public interface UpdateLogRepository extends JpaRepository<DiagnosisLog, Integer
     @Query("select l.id from DiagnosisLog l where l.userNum=?1 and l.active=0")
     Integer findLogByUserNum(Integer userNum);
     // active
-    // 0:설문조사 진행 중
-    // 1:설문조사 완료
+    // 0:진단 시작 전
+    // 1:진단 시작 후
 }
