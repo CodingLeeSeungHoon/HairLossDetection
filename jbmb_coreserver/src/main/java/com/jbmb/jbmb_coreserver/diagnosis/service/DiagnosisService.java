@@ -8,7 +8,8 @@ import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisResult;
 import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisSurvey;
 import com.jbmb.jbmb_coreserver.diagnosis.dto.Request.*;
 import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.HairLossBySurveyResponse;
-import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.Response;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.disabledResponse;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.UpdateImageLinkResponse;
 import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.UpdateSurveyResponse;
 import com.jbmb.jbmb_coreserver.diagnosis.repository.DiagnosisResultRepository;
 import com.jbmb.jbmb_coreserver.diagnosis.repository.ImageLinkRepository;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -34,29 +36,49 @@ public class DiagnosisService {
     private final UpdateSurveyRepository updateSurveyRepository;
     private final ImageLinkRepository imageLinkRepository;
     private final DiagnosisResultRepository diagnosisResultRepository;
-    private final Response response = new Response();
-    private final UpdateSurveyResponse updateSurveyresponse = new UpdateSurveyResponse();
-    private final HairLossBySurveyResponse hairLossBySurveyResponse = new HairLossBySurveyResponse();
 
     /**
-     * 설문조사 하다가 중간에 튕겼을 때 삭제를 위한
+     * 진단 관련 로그 4가지 생성 및 진단 아이디 반환
+     * @param userNum
+     * @return diagnosisID
+     */
+    public Integer createLog(Integer userNum){
+        Integer diagnosisID = updateLogRepository.save(DiagnosisLog.builder()
+                .userNum(userNum)
+                .active(0)
+                .date(new Date())
+                .build()).getId();
+        updateSurveyRepository.save(DiagnosisSurvey.builder().id(diagnosisID).build());
+        imageLinkRepository.save(DiagnosisImage.builder().id(diagnosisID).build());
+        return diagnosisID;
+    }
+
+    /**
+     * 설문조사 하다가 중간에 튕겼을 때 삭제를 위한 API
+     * 설문조사 시작할 때 프론트에서 호출
      * resultCode 0:성공 , 1:진단기록 없음 , 2:아이디 틀림
+     * 1:진단기록 없음도 성공임(ative=0인게 없다는 것)
      * @param DisabledRequest
      * @return Response
      */
-    public Response disabledService(DisabledRequest disalbed){
+    public disabledResponse disabledService(DisabledRequest disalbed){
+        Integer userNum = null;
         try{
-            Integer userNum = memberRepository.findById(disalbed.getId()).get().getUserNum();
-            Integer diagnosisID = updateLogRepository.findLogByUserNum(userNum);
-            updateLogRepository.deleteById(diagnosisID);
-            updateSurveyRepository.deleteById(diagnosisID);
+            userNum = memberRepository.findById(disalbed.getId()).get().getUserNum();
+            Integer diagnosisID = updateLogRepository.findLogByUserNum(userNum);    // active가 0인 것을 조회
+            updateLogRepository.deleteById(diagnosisID);    // 로그 삭제
+            updateSurveyRepository.deleteById(diagnosisID); // 설문 삭제
+            imageLinkRepository.deleteById(diagnosisID);    // 이미지 링크 삭제
         }catch (NoSuchElementException e){
-            return response.builder().resultCode(2).build();
+            log.info("프론트에서 잘못된 ID로 요청함");
+            return disabledResponse.builder().resultCode(2).build();
         }
         catch (Exception e){
-            return response.builder().resultCode(1).build();
+            log.info("active가 0인 진단기록 없음(=성공) 및 진단 아이디 생성");
+            return disabledResponse.builder().resultCode(1).diagnosisID(createLog(userNum)).build();
         }
-        return response.builder().resultCode(0).build();
+        log.info("active가 1인 진단기록 삭제 성공 및 진단 아이디 생성");
+        return disabledResponse.builder().resultCode(0).diagnosisID(createLog(userNum)).build();
     }
 
     /**
@@ -82,51 +104,24 @@ public class DiagnosisService {
      * @param UpdateSurveyRequest
      * @return UpdateSurveyResponse
      */
-    public UpdateSurveyResponse updateService(ServletRequest request, UpdateSurveyRequest survey) {
-        Integer userNum=getUserNum(request); // 유저 번호 받아오기
-        if(userNum==0) return updateSurveyresponse.builder().resultCode(1).build(); // 사용자 번호가 존재하지 않을 경우
-        Integer diagnosisID = updateLogRepository.findLogByUserNum(userNum); // 진단기록 가져오기
-        if (diagnosisID == null) {  // 설문을 처음 진행할 경우
-            diagnosisID = updateLogRepository.save(DiagnosisLog.builder()
-                    .userNum(userNum)
-                    .active(0)
-                    .build()).getId();
-            updateSurveyRepository.save(DiagnosisSurvey.builder()
-                    .id(diagnosisID).build());
+    public UpdateSurveyResponse updateService(UpdateSurveyRequest survey) {
+
+        DiagnosisSurvey diagnosisSurvey;
+        
+        try{
+            Optional<DiagnosisSurvey> optionalDiagnosisSurvey = updateSurveyRepository.findById(survey.getDiagnosisID());
+            diagnosisSurvey=optionalDiagnosisSurvey.get();
+        }
+        catch (Exception e){
+            log.info("잘못된 진단 아이디");
+            return UpdateSurveyResponse.builder().resultCode(1).build();
         }
 
-        Optional<DiagnosisSurvey> result = updateSurveyRepository.findById(diagnosisID);
-        int[] checkNum=new int[11];
+        diagnosisSurvey.changeSurvey(survey.getSurveyNum(), survey.getChecked());
+        updateSurveyRepository.save(diagnosisSurvey);
 
-        try{
-        checkNum[1]=result.get().getSurvey1();
-        checkNum[2]=result.get().getSurvey2();
-        checkNum[3]=result.get().getSurvey3();
-        checkNum[4]=result.get().getSurvey4();
-        checkNum[5]=result.get().getSurvey5();
-        checkNum[6]=result.get().getSurvey6();
-        checkNum[7]=result.get().getSurvey7();
-        checkNum[8]=result.get().getSurvey8();
-        checkNum[9]=result.get().getSurvey9();
-        checkNum[10]=result.get().getSurvey10();
-        }catch (Exception e){}
-        checkNum[survey.getSurveyNum()]= survey.getChecked();
-
-        updateSurveyRepository.save(DiagnosisSurvey.builder()
-                .id(diagnosisID)
-                .survey1(checkNum[1])
-                .survey2(checkNum[2])
-                .survey3(checkNum[3])
-                .survey4(checkNum[4])
-                .survey5(checkNum[5])
-                .survey6(checkNum[6])
-                .survey7(checkNum[7])
-                .survey8(checkNum[8])
-                .survey9(checkNum[9])
-                .survey10(checkNum[10])
-                .build());
-
-        return updateSurveyresponse.builder().resultCode(0).diagnosisID(diagnosisID).build();
+        log.info("설문조사 업데이트");
+        return UpdateSurveyResponse.builder().resultCode(0).diagnosisID(survey.getDiagnosisID()).build();
     }
 
     /**
@@ -135,33 +130,37 @@ public class DiagnosisService {
      * @param ImageLinkRequest
      * @return Response
      */
-    public Response imageLinkService(ServletRequest request, ImageLinkRequest imageLink){
-        Integer userNum=getUserNum(request); // 유저 번호 받아오기
-        if(userNum==0) return response.builder().resultCode(1).build(); // 사용자 번호가 존재하지 않을 경우
-        Integer diagnosisID = updateLogRepository.findLogByUserNum(userNum); // 진단기록 가져오기
-        if(diagnosisID==null)return response.builder().resultCode(1).build();
-        imageLinkRepository.save(DiagnosisImage.builder() // 이미지 링크 저장
-                .id(diagnosisID)
-                .diagnosisImage(imageLink.getImageLink())
-                .build());
-        updateLogRepository.save(DiagnosisLog.builder() // 이미지까지 저장했으므로 active를 1로
-                .id(diagnosisID)
-                .userNum(userNum)
-                .active(1)
-                .build());
+    public UpdateImageLinkResponse imageLinkService(ImageLinkRequest imageLink){
 
-        return response.builder().resultCode(0).build();
+        DiagnosisImage diagnosisImage;
+
+        try{
+            Optional<DiagnosisImage> optionalDiagnosisImage = imageLinkRepository.findById(imageLink.getDiagnosisID());
+            diagnosisImage=optionalDiagnosisImage.get();
+        }
+        catch (Exception e){
+            log.info("잘못된 진단 아이디");
+            return UpdateImageLinkResponse.builder().resultCode(1).build();
+        }
+
+        diagnosisImage.changeDiagnosisImage(imageLink.getImageLink());
+        imageLinkRepository.save(diagnosisImage);
+        
+        log.info("이미지 링크 DB 저장");
+        return UpdateImageLinkResponse.builder().resultCode(0).diagnosisID(imageLink.getDiagnosisID()).build();
     }
 
     /**
      * DB에 저장된 설문 내용으로 설문 분석 리턴
+     * 필요시 사용
      * resultCode 0:성공 , 1:실패
      * @param hairLossBySurvey
      * @return HairLossBySurveyResponse
      */
+    @Deprecated
     public HairLossBySurveyResponse hairLossBySurveyService(HairLossBySurveyRequest hairLossBySurvey){
         Optional<DiagnosisSurvey> result = updateSurveyRepository.findById(hairLossBySurvey.getDiagnosisID());
-        if(!result.isPresent()) return hairLossBySurveyResponse.builder().resultCode(1).build();
+        if(!result.isPresent()) return HairLossBySurveyResponse.builder().resultCode(1).build();
         Integer sum=result.get().getSurvey1()
                 +result.get().getSurvey2()
                 +result.get().getSurvey3()
@@ -172,19 +171,21 @@ public class DiagnosisService {
                 +result.get().getSurvey8()
                 +result.get().getSurvey9()
                 +result.get().getSurvey10()-10;
-        if (sum<3) return hairLossBySurveyResponse.builder().resultCode(0).state(0).build();
-        else if(sum<4) return hairLossBySurveyResponse.builder().resultCode(0).state(1).build();
-        else if(sum<6) return hairLossBySurveyResponse.builder().resultCode(0).state(2).build();
-        return hairLossBySurveyResponse.builder().resultCode(0).state(3).build();
+        if (sum<3) return HairLossBySurveyResponse.builder().resultCode(0).state(0).build();
+        else if(sum<4) return HairLossBySurveyResponse.builder().resultCode(0).state(1).build();
+        else if(sum<6) return HairLossBySurveyResponse.builder().resultCode(0).state(2).build();
+        return HairLossBySurveyResponse.builder().resultCode(0).state(3).build();
     }
 
     /**
      * 진단 결과를 DB에 저장
+     * 필요시 사용
      * resultCode 0:성공 , 1:실패
      * @param UpdateDiagnosisRequest
      * @return Response
      */
-    public Response updateDiagnosisService(UpdateDiagnosisRequest updateDiagnosisRequest){
+    @Deprecated
+    public disabledResponse updateDiagnosisService(UpdateDiagnosisRequest updateDiagnosisRequest){
         try{
             diagnosisResultRepository.save(DiagnosisResult.builder()
                     .id(updateDiagnosisRequest.getDiagnosisID())
@@ -192,11 +193,10 @@ public class DiagnosisService {
                     .result0(updateDiagnosisRequest.getPercent().get(0))
                     .result1(updateDiagnosisRequest.getPercent().get(1))
                     .result2(updateDiagnosisRequest.getPercent().get(2))
-                    .result3(updateDiagnosisRequest.getPercent().get(3))
                     .build());
-            return response.builder().resultCode(0).build();
+            return disabledResponse.builder().resultCode(0).build();
         }catch (Exception e){
-            return response.builder().resultCode(1).build();
+            return disabledResponse.builder().resultCode(1).build();
         }
 
     }

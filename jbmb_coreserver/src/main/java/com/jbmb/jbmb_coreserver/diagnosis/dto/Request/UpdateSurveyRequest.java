@@ -8,6 +8,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class UpdateSurveyRequest {
+    private Integer diagnosisID;
     private Integer surveyNum;
     private Integer checked;
 }

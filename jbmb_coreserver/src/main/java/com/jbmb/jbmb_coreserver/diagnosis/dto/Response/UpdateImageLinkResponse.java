@@ -7,6 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Response {
+public class UpdateImageLinkResponse {
     private Integer resultCode;
+    private Integer diagnosisID;
 }

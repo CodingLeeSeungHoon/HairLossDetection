@@ -1,15 +1,18 @@
 package com.jbmb.jbmb_coreserver.diagnosis.domain;
 
+import com.jbmb.jbmb_coreserver.diagnosis.repository.UpdateSurveyRepository;
 import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.transaction.Transactional;
 
 @ToString
 @Getter
 @Builder
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -49,4 +52,16 @@ public class DiagnosisSurvey {
     @Column(name = "survey_10", columnDefinition = "TINYINT", nullable = true)
     private Integer survey10;
 
+    public void changeSurvey(Integer num, Integer checked){
+        if(num==1)survey1=checked;
+        else if(num==2)survey2=checked;
+        else if(num==3)survey3=checked;
+        else if(num==4)survey4=checked;
+        else if(num==5)survey5=checked;
+        else if(num==6)survey6=checked;
+        else if(num==7)survey7=checked;
+        else if(num==8)survey8=checked;
+        else if(num==9)survey9=checked;
+        else if(num==10)survey10=checked;
+    }
 }

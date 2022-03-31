@@ -8,5 +8,6 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class ImageLinkRequest {
+    private Integer diagnosisID;
     private String imageLink;
 }

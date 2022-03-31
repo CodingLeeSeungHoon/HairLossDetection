@@ -28,11 +28,6 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final RedisTemplate<String, Object> redisTemplate;
 
-    private final SignupResponse signup = new SignupResponse();
-    private final LoginResponse login = new LoginResponse();
-    private final LogoutResponse logout = new LogoutResponse();
-    private final InformationResponse information = new InformationResponse();
-
     /**
      * 회원가입 버튼 클릭 시
      * resultCode 0:성공 , 1:ID 중복, 2:실패
@@ -40,10 +35,13 @@ public class MemberService {
      * @return Signup
      */
     public SignupResponse joinService(Member user){
-        if(memberRepository.findById(user.getId()).isPresent()) return signup
-                .builder()
-                .resultCode(1)
-                .build(); // 중복 체크
+        if(memberRepository.findById(user.getId()).isPresent()){
+            log.info("ID 중복");
+            return SignupResponse
+                    .builder()
+                    .resultCode(1)
+                    .build(); // 중복 체크
+        }
         try {
             memberRepository.save(Member.builder()
                     .userNum(user.getUserNum())
@@ -57,12 +55,14 @@ public class MemberService {
                     .hairType(user.getHairType())
                     .roles(Collections.singletonList("ROLE_USER")) // 최초 가입시 USER 로 설정
                     .build());
-            return signup
+            log.info("회원가입 성공");
+            return SignupResponse
                     .builder()
                     .resultCode(0)
                     .build();
         } catch (Exception e){
-            return signup
+            log.info("회원가입 오류");
+            return SignupResponse
                     .builder()
                     .resultCode(2)
                     .build();
@@ -78,17 +78,22 @@ public class MemberService {
      */
     public LoginResponse loginService(Member user){
         Optional<Member> member=memberRepository.findById(user.getId());
-        if (!member.isPresent()) return login
-                                        .builder()
-                                        .resultCode(1)
-                                        .build(); // 가입되지 않은 ID
+        if (!member.isPresent()) {
+            log.info("가입되지 않은 ID");
+            return LoginResponse
+                    .builder()
+                    .resultCode(1)
+                    .build(); // 가입되지 않은 ID
+        }
         if (!passwordEncoder.matches(user.getPassword(), member.get().getPassword())) {
-            return login
+            log.info("비밀번호 오류");
+            return LoginResponse
                     .builder()
                     .resultCode(2)
                     .build(); // 잘못된 비밀번호
         }
-        return login.builder()
+        log.info("로그인 성공");
+        return LoginResponse.builder()
                 .resultCode(0)
                 .jwt(jwtTokenProvider.createToken(member.get().getId(), member.get().getRoles()))
                 .id(user.getId())
@@ -111,8 +116,9 @@ public class MemberService {
                     expirationDate.getTime() - System.currentTimeMillis(),
                     TimeUnit.MILLISECONDS );
             log.info("redis value : "+redisTemplate.opsForValue().get(token));
+            log.info("로그아웃 성공");
         }
-        return logout
+        return LogoutResponse
                 .builder()
                 .resultCode(re)
                 .build();
@@ -130,9 +136,11 @@ public class MemberService {
             String id = jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken((HttpServletRequest) req));
             member=memberRepository.findById(id);
         }catch (Exception e){
-            return information.builder().resultCode(1).build();
+            log.info("오류");
+            return InformationResponse.builder().resultCode(1).build();
         }
-        return information.builder()
+        log.info("회원 정보 조회 성공");
+        return InformationResponse.builder()
                 .resultCode(0)
                 .id(member.get().getId())
                 .name(member.get().getName())

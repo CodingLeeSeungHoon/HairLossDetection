@@ -2,7 +2,8 @@ package com.jbmb.jbmb_coreserver.diagnosis.controller;
 
 import com.jbmb.jbmb_coreserver.diagnosis.dto.Request.*;
 import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.HairLossBySurveyResponse;
-import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.Response;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.disabledResponse;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.UpdateImageLinkResponse;
 import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.UpdateSurveyResponse;
 import com.jbmb.jbmb_coreserver.diagnosis.service.DiagnosisService;
 import groovy.util.logging.Slf4j;
@@ -26,31 +27,35 @@ public class DiagnosisController {
 
     // 기록 삭제
     @PostMapping("/disabled")
-    public Response deleteDisabledSurveyByUserId(@RequestBody DisabledRequest disabled) {
+    public disabledResponse deleteDisabledSurveyByUserId(@RequestBody DisabledRequest disabled) {
         return diagnosisService.disabledService(disabled);
     }
 
     // 설문조사 업데이트
     @PostMapping("/update_survey")
     public UpdateSurveyResponse updateSurvey(ServletRequest request, @RequestBody UpdateSurveyRequest survey) {
-        return diagnosisService.updateService(request, survey);
+        return diagnosisService.updateService(survey);
     }
 
     // 이미지 링크 DB 저장
     @PostMapping("/image_link")
-    public Response updateUserImageLink(ServletRequest request, @RequestBody ImageLinkRequest imageLink) {
-        return diagnosisService.imageLinkService(request, imageLink);
+    public UpdateImageLinkResponse updateUserImageLink(ServletRequest request, @RequestBody ImageLinkRequest imageLink) {
+        return diagnosisService.imageLinkService(imageLink);
     }
 
     // 설문 분석
+    // 필요시 사용
+    @Deprecated
     @PostMapping("/hair_loss_survey")
     public HairLossBySurveyResponse diagnoseHairLossBySurvey(@RequestBody HairLossBySurveyRequest hairLossBySurvey) {
         return diagnosisService.hairLossBySurveyService(hairLossBySurvey);
     }
 
     // 진단 업데이트
+    // 필요시 사용
+    @Deprecated
     @PostMapping("/update_diagnosis")
-    public Response updateDiagnosis(@RequestBody UpdateDiagnosisRequest updateDiagnosisRequest) {
+    public disabledResponse updateDiagnosis(@RequestBody UpdateDiagnosisRequest updateDiagnosisRequest) {
         return diagnosisService.updateDiagnosisService(updateDiagnosisRequest);
     }
 
