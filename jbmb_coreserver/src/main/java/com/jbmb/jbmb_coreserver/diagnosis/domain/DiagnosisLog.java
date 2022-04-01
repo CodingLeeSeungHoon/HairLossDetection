@@ -27,7 +27,7 @@ public class DiagnosisLog {
     @Column(name="created_at", columnDefinition = "DATETIME", nullable = false)
     private Date date;
 
-    public void changeActive(Integer id){
+    public void changeActive(){
         active=1;
     }
 }

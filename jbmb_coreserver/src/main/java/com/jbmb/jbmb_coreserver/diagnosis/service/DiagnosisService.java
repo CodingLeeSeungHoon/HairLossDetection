@@ -7,17 +7,19 @@ import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisLog;
 import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisResult;
 import com.jbmb.jbmb_coreserver.diagnosis.domain.DiagnosisSurvey;
 import com.jbmb.jbmb_coreserver.diagnosis.dto.Request.*;
-import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.HairLossBySurveyResponse;
-import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.disabledResponse;
-import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.UpdateImageLinkResponse;
-import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.UpdateSurveyResponse;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.*;
 import com.jbmb.jbmb_coreserver.diagnosis.repository.DiagnosisResultRepository;
 import com.jbmb.jbmb_coreserver.diagnosis.repository.ImageLinkRepository;
 import com.jbmb.jbmb_coreserver.diagnosis.repository.UpdateLogRepository;
 import com.jbmb.jbmb_coreserver.diagnosis.repository.UpdateSurveyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -59,7 +61,7 @@ public class DiagnosisService {
      * resultCode 0:성공 , 1:진단기록 없음 , 2:아이디 틀림
      * 1:진단기록 없음도 성공임(ative=0인게 없다는 것)
      * @param DisabledRequest
-     * @return Response
+     * @return disabledResponse
      */
     public disabledResponse disabledService(DisabledRequest disalbed){
         Integer userNum = null;
@@ -128,7 +130,7 @@ public class DiagnosisService {
      * 이미지 링크 DB에 저장
      * resultCode 0:성공 , 1:실패
      * @param ImageLinkRequest
-     * @return Response
+     * @return UpdateImageLinkResponse
      */
     public UpdateImageLinkResponse imageLinkService(ImageLinkRequest imageLink){
 
@@ -148,6 +150,96 @@ public class DiagnosisService {
         
         log.info("이미지 링크 DB 저장");
         return UpdateImageLinkResponse.builder().resultCode(0).diagnosisID(imageLink.getDiagnosisID()).build();
+    }
+
+    /**
+     * 진단 시작
+     * resultCode 0:성공 , 1:실패
+     * 설문조사와 이미지 링크에 null값인 진단 아이디는 삭제
+     * 설문조사와 이미지 링크가 완전히 들어있는 진단 아이디의 active를 1로 업데이트
+     * 이미지 링크 보내서 AI 분석 람다 함수 호출 및 리턴 결과 저장
+     * 설문조사 분석 후 진단 결과 저장.
+     * @param HairLossDetectionRequest
+     * @return HairLossDetectionResponse
+     */
+    public HairLossDetectionResponse hairLossDetectionService(HairLossDetectionRequest hairLossDetectionRequest){
+
+        DiagnosisLog diagnosisLog=null;
+        DiagnosisSurvey diagnosisSurvey=null;
+        DiagnosisImage diagnosisImage=null;
+        AIAnalysisResponse aiAnalysisResponse=null;
+
+        try {
+            diagnosisLog = updateLogRepository.findById(hairLossDetectionRequest.getDiagnosisID()).get();
+            diagnosisSurvey = updateSurveyRepository.findById(hairLossDetectionRequest.getDiagnosisID()).get();
+            diagnosisImage = imageLinkRepository.findById(hairLossDetectionRequest.getDiagnosisID()).get();
+        }catch (Exception e){
+            log.info("잘못된 진단 아이디");
+            HairLossDetectionResponse.builder().resultCode(1).diagnosisID(hairLossDetectionRequest.getDiagnosisID()).build();
+        }
+
+        if(diagnosisSurvey.checkNull() && diagnosisImage.checkNull()) diagnosisLog.changeActive();
+        else {
+            log.info("null 값 존재");
+            return HairLossDetectionResponse.builder().resultCode(1).diagnosisID(hairLossDetectionRequest.getDiagnosisID()).build();
+        }
+
+        try{
+            aiAnalysisResponse= aiAnalysisService(diagnosisImage.getDiagnosisImage());
+        }catch (Exception e){
+            log.info("active는 1로 바뀌었으난 AI 이미지 진단 실패");
+            return HairLossDetectionResponse.builder().resultCode(1).diagnosisID(hairLossDetectionRequest.getDiagnosisID()).build();
+        }
+
+        log.info("진단 성공");
+        diagnosisResultRepository.save(DiagnosisResult.builder()
+                .id(hairLossDetectionRequest.getDiagnosisID())
+                .resultCode(getSurveyResult(diagnosisSurvey))
+                .result0(aiAnalysisResponse.getPercent0())
+                .result1(aiAnalysisResponse.getPercent1())
+                .result2(aiAnalysisResponse.getPercent2())
+                .build());
+        return HairLossDetectionResponse.builder().resultCode(0).diagnosisID(hairLossDetectionRequest.getDiagnosisID()).build();
+    }
+
+    /**
+     * 설문 분석
+     * @param DiagnosisSurvey
+     * @return
+     */
+    public Integer getSurveyResult(DiagnosisSurvey diagnosisSurvey){
+        Integer sum=diagnosisSurvey.getSurvey1()
+                +diagnosisSurvey.getSurvey2()
+                +diagnosisSurvey.getSurvey3()
+                +diagnosisSurvey.getSurvey4()
+                +diagnosisSurvey.getSurvey5()
+                +diagnosisSurvey.getSurvey6()
+                +diagnosisSurvey.getSurvey7()
+                +diagnosisSurvey.getSurvey8()
+                +diagnosisSurvey.getSurvey9()
+                +diagnosisSurvey.getSurvey10()-10;
+        if (sum<3) return 0;
+        else if(sum<4) return 1;
+        else if(sum<6) return 2;
+        return 3;
+    }
+
+    /**
+     * 이미지 분석 http 요청 WebClient (POST 요청)
+     * @param imageLink
+     * @return
+     */
+    public AIAnalysisResponse aiAnalysisService(String imageLink){
+        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+        formData.add("imageLink", imageLink);
+        WebClient webClient = WebClient.create("http://localhost:5000");    // 람다 엔드포인트 URI 채워야
+        return webClient.post()
+                .uri("/analysis")                                       // 람다 엔드포인트 URI 채워야
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .body(BodyInserters.fromFormData(formData))
+                .retrieve()
+                .bodyToMono(AIAnalysisResponse.class)
+                .block();
     }
 
     /**

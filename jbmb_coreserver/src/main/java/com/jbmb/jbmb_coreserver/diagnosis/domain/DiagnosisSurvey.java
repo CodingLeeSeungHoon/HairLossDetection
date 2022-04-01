@@ -64,4 +64,18 @@ public class DiagnosisSurvey {
         else if(num==9)survey9=checked;
         else if(num==10)survey10=checked;
     }
+
+    public boolean checkNull(){
+        if(survey1==null
+                || survey2==null
+                || survey3==null
+                || survey4==null
+                || survey5==null
+                || survey6==null
+                || survey7==null
+                || survey8==null
+                || survey9==null
+                || survey10==null) return false;
+        return true;
+    }
 }

@@ -25,4 +25,9 @@ public class DiagnosisImage {
     public void changeDiagnosisImage(String imageLink){
         diagnosisImage=imageLink;
     }
+
+    public boolean checkNull(){
+        if(diagnosisImage==null) return false;
+        return true;
+    }
 }
