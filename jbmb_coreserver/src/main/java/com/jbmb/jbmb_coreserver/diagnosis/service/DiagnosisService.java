@@ -23,9 +23,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -153,7 +151,7 @@ public class DiagnosisService {
     }
 
     /**
-     * 진단 시작
+     * 진단 시작시 앱에서 호출하는 API
      * resultCode 0:성공 , 1:실패
      * 설문조사와 이미지 링크에 null값인 진단 아이디는 삭제
      * 설문조사와 이미지 링크가 완전히 들어있는 진단 아이디의 active를 1로 업데이트
@@ -167,7 +165,7 @@ public class DiagnosisService {
         DiagnosisLog diagnosisLog=null;
         DiagnosisSurvey diagnosisSurvey=null;
         DiagnosisImage diagnosisImage=null;
-        AIAnalysisResponse aiAnalysisResponse=null;
+        AIAnalysisResponse aiAnalysisResponse;
 
         try {
             diagnosisLog = updateLogRepository.findById(hairLossDetectionRequest.getDiagnosisID()).get();
@@ -240,6 +238,32 @@ public class DiagnosisService {
                 .retrieve()
                 .bodyToMono(AIAnalysisResponse.class)
                 .block();
+    }
+
+    /**
+     * 진단 결과 리턴 API
+     * resultCode 0:성공 , 1:실패
+     * @param HairLossResultRequest
+     * @return HairLossResultResponse
+     */
+    public HairLossResultResponse hairLossResultService(HairLossResultRequest hairLossResultRequest){
+        DiagnosisResult diagnosisResult;
+
+        try{
+            Optional<DiagnosisResult> optionalDiagnosisResult = diagnosisResultRepository.findById(hairLossResultRequest.getDiagnosisID());
+            diagnosisResult=optionalDiagnosisResult.get();
+        }
+        catch (Exception e){
+            log.info("잘못된 진단 아이디");
+            return HairLossResultResponse.builder().resultCode(1).build();
+        }
+
+        log.info("진단 결과 리턴");
+        return HairLossResultResponse.builder()
+                .resultCode(0)
+                .surveyResult(diagnosisResult.getResultCode())
+                .percent(Arrays.asList(diagnosisResult.getResult0(), diagnosisResult.getResult1(), diagnosisResult.getResult2()))
+                .build();
     }
 
     /**

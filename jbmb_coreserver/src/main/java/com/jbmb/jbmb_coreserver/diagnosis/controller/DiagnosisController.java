@@ -6,10 +6,7 @@ import com.jbmb.jbmb_coreserver.diagnosis.service.DiagnosisService;
 import groovy.util.logging.Slf4j;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
 
@@ -44,6 +41,12 @@ public class DiagnosisController {
     @PostMapping("hair_loss_detection")
     public HairLossDetectionResponse hairLossDetection(@RequestBody HairLossDetectionRequest hairLossDetectionRequest){
         return diagnosisService.hairLossDetectionService(hairLossDetectionRequest);
+    }
+
+    // 진단 결과 API
+    @GetMapping("hair_loss_result")
+    public HairLossResultResponse hairLossResult(@RequestBody HairLossResultRequest hairLossResultRequest){
+        return diagnosisService.hairLossResultService(hairLossResultRequest);
     }
 
     // 설문 분석
