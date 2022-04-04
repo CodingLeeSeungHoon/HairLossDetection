@@ -267,6 +267,49 @@ public class DiagnosisService {
     }
 
     /**
+     * 진단 로그 받아오기
+     * 진단 아이디를 기반으로 설문내역, 이미지 링크, 분석 결과를 리턴
+     * resultCode 0:성공 , 1:실패
+     * @param GetDataForDiagnosisRequest
+     * @return GetDataForDiagnosisResponse
+     */
+    public GetDataForDiagnosisResponse getDataForDiagnosisService(GetDataForDiagnosisRequest getDataForDiagnosisRequest){
+
+        DiagnosisSurvey diagnosisSurvey=null;
+        DiagnosisImage diagnosisImage=null;
+        DiagnosisResult diagnosisResult = null;
+
+        try {
+            diagnosisSurvey = updateSurveyRepository.findById(getDataForDiagnosisRequest.getDiagnosisID()).get();
+            diagnosisImage = imageLinkRepository.findById(getDataForDiagnosisRequest.getDiagnosisID()).get();
+            diagnosisResult=diagnosisResultRepository.findById((getDataForDiagnosisRequest.getDiagnosisID())).get();
+        }catch (Exception e){
+            log.info("잘못된 진단 아이디");
+            return GetDataForDiagnosisResponse.builder().resultCode(1).build();
+        }
+
+        log.info("진단 로그 받아오기");
+        return GetDataForDiagnosisResponse.builder()
+                .resultCode(0)
+                .imageLink(diagnosisImage.getDiagnosisImage())
+                .surveyResult(diagnosisResult.getResultCode())
+                .percent(Arrays.asList(diagnosisResult.getResult0(), diagnosisResult.getResult1(), diagnosisResult.getResult2()))
+                .surveyClass(GetDataForDiagnosisResponse.SurveyClass.builder()
+                        .survey1(diagnosisSurvey.getSurvey1())
+                        .survey2(diagnosisSurvey.getSurvey2())
+                        .survey3(diagnosisSurvey.getSurvey3())
+                        .survey4(diagnosisSurvey.getSurvey4())
+                        .survey5(diagnosisSurvey.getSurvey5())
+                        .survey6(diagnosisSurvey.getSurvey6())
+                        .survey7(diagnosisSurvey.getSurvey7())
+                        .survey8(diagnosisSurvey.getSurvey8())
+                        .survey9(diagnosisSurvey.getSurvey9())
+                        .survey10(diagnosisSurvey.getSurvey10())
+                        .build())
+                .build();
+    }
+
+    /**
      * DB에 저장된 설문 내용으로 설문 분석 리턴
      * 필요시 사용
      * resultCode 0:성공 , 1:실패
