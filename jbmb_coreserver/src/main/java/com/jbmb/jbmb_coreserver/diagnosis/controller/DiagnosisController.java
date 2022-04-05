@@ -43,10 +43,16 @@ public class DiagnosisController {
         return diagnosisService.hairLossDetectionService(hairLossDetectionRequest);
     }
 
-    // 진단 결과 API
+    // 진단 결과 리턴
     @GetMapping("hair_loss_result")
     public HairLossResultResponse hairLossResult(@RequestBody HairLossResultRequest hairLossResultRequest){
         return diagnosisService.hairLossResultService(hairLossResultRequest);
+    }
+
+    // 진단 로그 받아오기
+    @GetMapping("data")
+    public GetDataForDiagnosisResponse getDataForDiagnosis(@RequestBody GetDataForDiagnosisRequest getDataForDiagnosisRequest){
+        return diagnosisService.getDataForDiagnosisService(getDataForDiagnosisRequest);
     }
 
     // 설문 분석
