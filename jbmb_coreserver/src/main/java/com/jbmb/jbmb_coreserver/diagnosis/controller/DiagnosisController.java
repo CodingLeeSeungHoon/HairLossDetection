@@ -21,7 +21,7 @@ public class DiagnosisController {
 
     // 기록 삭제
     @PostMapping("/disabled")
-    public disabledResponse deleteDisabledSurveyByUserId(@RequestBody DisabledRequest disabled) {
+    public DisabledResponse deleteDisabledSurveyByUserId(@RequestBody DisabledRequest disabled) {
         return diagnosisService.disabledService(disabled);
     }
 
@@ -73,7 +73,7 @@ public class DiagnosisController {
     // 필요시 사용
     @Deprecated
     @PostMapping("/update_diagnosis")
-    public disabledResponse updateDiagnosis(@RequestBody UpdateDiagnosisRequest updateDiagnosisRequest) {
+    public DisabledResponse updateDiagnosis(@RequestBody UpdateDiagnosisRequest updateDiagnosisRequest) {
         return diagnosisService.updateDiagnosisService(updateDiagnosisRequest);
     }
 

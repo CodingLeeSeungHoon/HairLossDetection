@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class disabledResponse {
+public class DisabledResponse {
     private Integer resultCode;
     private Integer diagnosisID;
 }
