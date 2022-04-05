@@ -55,6 +55,12 @@ public class DiagnosisController {
         return diagnosisService.getDataForDiagnosisService(getDataForDiagnosisRequest);
     }
 
+    // 진단 로그 리스트 받아오기 (진단 아이디와 생성 날짜로 이루어진 목록)
+    @GetMapping("/data_list")
+    public GetDataFromDiagnosisResponse getDataFromDiagnosis(@RequestParam(value="id") String id){
+        return diagnosisService.getDatFromDiagnosisService(id);
+    }
+
     // 설문 분석
     // 필요시 사용
     @Deprecated
