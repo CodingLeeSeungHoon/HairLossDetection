@@ -62,7 +62,7 @@ public class DiagnosisService {
      * @param DisabledRequest
      * @return disabledResponse
      */
-    public disabledResponse disabledService(DisabledRequest disalbed){
+    public DisabledResponse disabledService(DisabledRequest disalbed){
         Integer userNum = null;
         try{
             userNum = memberRepository.findById(disalbed.getId()).get().getUserNum();
@@ -72,14 +72,14 @@ public class DiagnosisService {
             imageLinkRepository.deleteById(diagnosisID);    // 이미지 링크 삭제
         }catch (NoSuchElementException e){
             log.info("프론트에서 잘못된 ID로 요청함");
-            return disabledResponse.builder().resultCode(2).build();
+            return DisabledResponse.builder().resultCode(2).build();
         }
         catch (Exception e){
             log.info("active가 0인 진단기록 없음(=성공) 및 진단 아이디 생성");
-            return disabledResponse.builder().resultCode(1).diagnosisID(createLog(userNum)).build();
+            return DisabledResponse.builder().resultCode(1).diagnosisID(createLog(userNum)).build();
         }
         log.info("active가 0인 진단기록 삭제 성공 및 진단 아이디 생성");
-        return disabledResponse.builder().resultCode(0).diagnosisID(createLog(userNum)).build();
+        return DisabledResponse.builder().resultCode(0).diagnosisID(createLog(userNum)).build();
     }
 
     /**
@@ -385,7 +385,7 @@ public class DiagnosisService {
      * @return Response
      */
     @Deprecated
-    public disabledResponse updateDiagnosisService(UpdateDiagnosisRequest updateDiagnosisRequest){
+    public DisabledResponse updateDiagnosisService(UpdateDiagnosisRequest updateDiagnosisRequest){
         try{
             diagnosisResultRepository.save(DiagnosisResult.builder()
                     .id(updateDiagnosisRequest.getDiagnosisID())
@@ -394,9 +394,9 @@ public class DiagnosisService {
                     .result1(updateDiagnosisRequest.getPercent().get(1))
                     .result2(updateDiagnosisRequest.getPercent().get(2))
                     .build());
-            return disabledResponse.builder().resultCode(0).build();
+            return DisabledResponse.builder().resultCode(0).build();
         }catch (Exception e){
-            return disabledResponse.builder().resultCode(1).build();
+            return DisabledResponse.builder().resultCode(1).build();
         }
 
     }
