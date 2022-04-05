@@ -23,6 +23,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Slf4j
@@ -77,7 +78,7 @@ public class DiagnosisService {
             log.info("active가 0인 진단기록 없음(=성공) 및 진단 아이디 생성");
             return disabledResponse.builder().resultCode(1).diagnosisID(createLog(userNum)).build();
         }
-        log.info("active가 1인 진단기록 삭제 성공 및 진단 아이디 생성");
+        log.info("active가 0인 진단기록 삭제 성공 및 진단 아이디 생성");
         return disabledResponse.builder().resultCode(0).diagnosisID(createLog(userNum)).build();
     }
 
@@ -306,6 +307,46 @@ public class DiagnosisService {
                         .survey9(diagnosisSurvey.getSurvey9())
                         .survey10(diagnosisSurvey.getSurvey10())
                         .build())
+                .build();
+    }
+
+    /**
+     * 진단 로그 리스트 받아오기
+     * 사용자 아이디를 기반으로 진단 아이디, 진단 생성 날짜(시간)의 리스트를 리턴
+     * 진단 기록이 없으면 resultCode=0 이고 리스트는 null
+     * resultCode 0:성공 , 1:실패
+     * @param id
+     * @return GetDataFromDiagnosisResponse
+     */
+    public GetDataFromDiagnosisResponse getDatFromDiagnosisService(String id){
+
+        List<DiagnosisLog> logList = null;
+
+        try{
+            Integer userNum = memberRepository.findById(id).get().getUserNum();
+            logList=updateLogRepository.getDiagnosisLogByUserNum(userNum);
+        }catch (NoSuchElementException e){
+            log.info("프론트에서 잘못된 ID로 요청함");
+            return GetDataFromDiagnosisResponse.builder()
+                    .resultCode(1)
+                    .build();
+        }catch (Exception e){
+            log.info("진단 기록 없음");
+            return GetDataFromDiagnosisResponse.builder()
+                    .resultCode(0)
+                    .build();
+        }
+
+        List<GetDataFromDiagnosisResponse.Log> diagnosisList = new ArrayList<>();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd a HH:mm:ss");
+        for(DiagnosisLog d : logList){
+            diagnosisList.add(GetDataFromDiagnosisResponse.Log.builder().diagnosisID(d.getId()).date(simpleDateFormat.format(d.getDate())).build());
+        }
+
+        log.info("진단 로그 리스트 보내기");
+        return GetDataFromDiagnosisResponse.builder()
+                .resultCode(0)
+                .diagnosisList(diagnosisList)
                 .build();
     }
 
