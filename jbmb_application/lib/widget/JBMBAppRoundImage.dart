@@ -29,7 +29,9 @@ class JBMBAppRoundImage extends StatelessWidget {
     required double width,
   }) {
     // return JBMBAppRoundImage(NetworkImage(url), height: height, width: width);
-    return JBMBAppRoundImage(Image.file(File(url)).image, height: height, width: width);
+    return JBMBAppRoundImage(Image
+        .file(File(url))
+        .image, height: height, width: width);
   }
 
   factory JBMBAppRoundImage.memory(Uint8List data,

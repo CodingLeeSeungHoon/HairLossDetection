@@ -6,13 +6,16 @@ import '../widget/JBMBAppBars.dart';
 
 /// 2022.03.08 이승훈
 /// 설문조사 페이지 클래스화
-class SurveyCustomPage{
+class SurveyCustomPage {
   // question number with 'Q' + number + '.'
   final String qNum;
+
   // question script
   final String question;
+
   // when press button 'O'
   final VoidCallback? onPressedYes;
+
   // when press button 'X'
   final VoidCallback? onPressedNo;
 
@@ -39,27 +42,27 @@ class SurveyCustomPage{
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  flex: 1,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        qNum,
-                        style: const TextStyle(
-                            fontFamily: 'NanumGothic-Regular',
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        question,
-                        style: const TextStyle(
-                          fontFamily: 'NanumGothic-Regular',
-                          fontSize: 26,
+                    flex: 1,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          qNum,
+                          style: const TextStyle(
+                              fontFamily: 'NanumGothic-Regular',
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold),
                         ),
-                      ),
-                    ],
-                  )
+                        Text(
+                          question,
+                          style: const TextStyle(
+                            fontFamily: 'NanumGothic-Regular',
+                            fontSize: 26,
+                          ),
+                        ),
+                      ],
+                    )
                 ),
                 Divider(thickness: 2,),
                 Expanded(
@@ -67,8 +70,12 @@ class SurveyCustomPage{
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        JBMBBigButton(buttonText: 'O', onPressed: onPressedYes,),
-                        JBMBBigButton(buttonText: 'X', onPressed: onPressedNo, backgroundColor: Colors.white, elementColor: Colors.black,),
+                        JBMBBigButton(
+                          buttonText: 'O', onPressed: onPressedYes,),
+                        JBMBBigButton(buttonText: 'X',
+                          onPressed: onPressedNo,
+                          backgroundColor: Colors.white,
+                          elementColor: Colors.black,),
                       ],
                     ))
               ],

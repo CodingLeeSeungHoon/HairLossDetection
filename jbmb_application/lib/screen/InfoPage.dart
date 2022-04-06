@@ -10,9 +10,14 @@ class InfoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    double phoneHeight = MediaQuery.of(context).size.height;
-    double phonePadding = MediaQuery.of(context).padding.top;
+    double phoneHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    double phonePadding = MediaQuery
+        .of(context)
+        .padding
+        .top;
 
     return Scaffold(
       body: Container(

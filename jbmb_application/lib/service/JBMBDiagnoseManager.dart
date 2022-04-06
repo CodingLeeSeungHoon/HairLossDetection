@@ -14,7 +14,7 @@ class JBMBDiagnoseManager {
   JBMBDiagnoseManager(this.surveyManager);
 
   /// 매니저의 진단 아이디 상태 확인 메소드
-  bool isDiagnosisIDNull(){
+  bool isDiagnosisIDNull() {
     return diagnosisID == null ? true : false;
   }
 

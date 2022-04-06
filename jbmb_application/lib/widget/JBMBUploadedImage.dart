@@ -18,7 +18,8 @@ class JBMBUploadedImageWidget extends StatefulWidget {
   });
 
   @override
-  _JBMBUploadedImageWidgetState createState() => _JBMBUploadedImageWidgetState();
+  _JBMBUploadedImageWidgetState createState() =>
+      _JBMBUploadedImageWidgetState();
 }
 
 class _JBMBUploadedImageWidgetState extends State<JBMBUploadedImageWidget> {
@@ -33,20 +34,20 @@ class _JBMBUploadedImageWidgetState extends State<JBMBUploadedImageWidget> {
         if (isLoading)
           Center(
               child: Column(
-            children: const [
-              CircularProgressIndicator(
-                color: Colors.black45,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                "서버에 저장 중..",
-                style: TextStyle(
-                    color: Colors.black45, fontWeight: FontWeight.bold),
-              )
-            ],
-          )),
+                children: const [
+                  CircularProgressIndicator(
+                    color: Colors.black45,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "서버에 저장 중..",
+                    style: TextStyle(
+                        color: Colors.black45, fontWeight: FontWeight.bold),
+                  )
+                ],
+              )),
         if (!isLoading && imageUrl == null)
           const Icon(
             Icons.image,
@@ -82,32 +83,34 @@ class _JBMBUploadedImageWidgetState extends State<JBMBUploadedImageWidget> {
   Future _selectPhoto() async {
     await showModalBottomSheet(
         context: context,
-        builder: (context) => BottomSheet(
-            onClosing: () {},
-            builder: (context) => Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ListTile(
-                      leading: const Icon(Icons.camera),
-                      title: const Text('카메라 촬영'),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        _pickImage(ImageSource.camera);
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.photo_album),
-                      title: const Text('앨범에서 찾기'),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        _pickImage(ImageSource.gallery);
-                      },
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    )
-                  ],
-                )));
+        builder: (context) =>
+            BottomSheet(
+                onClosing: () {},
+                builder: (context) =>
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTile(
+                          leading: const Icon(Icons.camera),
+                          title: const Text('카메라 촬영'),
+                          onTap: () {
+                            Navigator.of(context).pop();
+                            _pickImage(ImageSource.camera);
+                          },
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.photo_album),
+                          title: const Text('앨범에서 찾기'),
+                          onTap: () {
+                            Navigator.of(context).pop();
+                            _pickImage(ImageSource.gallery);
+                          },
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        )
+                      ],
+                    )));
   }
 
   /// 이미지 선택 혹은 촬영 - 편집 - 업로드가 모두 포함된 메소드

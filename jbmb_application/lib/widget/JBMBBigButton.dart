@@ -32,7 +32,10 @@ class JBMBBigButton extends StatelessWidget {
         backgroundColor: backgroundColor,
         padding: const EdgeInsets.all(10.0),
         fixedSize: Size(phoneWidth * 0.35, phoneWidth * 0.35),
-        textStyle: TextStyle(fontSize: 50, fontWeight: FontWeight.bold, fontFamily: 'NanumGothic-Regular', color: elementColor),
+        textStyle: TextStyle(fontSize: 50,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'NanumGothic-Regular',
+            color: elementColor),
         side: const BorderSide(color: Colors.grey, width: 2),
         shape:
         RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),

@@ -48,9 +48,18 @@ class _LoginedHomeState extends State<LoginedHome> {
 
   @override
   Widget build(BuildContext context) {
-    double phoneWidth = MediaQuery.of(context).size.width;
-    double phoneHeight = MediaQuery.of(context).size.height;
-    double phonePadding = MediaQuery.of(context).padding.top;
+    double phoneWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    double phoneHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    double phonePadding = MediaQuery
+        .of(context)
+        .padding
+        .top;
 
     return WillPopScope(
         child: Scaffold(
@@ -69,7 +78,7 @@ class _LoginedHomeState extends State<LoginedHome> {
                     _scaffoldKey.currentState?.openEndDrawer()),
             // AppBar를 제외한 나머지 위젯 (중간문구 - 구분선 - 슬라이더)
             body: Container(
-                // 가운데 정렬
+              // 가운데 정렬
                 alignment: AlignmentDirectional.center,
                 // 패딩과 마진 값
                 padding: EdgeInsets.all(phonePadding * 0.33),
@@ -108,7 +117,8 @@ class _LoginedHomeState extends State<LoginedHome> {
                           builder: (BuildContext context) {
                             return Container(
                                 alignment: Alignment.center,
-                                margin: const EdgeInsets.symmetric(horizontal: 10.0),
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 10.0),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -128,7 +138,7 @@ class _LoginedHomeState extends State<LoginedHome> {
                                     ),
                                     JBMBOutlinedButton(
                                       buttonText:
-                                          getButtonTextByIndex(_current),
+                                      getButtonTextByIndex(_current),
                                       iconData: getIconDataByIndex(_current),
                                       onPressed: () {
                                         movePageByCurrentIndex(_current);
@@ -171,9 +181,10 @@ class _LoginedHomeState extends State<LoginedHome> {
     switch (currentIndex) {
       case 0:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => DiagnosisAlertPage(
-            memberManager: widget.memberManager,
-          ),
+          builder: (context) =>
+              DiagnosisAlertPage(
+                memberManager: widget.memberManager,
+              ),
         ));
         break;
       case 1:
@@ -182,88 +193,95 @@ class _LoginedHomeState extends State<LoginedHome> {
         break;
       case 2:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => HospitalPage(
-            memberManager: widget.memberManager,
-          ),
+          builder: (context) =>
+              HospitalPage(
+                memberManager: widget.memberManager,
+              ),
         ));
         break;
       case 3:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => CommunityPage(
-            memberManager: widget.memberManager,
-          ),
+          builder: (context) =>
+              CommunityPage(
+                memberManager: widget.memberManager,
+              ),
         ));
         break;
     }
   }
 
   /// 샴푸 botomSheet 생성하는 메소드
-  Widget buildSheet() => Container(
-      padding: EdgeInsets.all(8),
-      margin: EdgeInsets.all(8),
-      child: Column(
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+  Widget buildSheet() =>
+      Container(
+          padding: EdgeInsets.all(8),
+          margin: EdgeInsets.all(8),
+          child: Column(
             children: [
-              const Text(
-                "당신의\n두피 타입을\n선택해주세요.\n",
-                style: TextStyle(
-                    fontSize: 23,
-                    color: Colors.black54,
-                    fontFamily: 'NanumGothic-Regular',
-                    fontWeight: FontWeight.bold),
-              ),
-              Row(
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.info_outline),
-                    tooltip:
-                        '\n일반적으로 두피 역시 피부이기 때문에 \n건성 피부는 건성 두피, 지성 피부는 지성 두피를\n 가질 확률이 높습니다.\n'
-                        '건성 두피는 각질과 비듬이 많은 두피,\n지성 두피는 유분이 많은 두피를 의미합니다.\n'
-                        '샴푸를 한 지 반나절 내에 기름지고 축 가라앉는다면 지성,\n 비듬이나 각질 가루가 많이 떨어지는 두피는 건성입니다.\n',
+                  const Text(
+                    "당신의\n두피 타입을\n선택해주세요.\n",
+                    style: TextStyle(
+                        fontSize: 23,
+                        color: Colors.black54,
+                        fontFamily: 'NanumGothic-Regular',
+                        fontWeight: FontWeight.bold),
                   ),
-                  const Text("지성 두피와 건성 두피에 대해 \n알고 싶다면 버튼을 꾹 누르세요")
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.info_outline),
+                        tooltip:
+                        '\n일반적으로 두피 역시 피부이기 때문에 \n건성 피부는 건성 두피, 지성 피부는 지성 두피를\n 가질 확률이 높습니다.\n'
+                            '건성 두피는 각질과 비듬이 많은 두피,\n지성 두피는 유분이 많은 두피를 의미합니다.\n'
+                            '샴푸를 한 지 반나절 내에 기름지고 축 가라앉는다면 지성,\n 비듬이나 각질 가루가 많이 떨어지는 두피는 건성입니다.\n',
+                      ),
+                      const Text("지성 두피와 건성 두피에 대해 \n알고 싶다면 버튼을 꾹 누르세요")
+                    ],
+                  ),
+                  const Divider(
+                    thickness: 2,
+                  ),
                 ],
               ),
-              const Divider(
-                thickness: 2,
-              ),
+              Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      JBMBBigButton(
+                        buttonText: '지성',
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ShampooPage(
+                                      memberManager: widget.memberManager,
+                                    ),
+                              ));
+                        },
+                      ),
+                      JBMBBigButton(
+                        buttonText: '건성',
+                        backgroundColor: Colors.white,
+                        elementColor: Colors.black45,
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ShampooPage(
+                                      memberManager: widget.memberManager,
+                                    ),
+                              ));
+                        },
+                      )
+                    ],
+                  ))
             ],
-          ),
-          Expanded(
-              child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              JBMBBigButton(
-                buttonText: '지성',
-                onPressed: () {
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => ShampooPage(
-                      memberManager: widget.memberManager,
-                    ),
-                  ));
-                },
-              ),
-              JBMBBigButton(
-                buttonText: '건성',
-                backgroundColor: Colors.white,
-                elementColor: Colors.black45,
-                onPressed: () {
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => ShampooPage(
-                      memberManager: widget.memberManager,
-                    ),
-                  ));
-                },
-              )
-            ],
-          ))
-        ],
-      ));
+          ));
 
   /// display Button Text by [index]
   String getButtonTextByIndex(int index) {
@@ -290,19 +308,19 @@ class _LoginedHomeState extends State<LoginedHome> {
     IconData? retval;
     switch (index) {
       case 0:
-        // 무료 진단
+      // 무료 진단
         retval = Icons.check_box_rounded;
         return retval;
       case 1:
-        // 샴푸 추천
+      // 샴푸 추천
         retval = Icons.find_in_page_rounded;
         return retval;
       case 2:
-        // 병원 추천
+      // 병원 추천
         retval = Icons.local_hospital;
         return retval;
       case 3:
-        // 커뮤니티
+      // 커뮤니티
         retval = Icons.group;
         return retval;
     }
@@ -329,7 +347,7 @@ class MenuTextByIndex extends StatelessWidget {
           children: const [
             Text(
               "자가진단 및 AI 이미지 진단으로\n"
-              "간단하게 탈모 상태를 알아보세요",
+                  "간단하게 탈모 상태를 알아보세요",
               style: TextStyle(
                 fontFamily: fontFamily,
                 fontSize: fontSize,
@@ -345,7 +363,7 @@ class MenuTextByIndex extends StatelessWidget {
           children: const [
             Text(
               "자신의 두피 타입에 따라\n"
-              "적절한 샴푸를 추천해드려요",
+                  "적절한 샴푸를 추천해드려요",
               style: TextStyle(
                   fontFamily: fontFamily, fontSize: fontSize, color: color),
               textAlign: TextAlign.center,
@@ -358,7 +376,7 @@ class MenuTextByIndex extends StatelessWidget {
           children: const [
             Text(
               "근처 탈모 전문 병원을\n"
-              "찾아보세요",
+                  "찾아보세요",
               style: TextStyle(
                   fontFamily: fontFamily, fontSize: fontSize, color: color),
               textAlign: TextAlign.center,
@@ -371,7 +389,7 @@ class MenuTextByIndex extends StatelessWidget {
           children: const [
             Text(
               "비슷한 고민이 있는 회원들과\n"
-              "다양한 이야기를 나눠요",
+                  "다양한 이야기를 나눠요",
               style: TextStyle(
                   fontFamily: fontFamily, fontSize: fontSize, color: color),
               textAlign: TextAlign.center,

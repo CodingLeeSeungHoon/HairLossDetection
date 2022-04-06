@@ -8,6 +8,7 @@ import '../widget/JBMBAppBars.dart';
 
 class UploadImageGuidePage extends StatelessWidget {
   final JBMBMemberManager memberManager;
+
   const UploadImageGuidePage({
     Key? key,
     required this.memberManager
@@ -15,7 +16,10 @@ class UploadImageGuidePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double phoneWidth = MediaQuery.of(context).size.width;
+    double phoneWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
 
     return WillPopScope(
         child: Scaffold(
@@ -39,7 +43,7 @@ class UploadImageGuidePage extends StatelessWidget {
                           children: const [
                             Text(
                               "\n이미지 업로드\n"
-                              "가이드라인 ",
+                                  "가이드라인 ",
                               style: TextStyle(
                                   fontSize: 23,
                                   color: Colors.black54,
@@ -83,18 +87,19 @@ class UploadImageGuidePage extends StatelessWidget {
                           iconData: Icons.check,
                           onPressed: () {
                             Future.delayed(const Duration(milliseconds: 250),
-                                () {
-                              Navigator.pushReplacement(
-                                context,
-                                PageRouteBuilder(
-                                  pageBuilder:
-                                      (context, animation1, animation2) =>
-                                          UploadImagePage(memberManager: memberManager,),
-                                  transitionDuration: Duration.zero,
-                                  reverseTransitionDuration: Duration.zero,
-                                ),
-                              );
-                            });
+                                    () {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    PageRouteBuilder(
+                                      pageBuilder:
+                                          (context, animation1, animation2) =>
+                                          UploadImagePage(
+                                            memberManager: memberManager,),
+                                      transitionDuration: Duration.zero,
+                                      reverseTransitionDuration: Duration.zero,
+                                    ),
+                                  );
+                                });
                           },
                         ),
                       ],

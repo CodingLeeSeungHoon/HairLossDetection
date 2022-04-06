@@ -24,27 +24,35 @@ class JBMBMemberInfo {
 
   // getter & setter
   String? get getID => id;
+
   set setID(String? inputID) => id = inputID;
 
   String? get getPW => passWord;
+
   set setPW(String? inputPW) => passWord = inputPW;
 
   String? get getName => name;
+
   set setName(String? inputName) => name = inputName;
 
   String? get getPhone => phoneNumber;
+
   set setPhone(String? inputPhone) => phoneNumber = inputPhone;
 
   String? get getEmail => email;
+
   set setEmail(String? inputEmail) => email = inputEmail;
 
   String? get getSex => sex;
+
   set setSex(String? inputSex) => sex = inputSex;
 
   int? get getAge => age;
+
   set setAge(int? inputAge) => age = inputAge;
 
   int? get getHairType => hairType;
+
   set setHairType(int? inputHairType) => hairType = inputHairType;
 
   // fromJson
@@ -59,15 +67,16 @@ class JBMBMemberInfo {
         email = json['email'];
 
   // toJson
-  Map<String, dynamic> toJson() => {
-    'id' : id,
-    'password' : passWord,
-    'name' : name,
-    'phone' : phoneNumber,
-    'sex' : sex == 'male' ? 1 : 0,
-    'age' : age,
-    'hairType' : hairType,
-    'email' : email
-  };
+  Map<String, dynamic> toJson() =>
+      {
+        'id': id,
+        'password': passWord,
+        'name': name,
+        'phone': phoneNumber,
+        'sex': sex == 'male' ? 1 : 0,
+        'age': age,
+        'hairType': hairType,
+        'email': email
+      };
 
 }

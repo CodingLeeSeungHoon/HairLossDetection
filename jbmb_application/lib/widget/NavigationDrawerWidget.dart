@@ -9,9 +9,18 @@ class NavigationDrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double phoneWidth = MediaQuery.of(context).size.width;
-    double phoneHeight = MediaQuery.of(context).size.height;
-    double phonePadding = MediaQuery.of(context).padding.top;
+    double phoneWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    double phoneHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    double phonePadding = MediaQuery
+        .of(context)
+        .padding
+        .top;
 
     return Drawer(
       child: Material(
@@ -19,7 +28,10 @@ class NavigationDrawerWidget extends StatelessWidget {
           padding: padding,
           children: <Widget>[
             SizedBox(height: phoneHeight * 0.10,),
-            const Text("제발모발", textAlign: TextAlign.center, style: TextStyle(fontFamily: "Gugi-regular", fontSize: 25, fontWeight: FontWeight.bold),),
+            const Text("제발모발", textAlign: TextAlign.center,
+              style: TextStyle(fontFamily: "Gugi-regular",
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold),),
             SizedBox(
               height: phoneHeight * 0.05,
             ),

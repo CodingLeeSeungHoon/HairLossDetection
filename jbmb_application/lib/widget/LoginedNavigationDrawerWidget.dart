@@ -18,6 +18,7 @@ import '../screen/JoinPage.dart';
 /// 2020.03.07 이승훈 개발
 class LoginedNavigationDrawerWidget extends StatelessWidget {
   final JBMBMemberManager memberManager;
+
   LoginedNavigationDrawerWidget({
     Key? key,
     required this.memberManager
@@ -26,9 +27,18 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double phoneWidth = MediaQuery.of(context).size.width;
-    double phoneHeight = MediaQuery.of(context).size.height;
-    double phonePadding = MediaQuery.of(context).padding.top;
+    double phoneWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    double phoneHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    double phonePadding = MediaQuery
+        .of(context)
+        .padding
+        .top;
 
     return Drawer(
       child: Material(
@@ -36,7 +46,10 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
           padding: padding,
           children: <Widget>[
             SizedBox(height: phoneHeight * 0.10,),
-            const Text("제발모발", textAlign: TextAlign.center, style: TextStyle(fontFamily: "Gugi-regular", fontSize: 25, fontWeight: FontWeight.bold),),
+            const Text("제발모발", textAlign: TextAlign.center,
+              style: TextStyle(fontFamily: "Gugi-regular",
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold),),
             SizedBox(
               height: phoneHeight * 0.05,
             ),
@@ -100,16 +113,16 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
 
     switch (index) {
       case 0:
-        // logout
-        // Navigator.of(context).popUntil((route) => route.isFirst);
-        try{
+      // logout
+      // Navigator.of(context).popUntil((route) => route.isFirst);
+        try {
           String token = await memberManager.jwtManager.getToken();
           JBMBLoginManager().tryLogout(token);
           log("[Logout] success logout with valid token");
         } catch (e) {
           log("[Logout] token was invalid but success logout : $e");
         }
-        Future.delayed(const Duration(milliseconds: 250), (){
+        Future.delayed(const Duration(milliseconds: 250), () {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
@@ -122,7 +135,8 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
         break;
       case 1:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => DiagnosisAlertPage(memberManager: memberManager,),
+          builder: (context) =>
+              DiagnosisAlertPage(memberManager: memberManager,),
         ));
         // diagnose
         break;

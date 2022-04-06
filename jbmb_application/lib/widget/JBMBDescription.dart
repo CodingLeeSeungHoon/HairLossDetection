@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 /// 2020.03.07 이승훈 개발
 class LoginedMainDescription extends StatelessWidget {
   final String userName;
+
   const LoginedMainDescription({
     Key? key,
     required this.userName

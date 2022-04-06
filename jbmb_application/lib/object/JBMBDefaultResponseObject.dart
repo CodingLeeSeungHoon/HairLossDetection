@@ -1,4 +1,4 @@
-class JBMBDefaultResponseObject{
+class JBMBDefaultResponseObject {
   // member variable
   int? _resultCode;
 

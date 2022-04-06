@@ -37,16 +37,28 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    double phoneWidth = MediaQuery.of(context).size.width;
-    double phoneHeight = MediaQuery.of(context).size.height;
-    double phonePadding = MediaQuery.of(context).padding.top;
+    double phoneWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    double phoneHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    double phonePadding = MediaQuery
+        .of(context)
+        .padding
+        .top;
 
     return Scaffold(
       // resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.white,
       appBar: JBMBTransparentAppbar(onPressedCancel: () {
-        if (MediaQuery.of(context).viewInsets.bottom != 0) {
+        if (MediaQuery
+            .of(context)
+            .viewInsets
+            .bottom != 0) {
           FocusManager.instance.primaryFocus?.unfocus();
         } else {
           Future.delayed(const Duration(milliseconds: 180), () {
@@ -100,8 +112,8 @@ class _LoginPageState extends State<LoginPage> {
                           _getValueFromTextField();
                         });
                         JBMBLoginResponseObject loginResponse =
-                            await jbmbLoginManager
-                                .requestLogin(jbmbLoginRequestObject);
+                        await jbmbLoginManager
+                            .requestLogin(jbmbLoginRequestObject);
                         if (loginResponse.getResultCode == 0) {
                           // 로그인 응답에 성공한 경우
                           try {
@@ -149,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
     JBMBJwtManager jwtManager = JBMBJwtManager();
     jwtManager.saveToken(loginResponse.getJWT!);
     JBMBMemberManager memberManager =
-        JBMBMemberManager(jbmbMemberInfo, jwtManager);
+    JBMBMemberManager(jbmbMemberInfo, jwtManager);
 
     FocusManager.instance.primaryFocus?.unfocus();
     // Navigator.pop(context);
@@ -157,9 +169,10 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation1, animation2) => LoginedHome(
-            memberManager: memberManager,
-          ),
+          pageBuilder: (context, animation1, animation2) =>
+              LoginedHome(
+                memberManager: memberManager,
+              ),
           transitionDuration: Duration.zero,
           reverseTransitionDuration: Duration.zero,
         ),
@@ -172,19 +185,19 @@ class _LoginPageState extends State<LoginPage> {
     FocusManager.instance.primaryFocus?.unfocus();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Row(
-      children: const [
-        Icon(
-          Icons.cancel_outlined,
-          color: Colors.redAccent,
-        ),
-        Text("  JBMB 서버의 접속이 원활하지 않습니다."),
-      ],
-    )));
+          children: const [
+            Icon(
+              Icons.cancel_outlined,
+              color: Colors.redAccent,
+            ),
+            Text("  JBMB 서버의 접속이 원활하지 않습니다."),
+          ],
+        )));
   }
 
 // 로그인에 실패한 경우 호출되는 메소드 (스낵바 소환)
-  _doAfterFailLogin(
-      BuildContext context, JBMBLoginResponseObject loginResponseObject) {
+  _doAfterFailLogin(BuildContext context,
+      JBMBLoginResponseObject loginResponseObject) {
     String snackBarText = "";
     switch (loginResponseObject.getResultCode) {
       case 1:
@@ -201,14 +214,14 @@ class _LoginPageState extends State<LoginPage> {
     FocusManager.instance.primaryFocus?.unfocus();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Row(
-      children: [
-        const Icon(
-          Icons.cancel_outlined,
-          color: Colors.redAccent,
-        ),
-        Text(snackBarText),
-      ],
-    )));
+          children: [
+            const Icon(
+              Icons.cancel_outlined,
+              color: Colors.redAccent,
+            ),
+            Text(snackBarText),
+          ],
+        )));
   }
 
   // 회원가입 버튼을 클릭했을 때 호출되는 메소드 (페이지 이동)

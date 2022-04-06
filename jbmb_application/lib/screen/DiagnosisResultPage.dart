@@ -9,6 +9,7 @@ import '../widget/JBMBAppBars.dart';
 class DiagnosisResultPage extends StatefulWidget {
   final JBMBMemberManager memberManager;
   final int way;
+
   const DiagnosisResultPage({
     Key? key,
     required this.memberManager,
@@ -47,13 +48,16 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
         fontWeight: FontWeight.bold);
 
     String diagnosisDate = '(2022-03-10 18:30:23)';
-    double phoneWidth = MediaQuery.of(context).size.width;
+    double phoneWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
 
     return WillPopScope(
         child: Scaffold(
           extendBodyBehindAppBar: true,
           appBar: JBMBTransparentAppbar(onPressedCancel: () {
-            if (widget.way == 1){
+            if (widget.way == 1) {
               Future.delayed(const Duration(milliseconds: 250), () {
                 Navigator.pushReplacement(
                   context,
@@ -82,7 +86,8 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
                     ),
                     Row(
                       children: [
-                        Text(widget.memberManager.memberInfo.getName!, style: mildTitleTextStyle),
+                        Text(widget.memberManager.memberInfo.getName!,
+                            style: mildTitleTextStyle),
                         Text(" 님의", style: titleTextStyle)
                       ],
                     ),
@@ -207,16 +212,24 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: DataTable(columns: const [
-                        DataColumn(label: Center(child: Text('정상', textAlign: TextAlign.center,)),),
-                        DataColumn(label: Center(child: Text('초기 의심', textAlign: TextAlign.center,)),),
-                        DataColumn(label: Center( child: Text('중기 의심', textAlign: TextAlign.center,)),),
-                        DataColumn(label: Center(child: Text('말기 의심', textAlign: TextAlign.center,)),),
+                        DataColumn(label: Center(child: Text(
+                          '정상', textAlign: TextAlign.center,)),),
+                        DataColumn(label: Center(child: Text(
+                          '초기 의심', textAlign: TextAlign.center,)),),
+                        DataColumn(label: Center(child: Text(
+                          '중기 의심', textAlign: TextAlign.center,)),),
+                        DataColumn(label: Center(child: Text(
+                          '말기 의심', textAlign: TextAlign.center,)),),
                       ], rows: const [
                         DataRow(cells: [
-                          DataCell(Center(child: Text('99.00%', textAlign: TextAlign.center,)),),
-                          DataCell(Center(child: Text('0.33%', textAlign: TextAlign.center,)),),
-                          DataCell(Center(child: Text('0.33%', textAlign: TextAlign.center,)),),
-                          DataCell(Center(child: Text('0.33%', textAlign: TextAlign.center,)),),
+                          DataCell(Center(child: Text(
+                            '99.00%', textAlign: TextAlign.center,)),),
+                          DataCell(Center(child: Text(
+                            '0.33%', textAlign: TextAlign.center,)),),
+                          DataCell(Center(child: Text(
+                            '0.33%', textAlign: TextAlign.center,)),),
+                          DataCell(Center(child: Text(
+                            '0.33%', textAlign: TextAlign.center,)),),
                         ])
                       ],),
                     ),
@@ -228,9 +241,9 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
                       decoration: const BoxDecoration(color: Colors.black12),
                       child: const Text(
                           "- 설문 결과는 국민 건강 보험에서 제시한 기준을 토대로 만들어졌습니다.\n"
-                          "- AI 이미지 분석의 경우, 이미지 업로드 가이드라인을 제대로 지키지 않으면 정상적이지 않은 결과가 나올 수 있습니다.\n"
-                          "- AI 이미지 분석에서 좋은 결과가 있더라도, 설문조사의 결과가 좋지 않으면 탈모가 진행 중일 가능성이 높습니다.\n"
-                          "- 본 진단은 법적인 의료 효력이 없기 때문에 정확한 진단은 가까운 병원을 내원하시기 바랍니다."),
+                              "- AI 이미지 분석의 경우, 이미지 업로드 가이드라인을 제대로 지키지 않으면 정상적이지 않은 결과가 나올 수 있습니다.\n"
+                              "- AI 이미지 분석에서 좋은 결과가 있더라도, 설문조사의 결과가 좋지 않으면 탈모가 진행 중일 가능성이 높습니다.\n"
+                              "- 본 진단은 법적인 의료 효력이 없기 때문에 정확한 진단은 가까운 병원을 내원하시기 바랍니다."),
                     ),
                   ],
                 ),

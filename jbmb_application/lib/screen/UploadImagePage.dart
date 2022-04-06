@@ -9,6 +9,7 @@ import '../widget/JBMBAppBars.dart';
 
 class UploadImagePage extends StatefulWidget {
   final JBMBMemberManager memberManager;
+
   const UploadImagePage({
     Key? key,
     required this.memberManager
@@ -43,7 +44,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
                             children: const [
                               Text(
                                 "탈모로 의심가는 이미지를\n"
-                                "촬영하거나 갤러리에서 \n업로드 해주세요.",
+                                    "촬영하거나 갤러리에서 \n업로드 해주세요.",
                                 style: TextStyle(
                                     fontSize: 23,
                                     color: Colors.black54,
@@ -73,11 +74,16 @@ class _UploadImagePageState extends State<UploadImagePage> {
                               buttonText: '제출하기',
                               iconData: Icons.subject,
                               onPressed: () {
-                                Future.delayed(const Duration(milliseconds: 250), (){
+                                Future.delayed(const Duration(
+                                    milliseconds: 250), () {
                                   Navigator.pushReplacement(
                                     context,
                                     PageRouteBuilder(
-                                      pageBuilder: (context, animation1, animation2) => DiagnosisResultPage(memberManager: widget.memberManager, way: 1,),
+                                      pageBuilder: (context, animation1,
+                                          animation2) =>
+                                          DiagnosisResultPage(
+                                            memberManager: widget.memberManager,
+                                            way: 1,),
                                       transitionDuration: Duration.zero,
                                       reverseTransitionDuration: Duration.zero,
                                     ),

@@ -78,23 +78,23 @@ class _HospitalPageState extends State<HospitalPage> {
       result?.results?.forEach((element) {
         String snippet = _makeSnippset(element);
         Marker mark = Marker(
-            markerId: MarkerId(markerId.toString()),
-            infoWindow: InfoWindow(
-                title: element.name,
-                snippet: snippet,
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(element.name! + "을(를) 검색"),
-                    action: SnackBarAction(
-                      label: "Search",
-                      onPressed: () {
-                        _searchInGoogle(element.name!);
-                      },
-                    ),
-                  ));
-                }),
-            position: LatLng(element.geometry!.location!.lat!,
-                element.geometry!.location!.lng!),);
+          markerId: MarkerId(markerId.toString()),
+          infoWindow: InfoWindow(
+              title: element.name,
+              snippet: snippet,
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(element.name! + "을(를) 검색"),
+                  action: SnackBarAction(
+                    label: "Search",
+                    onPressed: () {
+                      _searchInGoogle(element.name!);
+                    },
+                  ),
+                ));
+              }),
+          position: LatLng(element.geometry!.location!.lat!,
+              element.geometry!.location!.lng!),);
         markerId += 1;
         _markers.add(mark);
       });
@@ -151,15 +151,21 @@ class _HospitalPageState extends State<HospitalPage> {
       await launch(encodedUrl);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("접속이 원활하지 않습니다."),)
+          const SnackBar(content: Text("접속이 원활하지 않습니다."),)
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    double phoneWidth = MediaQuery.of(context).size.width;
-    double phonePadding = MediaQuery.of(context).padding.top;
+    double phoneWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    double phonePadding = MediaQuery
+        .of(context)
+        .padding
+        .top;
 
     if (defaultTargetPlatform == TargetPlatform.android) {
       AndroidGoogleMapsFlutter.useAndroidViewSurface = true;
@@ -182,28 +188,28 @@ class _HospitalPageState extends State<HospitalPage> {
         ),
         body: isLoading == true
             ? const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.black45,
-                ),
-              )
+          child: CircularProgressIndicator(
+            color: Colors.black45,
+          ),
+        )
             : Container(
-                // 가운데 정렬
-                alignment: AlignmentDirectional.center,
-                // 패딩과 마진 값
-                padding: EdgeInsets.all(phonePadding * 0.33),
-                margin: EdgeInsets.all(phonePadding * 0.33),
-                // 내부 위젯 레이아웃 세로 배치
-                child: GoogleMap(
-                  markers: _markers,
-                  initialCameraPosition: CameraPosition(
-                    target: _initialPosition!,
-                    zoom: 11.5,
-                  ),
-                  mapType: MapType.normal,
-                  onMapCreated: _onMapCreated,
-                  myLocationButtonEnabled: true,
-                  myLocationEnabled: true,
-                ),
-              ));
+          // 가운데 정렬
+          alignment: AlignmentDirectional.center,
+          // 패딩과 마진 값
+          padding: EdgeInsets.all(phonePadding * 0.33),
+          margin: EdgeInsets.all(phonePadding * 0.33),
+          // 내부 위젯 레이아웃 세로 배치
+          child: GoogleMap(
+            markers: _markers,
+            initialCameraPosition: CameraPosition(
+              target: _initialPosition!,
+              zoom: 11.5,
+            ),
+            mapType: MapType.normal,
+            onMapCreated: _onMapCreated,
+            myLocationButtonEnabled: true,
+            myLocationEnabled: true,
+          ),
+        ));
   }
 }

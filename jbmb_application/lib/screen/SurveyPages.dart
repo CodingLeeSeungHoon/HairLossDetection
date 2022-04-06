@@ -7,13 +7,13 @@ import 'package:jbmb_application/service/JBMBMemberManager.dart';
 /// 2022.03.14 이승훈
 /// 설문조사 버튼 누른 후 모션 메소드화 (애니메이션 제거, 페이지 변환)
 class JBMBSurveyCustomMotion {
-  anyButtonPressed(BuildContext context, StatelessWidget widget){
+  anyButtonPressed(BuildContext context, StatelessWidget widget) {
     Future.delayed(const Duration(milliseconds: 250), () {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
           pageBuilder: (context, animation1, animation2) =>
-              widget,
+          widget,
           transitionDuration: Duration.zero,
           reverseTransitionDuration: Duration.zero,
         ),
