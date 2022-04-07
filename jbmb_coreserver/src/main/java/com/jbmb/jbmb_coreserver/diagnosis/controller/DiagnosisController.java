@@ -19,7 +19,7 @@ public class DiagnosisController {
     @Autowired
     private DiagnosisService diagnosisService;
 
-    // 기록 삭제
+    // 설문 시작 (기록 삭제)
     @PostMapping("/disabled")
     public DisabledResponse deleteDisabledSurveyByUserId(@RequestBody DisabledRequest disabled) {
         return diagnosisService.disabledService(disabled);
@@ -37,20 +37,20 @@ public class DiagnosisController {
         return diagnosisService.imageLinkService(imageLink);
     }
 
-    // 진단 시작
+    // 분석 시작
     @PostMapping("hair_loss_detection")
     public HairLossDetectionResponse hairLossDetection(@RequestBody HairLossDetectionRequest hairLossDetectionRequest){
         return diagnosisService.hairLossDetectionService(hairLossDetectionRequest);
     }
 
     // 진단 결과 리턴
-    @GetMapping("hair_loss_result")
+    @PostMapping("hair_loss_result")
     public HairLossResultResponse hairLossResult(@RequestBody HairLossResultRequest hairLossResultRequest){
         return diagnosisService.hairLossResultService(hairLossResultRequest);
     }
 
     // 진단 로그 받아오기
-    @GetMapping("data")
+    @PostMapping("data")
     public GetDataForDiagnosisResponse getDataForDiagnosis(@RequestBody GetDataForDiagnosisRequest getDataForDiagnosisRequest){
         return diagnosisService.getDataForDiagnosisService(getDataForDiagnosisRequest);
     }

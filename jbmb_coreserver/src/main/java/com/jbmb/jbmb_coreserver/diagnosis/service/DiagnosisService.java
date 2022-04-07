@@ -55,8 +55,9 @@ public class DiagnosisService {
     }
 
     /**
-     * 설문조사 하다가 중간에 튕겼을 때 삭제를 위한 API
+     * <설문 시작>
      * 설문조사 시작할 때 프론트에서 호출
+     * 설문조사 하다가 중간에 튕겼을 때 삭제를 위한
      * resultCode 0:성공 , 1:진단기록 없음 , 2:아이디 틀림
      * 1:진단기록 없음도 성공임(ative=0인게 없다는 것)
      * @param DisabledRequest
@@ -99,6 +100,7 @@ public class DiagnosisService {
     }
 
     /**
+     * <설문조사 업데이트>
      * 설문조사 페이지 하나 넘길 때마다
      * checked 0:미체크 , 1:없다 , 2:있다
      * resultCode 0:성공 , 1:실패
@@ -126,7 +128,7 @@ public class DiagnosisService {
     }
 
     /**
-     * 이미지 링크 DB에 저장
+     * <이미지 링크 DB 저장>
      * resultCode 0:성공 , 1:실패
      * @param ImageLinkRequest
      * @return UpdateImageLinkResponse
@@ -152,7 +154,8 @@ public class DiagnosisService {
     }
 
     /**
-     * 진단 시작시 앱에서 호출하는 API
+     * <분석 시작>
+     * 분석 시작시 앱에서 호출하는
      * resultCode 0:성공 , 1:실패
      * 설문조사와 이미지 링크에 null값인 진단 아이디는 삭제
      * 설문조사와 이미지 링크가 완전히 들어있는 진단 아이디의 active를 1로 업데이트
@@ -167,6 +170,7 @@ public class DiagnosisService {
         DiagnosisSurvey diagnosisSurvey=null;
         DiagnosisImage diagnosisImage=null;
         AIAnalysisResponse aiAnalysisResponse;
+        Integer ind=0;
 
         try {
             diagnosisLog = updateLogRepository.findById(hairLossDetectionRequest.getDiagnosisID()).get();
@@ -190,10 +194,22 @@ public class DiagnosisService {
             return HairLossDetectionResponse.builder().resultCode(1).diagnosisID(hairLossDetectionRequest.getDiagnosisID()).build();
         }
 
-        log.info("진단 성공");
+
+        if(aiAnalysisResponse.getPercent0() > aiAnalysisResponse.getPercent1()){
+            if(aiAnalysisResponse.getPercent0() <= aiAnalysisResponse.getPercent2())
+                ind=2;
+        }
+        else{
+            if(aiAnalysisResponse.getPercent1() > aiAnalysisResponse.getPercent2())
+                ind=1;
+            else
+                ind=2;
+        }
+
+        log.info("분석 성공");
         diagnosisResultRepository.save(DiagnosisResult.builder()
                 .id(hairLossDetectionRequest.getDiagnosisID())
-                .resultCode(getSurveyResult(diagnosisSurvey))
+                .resultCode(ind)
                 .result0(aiAnalysisResponse.getPercent0())
                 .result1(aiAnalysisResponse.getPercent1())
                 .result2(aiAnalysisResponse.getPercent2())
@@ -202,7 +218,7 @@ public class DiagnosisService {
     }
 
     /**
-     * 설문 분석
+     * <설문 분석>
      * @param DiagnosisSurvey
      * @return
      */
@@ -242,17 +258,22 @@ public class DiagnosisService {
     }
 
     /**
-     * 진단 결과 리턴 API
+     * <진단 결과 리턴>
      * resultCode 0:성공 , 1:실패
      * @param HairLossResultRequest
      * @return HairLossResultResponse
      */
     public HairLossResultResponse hairLossResultService(HairLossResultRequest hairLossResultRequest){
+
+        DiagnosisLog diagnosisLog;
         DiagnosisResult diagnosisResult;
+        DiagnosisSurvey diagnosisSurvey;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd a HH:mm:ss");
 
         try{
-            Optional<DiagnosisResult> optionalDiagnosisResult = diagnosisResultRepository.findById(hairLossResultRequest.getDiagnosisID());
-            diagnosisResult=optionalDiagnosisResult.get();
+            diagnosisLog=updateLogRepository.findById(hairLossResultRequest.getDiagnosisID()).get();
+            diagnosisResult=diagnosisResultRepository.findById(hairLossResultRequest.getDiagnosisID()).get();
+            diagnosisSurvey = updateSurveyRepository.findById(hairLossResultRequest.getDiagnosisID()).get();
         }
         catch (Exception e){
             log.info("잘못된 진단 아이디");
@@ -262,13 +283,14 @@ public class DiagnosisService {
         log.info("진단 결과 리턴");
         return HairLossResultResponse.builder()
                 .resultCode(0)
-                .surveyResult(diagnosisResult.getResultCode())
+                .surveyResult(getSurveyResult(diagnosisSurvey))
                 .percent(Arrays.asList(diagnosisResult.getResult0(), diagnosisResult.getResult1(), diagnosisResult.getResult2()))
+                .date(simpleDateFormat.format(diagnosisLog.getDate()))
                 .build();
     }
 
     /**
-     * 진단 로그 받아오기
+     * <진단 로그 받아오기>
      * 진단 아이디를 기반으로 설문내역, 이미지 링크, 분석 결과를 리턴
      * resultCode 0:성공 , 1:실패
      * @param GetDataForDiagnosisRequest
@@ -276,11 +298,14 @@ public class DiagnosisService {
      */
     public GetDataForDiagnosisResponse getDataForDiagnosisService(GetDataForDiagnosisRequest getDataForDiagnosisRequest){
 
-        DiagnosisSurvey diagnosisSurvey=null;
-        DiagnosisImage diagnosisImage=null;
-        DiagnosisResult diagnosisResult = null;
+        DiagnosisLog diagnosisLog;
+        DiagnosisSurvey diagnosisSurvey;
+        DiagnosisImage diagnosisImage;
+        DiagnosisResult diagnosisResult;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd a HH:mm:ss");
 
         try {
+            diagnosisLog=updateLogRepository.findById(getDataForDiagnosisRequest.getDiagnosisID()).get();
             diagnosisSurvey = updateSurveyRepository.findById(getDataForDiagnosisRequest.getDiagnosisID()).get();
             diagnosisImage = imageLinkRepository.findById(getDataForDiagnosisRequest.getDiagnosisID()).get();
             diagnosisResult=diagnosisResultRepository.findById((getDataForDiagnosisRequest.getDiagnosisID())).get();
@@ -293,8 +318,9 @@ public class DiagnosisService {
         return GetDataForDiagnosisResponse.builder()
                 .resultCode(0)
                 .imageLink(diagnosisImage.getDiagnosisImage())
-                .surveyResult(diagnosisResult.getResultCode())
+                .surveyResult(getSurveyResult(diagnosisSurvey))
                 .percent(Arrays.asList(diagnosisResult.getResult0(), diagnosisResult.getResult1(), diagnosisResult.getResult2()))
+                .date(simpleDateFormat.format(diagnosisLog.getDate()))
                 .surveyClass(GetDataForDiagnosisResponse.SurveyClass.builder()
                         .survey1(diagnosisSurvey.getSurvey1())
                         .survey2(diagnosisSurvey.getSurvey2())
@@ -311,7 +337,7 @@ public class DiagnosisService {
     }
 
     /**
-     * 진단 로그 리스트 받아오기
+     * <진단 로그 리스트 받아오기>
      * 사용자 아이디를 기반으로 진단 아이디, 진단 생성 날짜(시간)의 리스트를 리턴
      * 진단 기록이 없으면 resultCode=0 이고 리스트는 null
      * resultCode 0:성공 , 1:실패
