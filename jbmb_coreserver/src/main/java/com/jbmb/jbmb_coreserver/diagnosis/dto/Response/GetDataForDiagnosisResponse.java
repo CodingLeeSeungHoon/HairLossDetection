@@ -14,6 +14,7 @@ public class GetDataForDiagnosisResponse {
     private Integer surveyResult;
     private List<Float> percent;
     private SurveyClass surveyClass;
+    private String date;
 
     @Getter
     @Builder
