@@ -42,6 +42,9 @@ dependencies:
   # Diagnosis Result Gauges
   syncfusion_flutter_gauges: ^19.4.55
 
+  # Diagnosis Step Progress Indicator
+  step_progress_indicator: ^1.0.2
+
   # AWS S3 Storage
   http: ^0.13.4
   simple_s3: 0.3.2

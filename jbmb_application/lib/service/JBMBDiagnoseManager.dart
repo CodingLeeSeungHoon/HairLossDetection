@@ -27,6 +27,68 @@ class JBMBDiagnoseManager {
     return diagnosisID == null ? true : false;
   }
 
+  /// 2022.04.07 이승훈
+  /// public method
+  /// 진단 이후 바로 진단 결과를 받아오는 메소드
+  getDiagnosisResultDirectly(String jwtToken) async {
+    try {
+      JBMBDiagnosisResultResponseObject response = await _tryToGetDiagnosisResult(jwtToken, diagnosisID!);
+      if(!response.isPercentNull() && !response.isSurveyResultNull() && response.getResultCode == 0){
+        return response;
+      } else {
+        log('[JBMBDiagnoseManager] caught Exception : response Failed');
+        return null;
+      }
+    } catch (e) {
+      log('[JBMBDiagnoseManager] caught Exception : $e');
+      return null;
+    }
+  }
+
+  /// 2022.04.07 이승훈
+  /// public method
+  /// 진단 로그에서 각 진단 결과를 받을 수 있는 메소드
+  getDiagnosisResultByDiagnosisID(String jwtToken, int diagID) async {
+    try {
+      JBMBDiagnosisResultResponseObject response = await _tryToGetDiagnosisResult(jwtToken, diagID);
+      if(!response.isPercentNull() && !response.isSurveyResultNull() && response.getResultCode == 0){
+        return response;
+      } else {
+        log('[JBMBDiagnoseManager] caught Exception : response Failed');
+        return null;
+      }
+    } catch (e) {
+      log('[JBMBDiagnoseManager] caught Exception : $e');
+      return null;
+    }
+  }
+
+  /// 2022.04.07 이승훈
+  /// private method
+  /// 진단 결과 API
+  Future<JBMBDiagnosisResultResponseObject> _tryToGetDiagnosisResult (String jwtToken, int diagnosisID) async {
+    final response = await http.post(
+      Uri.parse('http://jebalmobal.site/user/diagnosis/hair_loss_result'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'X-AUTH-TOKEN': jwtToken
+      },
+      body: jsonEncode("{'diagnosisID' : $diagnosisID}"),
+    );
+
+    if (response.statusCode / 100 == 2) {
+      log("[JBMBDiagnoseManager] API Response StatusCode 200 (_tryToGetDiagnosisResult)");
+      log(jsonDecode(response.body));
+      return JBMBDiagnosisResultResponseObject.fromJson(
+          jsonDecode(utf8.decode(response.bodyBytes)));
+    } else {
+      log(
+          "[JBMBDiagnoseManager] API Response StatusCode is not 200, throw exception (_tryToGetDiagnosisResult)");
+      throw Exception('[Error:Server] 서버 측 오류로 진단 결과 불러오기에 실패했습니다.');
+    }
+  }
+
+  /// 2022.04.06 이승훈
   /// public method
   /// 제출한 결과를 바탕으로 분석 시작
   startAnalysis(String jwtToken) async {
@@ -43,6 +105,9 @@ class JBMBDiagnoseManager {
     }
   }
 
+  /// 2022.04.06 이승훈
+  /// private method
+  /// 분석 시작 API
   Future<JBMBStartAnalysisResponseObject> _tryAnalysis(String jwtToken) async {
     final response = await http.post(
       Uri.parse('http://jebalmobal.site/user/diagnosis/hair_loss_detection'),
@@ -65,6 +130,7 @@ class JBMBDiagnoseManager {
     }
   }
 
+  /// 2022.04.06 이승훈
   /// public method
   /// ImageUrl을 제출하기 위한 메소드
   submitImageUrl(String imageUrl, String jwtToken) async {
@@ -82,6 +148,8 @@ class JBMBDiagnoseManager {
     }
   }
 
+  /// 2022.04.06 이승훈
+  /// private method
   /// ImageUrl Server API
   Future<JBMBSaveImageResponseObject> _trySubmitImageUrl(JBMBSaveImageUrlRequestObject requestObject, String jwtToken) async {
     final response = await http.post(
@@ -105,8 +173,9 @@ class JBMBDiagnoseManager {
     }
   }
 
+  /// 2022.04.06 이승훈
+  /// public method
   /// 새로운 진단을 시작.
-  /// returns the int (진단 번호)
   createNewDiagnosis(JBMBMemberInfo memberInfo, String jwtToken) async {
     try {
       JBMBNewDiagnosisResponse response = await _tryInitDiagnosis(memberInfo.getID!, jwtToken);

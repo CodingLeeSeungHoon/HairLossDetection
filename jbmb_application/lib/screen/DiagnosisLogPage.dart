@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import '../object/JBMBDiagnosisResponseObject.dart';
 import '../object/JBMBMemberInfo.dart';
 import '../service/JBMBMemberManager.dart';
 import '../widget/JBMBAppBars.dart';
@@ -97,7 +98,10 @@ class _DiagnosisLogPageState extends State<DiagnosisLogPage> {
                           PageRouteBuilder(
                             pageBuilder: (context, animation1, animation2) =>
                                 DiagnosisResultPage(
-                                  memberManager: widget.memberManager, way: 2,),
+                                  memberManager: widget.memberManager,
+                                  way: 2,
+                                  resultObject: JBMBDiagnosisResultResponseObject(0, [99.9, 0.01, 0])
+                                ),
                             transitionDuration: Duration.zero,
                             reverseTransitionDuration: Duration.zero,
                           ),

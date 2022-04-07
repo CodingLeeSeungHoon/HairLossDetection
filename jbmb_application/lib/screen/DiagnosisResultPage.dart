@@ -4,24 +4,27 @@ import 'package:jbmb_application/screen/LoginedHome.dart';
 import 'package:jbmb_application/service/JBMBMemberManager.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
+import '../object/JBMBDiagnosisResponseObject.dart';
 import '../widget/JBMBAppBars.dart';
 
 class DiagnosisResultPage extends StatefulWidget {
   final JBMBMemberManager memberManager;
   final int way;
+  final JBMBDiagnosisResultResponseObject resultObject;
 
-  const DiagnosisResultPage({
-    Key? key,
-    required this.memberManager,
-    required this.way
-  }) : super(key: key);
+  const DiagnosisResultPage(
+      {Key? key,
+      required this.memberManager,
+      required this.way,
+      required this.resultObject})
+      : super(key: key);
 
   @override
   _DiagnosisResultPageState createState() => _DiagnosisResultPageState();
 }
 
 class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
-  bool isLoading = false;
+  DiagnosisConverter converter = DiagnosisConverter();
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +50,9 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
         fontFamily: 'NanumGothic-Regular',
         fontWeight: FontWeight.bold);
 
+    // TODO : change this and change object including date
     String diagnosisDate = '(2022-03-10 18:30:23)';
-    double phoneWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    double phoneWidth = MediaQuery.of(context).size.width;
 
     return WillPopScope(
         child: Scaffold(
@@ -63,7 +64,9 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
                   context,
                   PageRouteBuilder(
                     pageBuilder: (context, animation1, animation2) =>
-                        LoginedHome(memberManager: widget.memberManager,),
+                        LoginedHome(
+                      memberManager: widget.memberManager,
+                    ),
                     transitionDuration: Duration.zero,
                     reverseTransitionDuration: Duration.zero,
                   ),
@@ -129,12 +132,12 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
                             color: Colors.black12,
                             thicknessUnit: GaugeSizeUnit.factor,
                           ),
-                          pointers: const <GaugePointer>[
+                          pointers: <GaugePointer>[
                             RangePointer(
                               enableAnimation: true,
                               color: Colors.black45,
-                              // TODO : change variable
-                              value: 70,
+                              value: converter.getGaugeBySurveyCheckedCount(
+                                  widget.resultObject.surveyResult!),
                               cornerStyle: CornerStyle.bothCurve,
                               width: 0.2,
                               sizeUnit: GaugeSizeUnit.factor,
@@ -145,13 +148,17 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
                                 positionFactor: 0.1,
                                 angle: 90,
                                 widget: Text(
-                                  "정상",
+                                  converter.getStateBySurveyCheckedCount(
+                                      widget.resultObject.surveyResult!),
                                   style: indicatorTextStyle,
                                 ))
                           ])
                     ]),
-                    Text("설문조사 결과 체크 0개로 정상입니다."),
-                    const SizedBox(height: 30,),
+                    Text(
+                        "설문조사 결과 체크 ${widget.resultObject.surveyResult}개로 ${converter.getStateBySurveyCheckedCount(widget.resultObject.surveyResult!)}입니다."),
+                    const SizedBox(
+                      height: 30,
+                    ),
                     Row(
                       children: [
                         Text(
@@ -195,6 +202,7 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
                             GaugeAnnotation(
                                 positionFactor: 0.1,
                                 angle: 90,
+                                // TODO : change this
                                 widget: Text(
                                   "정상",
                                   style: indicatorTextStyle,
@@ -211,29 +219,76 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
                     ),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      child: DataTable(columns: const [
-                        DataColumn(label: Center(child: Text(
-                          '정상', textAlign: TextAlign.center,)),),
-                        DataColumn(label: Center(child: Text(
-                          '초기 의심', textAlign: TextAlign.center,)),),
-                        DataColumn(label: Center(child: Text(
-                          '중기 의심', textAlign: TextAlign.center,)),),
-                        DataColumn(label: Center(child: Text(
-                          '말기 의심', textAlign: TextAlign.center,)),),
-                      ], rows: const [
-                        DataRow(cells: [
-                          DataCell(Center(child: Text(
-                            '99.00%', textAlign: TextAlign.center,)),),
-                          DataCell(Center(child: Text(
-                            '0.33%', textAlign: TextAlign.center,)),),
-                          DataCell(Center(child: Text(
-                            '0.33%', textAlign: TextAlign.center,)),),
-                          DataCell(Center(child: Text(
-                            '0.33%', textAlign: TextAlign.center,)),),
-                        ])
-                      ],),
+                      child: DataTable(
+                        columns: const [
+                          DataColumn(
+                            label: Center(
+                                child: Text(
+                              'M0',
+                              textAlign: TextAlign.center,
+                            )),
+                          ),
+                          DataColumn(
+                            label: Center(
+                                child: Text(
+                              'M1',
+                              textAlign: TextAlign.center,
+                            )),
+                          ),
+                          DataColumn(
+                            label: Center(
+                                child: Text(
+                              'M2',
+                              textAlign: TextAlign.center,
+                            )),
+                          ),
+                        ],
+                        rows: [
+                          DataRow(cells: [
+                            DataCell(
+                              Center(
+                                  child: Text(
+                                '${widget.resultObject.percent![0]}%',
+                                textAlign: TextAlign.center,
+                              )),
+                            ),
+                            DataCell(
+                              Center(
+                                  child: Text(
+                                '${widget.resultObject.percent![1]}%',
+                                textAlign: TextAlign.center,
+                              )),
+                            ),
+                            DataCell(
+                              Center(
+                                  child: Text(
+                                '${widget.resultObject.percent![2]}%',
+                                textAlign: TextAlign.center,
+                              )),
+                            ),
+                          ])
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 20,),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "\n",
+                          style: textStyle,
+                        ),
+                        const Icon(
+                          Icons.star,
+                          color: Colors.black,
+                        ),
+                        Text(
+                          " 통합 결과\n",
+                          style: textStyle,
+                        ),
+                      ],
+                    ),
                     Container(
                       width: phoneWidth * 0.85,
                       alignment: Alignment.topLeft,
@@ -241,9 +296,9 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
                       decoration: const BoxDecoration(color: Colors.black12),
                       child: const Text(
                           "- 설문 결과는 국민 건강 보험에서 제시한 기준을 토대로 만들어졌습니다.\n"
-                              "- AI 이미지 분석의 경우, 이미지 업로드 가이드라인을 제대로 지키지 않으면 정상적이지 않은 결과가 나올 수 있습니다.\n"
-                              "- AI 이미지 분석에서 좋은 결과가 있더라도, 설문조사의 결과가 좋지 않으면 탈모가 진행 중일 가능성이 높습니다.\n"
-                              "- 본 진단은 법적인 의료 효력이 없기 때문에 정확한 진단은 가까운 병원을 내원하시기 바랍니다."),
+                          "- AI 이미지 분석의 경우, 이미지 업로드 가이드라인을 제대로 지키지 않으면 정상적이지 않은 결과가 나올 수 있습니다.\n"
+                          "- AI 이미지 분석에서 좋은 결과가 있더라도, 설문조사의 결과가 좋지 않으면 탈모가 진행 중일 가능성이 높습니다.\n"
+                          "- 본 진단은 법적인 의료 효력이 없기 때문에 정확한 진단은 가까운 병원을 내원하시기 바랍니다."),
                     ),
                   ],
                 ),
@@ -254,5 +309,59 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
         onWillPop: () {
           return Future(() => false);
         });
+  }
+}
+
+/// 2022.04.07 이승훈
+/// 설문조사 체크 수, 이미지 라벨, 총평을 화면 구성에 맞게 변환해주는 클래스
+class DiagnosisConverter {
+  String getStateBySurveyCheckedCount(int count) {
+    if (count < 3) {
+      return "정상";
+    } else if (count < 4) {
+      return "의심";
+    } else if (count < 6) {
+      return "진행";
+    } else {
+      return "위험";
+    }
+  }
+
+  double getGaugeBySurveyCheckedCount(int count) {
+    if (count < 3) {
+      return 25;
+    } else if (count < 4) {
+      return 45;
+    } else if (count < 6) {
+      return 70;
+    } else {
+      return 90;
+    }
+  }
+
+  String? getStateByLabel(int label){
+    switch(label){
+      case 0:
+        return 'M0';
+      case 1:
+        return 'M1';
+      case 2:
+        return 'M2';
+    }
+    return null;
+  }
+
+  double getGaugeByLabel(int label){
+    if (label == 0){
+      return 30;
+    } else if (label == 1) {
+      return 60;
+    } else {
+      return 90;
+    }
+  }
+
+  String? getWholeResult(int count, int label){
+
   }
 }
