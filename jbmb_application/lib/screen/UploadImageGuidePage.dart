@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jbmb_application/object/JBMBMemberInfo.dart';
 import 'package:jbmb_application/screen/UploadImagePage.dart';
+import 'package:jbmb_application/service/JBMBDiagnoseManager.dart';
 import 'package:jbmb_application/service/JBMBMemberManager.dart';
 import 'package:jbmb_application/widget/JBMBOutlinedButton.dart';
 
@@ -8,10 +9,12 @@ import '../widget/JBMBAppBars.dart';
 
 class UploadImageGuidePage extends StatelessWidget {
   final JBMBMemberManager memberManager;
+  final JBMBDiagnoseManager diagnoseManager;
 
   const UploadImageGuidePage({
     Key? key,
-    required this.memberManager
+    required this.memberManager,
+    required this.diagnoseManager
   }) : super(key: key);
 
   @override
@@ -94,7 +97,9 @@ class UploadImageGuidePage extends StatelessWidget {
                                       pageBuilder:
                                           (context, animation1, animation2) =>
                                           UploadImagePage(
-                                            memberManager: memberManager,),
+                                            memberManager: memberManager,
+                                            diagnoseManager: diagnoseManager
+                                          ),
                                       transitionDuration: Duration.zero,
                                       reverseTransitionDuration: Duration.zero,
                                     ),

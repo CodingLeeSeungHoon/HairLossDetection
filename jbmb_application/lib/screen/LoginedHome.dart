@@ -3,6 +3,8 @@ import 'package:jbmb_application/screen/CommunityPage.dart';
 import 'package:jbmb_application/screen/DiagnosisAlertPage.dart';
 import 'package:jbmb_application/screen/HospitalPage.dart';
 import 'package:jbmb_application/screen/ShampooPage.dart';
+import 'package:jbmb_application/service/JBMBDiagnoseManager.dart';
+import 'package:jbmb_application/service/JBMBSurveyManager.dart';
 import 'package:jbmb_application/widget/JBMBAppBars.dart';
 import 'package:jbmb_application/widget/JBMBBigButton.dart';
 import 'package:jbmb_application/widget/LoginedNavigationDrawerWidget.dart';
@@ -180,12 +182,29 @@ class _LoginedHomeState extends State<LoginedHome> {
   void movePageByCurrentIndex(int currentIndex) {
     switch (currentIndex) {
       case 0:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) =>
-              DiagnosisAlertPage(
-                memberManager: widget.memberManager,
-              ),
-        ));
+        JBMBSurveyManager surveyManager = JBMBSurveyManager();
+        JBMBDiagnoseManager diagnoseManager = JBMBDiagnoseManager(surveyManager);
+
+        int retval = diagnoseManager.createNewDiagnosis(widget.memberManager.memberInfo, widget.memberManager.jwtManager.getToken());
+        if (retval != -1){
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                DiagnosisAlertPage(
+                  memberManager: widget.memberManager,
+                  diagnoseManager: diagnoseManager,
+                ),
+          ));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Row(
+                children: const [
+                  Icon(Icons.check, color: Colors.red,),
+                  Text("서버상의 문제로, 진단을 시작할 수 없습니다.\n"
+                      "잠시 후에 다시 시도해주세요."),
+                ],
+              ))
+          );
+        }
         break;
       case 1:
         showModalBottomSheet(
@@ -210,11 +229,11 @@ class _LoginedHomeState extends State<LoginedHome> {
     }
   }
 
-  /// 샴푸 botomSheet 생성하는 메소드
+  /// 샴푸 bottomSheet 생성하는 메소드
   Widget buildSheet() =>
       Container(
-          padding: EdgeInsets.all(8),
-          margin: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
+          margin: const EdgeInsets.all(8),
           child: Column(
             children: [
               Column(

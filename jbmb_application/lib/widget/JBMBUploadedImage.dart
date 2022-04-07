@@ -11,10 +11,14 @@ import 'JBMBAppRoundImage.dart';
 
 class JBMBUploadedImageWidget extends StatefulWidget {
   final Function(String imageUrl) onFileChanged;
+  final String? userID;
+  final int? diagnosisID;
 
   const JBMBUploadedImageWidget({
     Key? key,
     required this.onFileChanged,
+    required this.userID,
+    required this.diagnosisID
   });
 
   @override
@@ -164,7 +168,7 @@ class _JBMBUploadedImageWidgetState extends State<JBMBUploadedImageWidget> {
     SimpleS3 _simpleS3 = SimpleS3();
     String result = await _simpleS3.uploadFile(file, 'jbmbbucket',
         "us-east-1:39989318-c9e2-4070-bd62-d0a52df01d88", AWSRegions.usEast1,
-        debugLog: true);
+        debugLog: true, fileName: widget.userID! + "_" + widget.diagnosisID.toString());
 
     // 'https://jbmbbucket.s3.amazonaws.com/' + fileName
 
@@ -173,6 +177,7 @@ class _JBMBUploadedImageWidgetState extends State<JBMBUploadedImageWidget> {
       isLoading = false;
     });
 
-    widget.onFileChanged(file.path);
+    // changed
+    widget.onFileChanged('https://jbmbbucket.s3.amazonaws.com/' + widget.userID! + "_" + widget.diagnosisID.toString());
   }
 }

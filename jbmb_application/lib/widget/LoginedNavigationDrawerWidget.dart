@@ -14,6 +14,8 @@ import 'package:jbmb_application/service/JBMBMemberManager.dart';
 import '../screen/CommunityPage.dart';
 import '../screen/Home.dart';
 import '../screen/JoinPage.dart';
+import '../service/JBMBDiagnoseManager.dart';
+import '../service/JBMBSurveyManager.dart';
 
 /// 2020.03.07 이승훈 개발
 class LoginedNavigationDrawerWidget extends StatelessWidget {
@@ -134,11 +136,27 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
         });
         break;
       case 1:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) =>
-              DiagnosisAlertPage(memberManager: memberManager,),
-        ));
-        // diagnose
+        JBMBSurveyManager surveyManager = JBMBSurveyManager();
+        JBMBDiagnoseManager diagnoseManager = JBMBDiagnoseManager(surveyManager);
+
+        int retval = diagnoseManager.createNewDiagnosis(memberManager.memberInfo, memberManager.jwtManager.getToken());
+
+        if (retval != -1){
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                DiagnosisAlertPage(memberManager: memberManager, diagnoseManager: diagnoseManager),
+          ));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Row(
+                children: const [
+                  Icon(Icons.check, color: Colors.red,),
+                  Text("서버상의 문제로, 진단을 시작할 수 없습니다.\n"
+                      "잠시 후에 다시 시도해주세요."),
+                ],
+              ))
+          );
+        }
         break;
       case 2:
         Navigator.of(context).push(MaterialPageRoute(
