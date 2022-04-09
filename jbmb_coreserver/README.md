@@ -69,7 +69,8 @@
    │  │               │   ├── controller
    │  │               │   │   └── ShampooController.java
    │  │               │   ├── dto
-   │  │               │   │   └── GetHairTypeResponse.java
+   │  │               │   │   ├── Response.java
+   │  │               │   │   └── Request.java
    │  │               │   └── service
    │  │               │       └── ShampooService.java
    │  │               └── board
