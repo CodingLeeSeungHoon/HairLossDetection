@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:jbmb_application/screen/CommunityPage.dart';
 import 'package:jbmb_application/screen/HospitalPage.dart';
 import 'package:jbmb_application/screen/ShampooPage.dart';
-import 'package:jbmb_application/widget/MainDescription.dart';
 import '../widget/JBMBAppBars.dart';
+import '../widget/JBMBDescription.dart';
 import '../widget/JBMBOutlinedButton.dart';
 import '../widget/NavigationDrawerWidget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -39,9 +39,18 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    double phoneWidth = MediaQuery.of(context).size.width;
-    double phoneHeight = MediaQuery.of(context).size.height;
-    double phonePadding = MediaQuery.of(context).padding.top;
+    double phoneWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    double phoneHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    double phonePadding = MediaQuery
+        .of(context)
+        .padding
+        .top;
 
     return Scaffold(
         key: _scaffoldKey,
@@ -52,10 +61,11 @@ class _HomeState extends State<Home> {
         ),
         // 전체 화면 바탕색 지정
         backgroundColor: Colors.white,
-        appBar: JBMBAppBar(onPressedMenu: () => _scaffoldKey.currentState?.openEndDrawer()),
+        appBar: JBMBAppBar(
+            onPressedMenu: () => _scaffoldKey.currentState?.openEndDrawer()),
         // AppBar를 제외한 나머지 위젯 (중간문구 - 구분선 - 슬라이더)
         body: Container(
-            // 가운데 정렬
+          // 가운데 정렬
             alignment: AlignmentDirectional.center,
             // 패딩과 마진 값
             padding: EdgeInsets.all(phonePadding * 0.33),
@@ -113,7 +123,7 @@ class _HomeState extends State<Home> {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBar(
                                             duration:
-                                                const Duration(seconds: 1),
+                                            const Duration(seconds: 1),
                                             content: Row(
                                               children: const [
                                                 Icon(
@@ -145,7 +155,7 @@ class _HomeState extends State<Home> {
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color:
-                              _current == index ? Colors.black : Colors.grey),
+                          _current == index ? Colors.black : Colors.grey),
                     );
                   }),
                 )
@@ -187,7 +197,7 @@ class _HomeState extends State<Home> {
           children: const [
             Text(
               "자가진단 및 AI 이미지 진단으로\n"
-              "간단하게 탈모 상태를 알아보세요",
+                  "간단하게 탈모 상태를 알아보세요",
               style: TextStyle(
                   fontFamily: fontFamily, fontSize: fontSize, color: color),
               textAlign: TextAlign.center,
@@ -200,7 +210,7 @@ class _HomeState extends State<Home> {
           children: const [
             Text(
               "자신의 두피 타입에 따라\n"
-              "적절한 샴푸를 추천해드려요",
+                  "적절한 샴푸를 추천해드려요",
               style: TextStyle(
                   fontFamily: fontFamily, fontSize: fontSize, color: color),
               textAlign: TextAlign.center,
@@ -213,7 +223,7 @@ class _HomeState extends State<Home> {
           children: const [
             Text(
               "근처 탈모 전문 병원을\n"
-              "찾아보세요",
+                  "찾아보세요",
               style: TextStyle(
                   fontFamily: fontFamily, fontSize: fontSize, color: color),
               textAlign: TextAlign.center,
@@ -226,7 +236,7 @@ class _HomeState extends State<Home> {
           children: const [
             Text(
               "비슷한 고민이 있는 회원들과\n"
-              "다양한 이야기를 나눠요",
+                  "다양한 이야기를 나눠요",
               style: TextStyle(
                   fontFamily: fontFamily, fontSize: fontSize, color: color),
               textAlign: TextAlign.center,
@@ -243,19 +253,19 @@ class _HomeState extends State<Home> {
     IconData? retval;
     switch (index) {
       case 0:
-        // 무료 진단
+      // 무료 진단
         retval = Icons.check_box_rounded;
         return retval;
       case 1:
-        // 샴푸 추천
+      // 샴푸 추천
         retval = Icons.find_in_page_rounded;
         return retval;
       case 2:
-        // 병원 추천
+      // 병원 추천
         retval = Icons.local_hospital;
         return retval;
       case 3:
-        // 커뮤니티
+      // 커뮤니티
         retval = Icons.group;
         return retval;
     }

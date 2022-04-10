@@ -20,7 +20,8 @@
    │  │               │   ├── dto
    │  │               │   │   ├── Login.java
    │  │               │   │   ├── Logout.java
-   │  │               │   │   └── Signup.java
+   │  │               │   │   ├── Signup.java
+   │  │               │   │   └── InformationResponse.java
    │  │               │   ├── jwt
    │  │               │   │   ├── JwtAuthenticationFilter.java
    │  │               │   │   └── JwtTokenProvider.java
@@ -38,18 +39,40 @@
    │  │               │   │   ├── DiagnosisResultImage.java
    │  │               │   │   └── DiagnosisSurvey.java
    │  │               │   ├── dto
-   │  │               │   │   ├── UpdateSurveyRequest.java
-   │  │               │   │   └── UpdateSurveyResponse.java
+   │  │               │   │   ├── Request
+   │  │               │   │   │   ├── DisabledRequest.java
+   │  │               │   │   │   ├── GetDataForDiagnosisRequest.java
+   │  │               │   │   │   ├── HairLossBySurveyRequest.java
+   │  │               │   │   │   ├── HairLossDetectionRequest.java
+   │  │               │   │   │   ├── HairLossResultRequest.java
+   │  │               │   │   │   ├── ImageLinkRequest.java
+   │  │               │   │   │   ├── UpdateDiagnosisRequest.java
+   │  │               │   │   │   └── UpdateSurveyResponse.java
+   │  │               │   │   └── Response
+   │  │               │   │       ├── AIAnalysisResponse.java
+   │  │               │   │       ├── DisabledResponse.java
+   │  │               │   │       ├── GetDataForDiagnosisResponse.java
+   │  │               │   │       ├── GetDataFromDiagnosisResponse.java
+   │  │               │   │       ├── HairLossBySurveyResponse.java
+   │  │               │   │       ├── HairLossDetectionResponse.java
+   │  │               │   │       ├── HairLossResultResponse.java
+   │  │               │   │       ├── UpdateImageLinkResponse.java
+   │  │               │   │       └── UpdateSurveyResponse.java
    │  │               │   ├── repository
+   │  │               │   │   ├── DiagnosisResultRepository.java
+   │  │               │   │   ├── ImageLinkRepository.java
    │  │               │   │   ├── UpdateLogRepository.java
    │  │               │   │   └── UpdateSurveyRepository.java
    │  │               │   └── service
    │  │               │       └── DiagnosisService.java
-   │  │               ├── feedback
+   │  │               ├── shampoo
    │  │               │   ├── controller
-   │  │               │   │   └── FeedbackController.java
+   │  │               │   │   └── ShampooController.java
+   │  │               │   ├── dto
+   │  │               │   │   ├── Response.java
+   │  │               │   │   └── Request.java
    │  │               │   └── service
-   │  │               │       └── FeedbackService.java
+   │  │               │       └── ShampooService.java
    │  │               └── board
    │  │                   ├── controller
    │  │                   │   └── BoardController.java

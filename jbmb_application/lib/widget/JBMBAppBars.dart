@@ -7,31 +7,31 @@ import 'package:flutter/material.dart';
 class JBMBAppBar extends AppBar {
   JBMBAppBar({Key? key, required VoidCallback onPressedMenu})
       : super(
-          key: key,
-          title: const Text(
-            "제발모발",
-            style: TextStyle(
-                fontSize: 23,
-                color: Colors.black,
-                fontFamily: 'Gugi-Regular',
-                fontWeight: FontWeight.bold),
-          ),
-          // AppBar 내 요소 가운데 정렬
-          centerTitle: true,
-          // AppBar 그림자 제거
-          elevation: 0,
-          // AppBar 바탕색 설정
-          backgroundColor: Colors.white,
-          actions: [
-            IconButton(
-              icon: const Icon(
-                Icons.menu,
-                color: Colors.black,
-              ),
-              onPressed: onPressedMenu,
-            )
-          ],
-        );
+    key: key,
+    title: const Text(
+      "제발모발",
+      style: TextStyle(
+          fontSize: 23,
+          color: Colors.black,
+          fontFamily: 'Gugi-Regular',
+          fontWeight: FontWeight.bold),
+    ),
+    // AppBar 내 요소 가운데 정렬
+    centerTitle: true,
+    // AppBar 그림자 제거
+    elevation: 0,
+    // AppBar 바탕색 설정
+    backgroundColor: Colors.white,
+    actions: [
+      IconButton(
+        icon: const Icon(
+          Icons.menu,
+          color: Colors.black,
+        ),
+        onPressed: onPressedMenu,
+      )
+    ],
+  );
 }
 
 /// 2022.03.14 이승훈
@@ -40,14 +40,14 @@ class JBMBAppBar extends AppBar {
 class JBMBTransparentAppbar extends AppBar {
   JBMBTransparentAppbar({Key? key, required VoidCallback onPressedCancel})
       : super(key: key,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          leading:
-              IconButton(icon: Icon(Icons.cancel), onPressed: onPressedCancel),
-          iconTheme: const IconThemeData(
-            color: Colors.black,
-          ),
-        );
+    elevation: 0,
+    backgroundColor: Colors.transparent,
+    leading:
+    IconButton(icon: Icon(Icons.cancel), onPressed: onPressedCancel),
+    iconTheme: const IconThemeData(
+      color: Colors.black,
+    ),
+  );
 }
 
 /// 2022.03.14 이승훈
@@ -74,7 +74,9 @@ class JBMBAppBarWithOutMenu extends AppBar {
 /// 제발모발 로고 + 백버튼 + Menu가 있는 AppBar로, 핵심 기능 페이지에 사용된다.
 /// Shampoo, Hospital, Community Page
 class JBMBAppBarWithBackButton extends AppBar {
-  JBMBAppBarWithBackButton({Key? key, required VoidCallback onPressedMenu, required VoidCallback onPressedCancel}) : super(
+  JBMBAppBarWithBackButton(
+      {Key? key, required VoidCallback onPressedMenu, required VoidCallback onPressedCancel})
+      : super(
     title: const Text(
       "제발모발",
       style: TextStyle(
@@ -89,7 +91,9 @@ class JBMBAppBarWithBackButton extends AppBar {
     elevation: 0,
     // AppBar 바탕색 설정
     backgroundColor: Colors.white,
-    leading: IconButton(icon: const Icon(Icons.arrow_back, color: Colors.black,), onPressed: onPressedCancel,),
+    leading: IconButton(
+      icon: const Icon(Icons.arrow_back, color: Colors.black,),
+      onPressed: onPressedCancel,),
     actions: [
       IconButton(
         icon: const Icon(

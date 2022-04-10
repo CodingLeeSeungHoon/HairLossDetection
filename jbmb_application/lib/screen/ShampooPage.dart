@@ -47,9 +47,18 @@ class _ShampooPageState extends State<ShampooPage> {
 
   @override
   Widget build(BuildContext context) {
-    double phoneWidth = MediaQuery.of(context).size.width;
-    double phoneHeight = MediaQuery.of(context).size.height;
-    double phonePadding = MediaQuery.of(context).padding.top;
+    double phoneWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    double phoneHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    double phonePadding = MediaQuery
+        .of(context)
+        .padding
+        .top;
 
     return Scaffold(
         key: _scaffoldKey,
@@ -86,9 +95,11 @@ class _ShampooPageState extends State<ShampooPage> {
                           child: Container(
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                                    image:
-                                        Image.asset("images/shampoo.png").image,
-                                    )),
+                                  image:
+                                  Image
+                                      .asset("images/shampoo.png")
+                                      .image,
+                                )),
                           ),
                         ),
                         const Spacer(
@@ -127,7 +138,8 @@ class _ShampooPageState extends State<ShampooPage> {
                                               fontWeight: FontWeight.bold,
                                               fontSize: 15),
                                         ),
-                                        Icon(Icons.star_outlined, color: Colors.yellow,),
+                                        Icon(Icons.star_outlined,
+                                          color: Colors.yellow,),
                                         Text(
                                           '(5/5)',
                                           style: TextStyle(fontSize: 15),
@@ -152,10 +164,10 @@ class _ShampooPageState extends State<ShampooPage> {
                                       alignment: Alignment.bottomRight,
                                       child: Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.end,
+                                        MainAxisAlignment.end,
                                         children: <Widget>[
                                           TextButton(
-                                              onPressed: (){},
+                                              onPressed: () {},
                                               child: const Text("구매 페이지로 연결")),
                                         ],
                                       ),

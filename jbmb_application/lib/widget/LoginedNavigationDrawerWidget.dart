@@ -14,10 +14,13 @@ import 'package:jbmb_application/service/JBMBMemberManager.dart';
 import '../screen/CommunityPage.dart';
 import '../screen/Home.dart';
 import '../screen/JoinPage.dart';
+import '../service/JBMBDiagnoseManager.dart';
+import '../service/JBMBSurveyManager.dart';
 
 /// 2020.03.07 이승훈 개발
 class LoginedNavigationDrawerWidget extends StatelessWidget {
   final JBMBMemberManager memberManager;
+
   LoginedNavigationDrawerWidget({
     Key? key,
     required this.memberManager
@@ -26,9 +29,18 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double phoneWidth = MediaQuery.of(context).size.width;
-    double phoneHeight = MediaQuery.of(context).size.height;
-    double phonePadding = MediaQuery.of(context).padding.top;
+    double phoneWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    double phoneHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    double phonePadding = MediaQuery
+        .of(context)
+        .padding
+        .top;
 
     return Drawer(
       child: Material(
@@ -36,7 +48,10 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
           padding: padding,
           children: <Widget>[
             SizedBox(height: phoneHeight * 0.10,),
-            const Text("제발모발", textAlign: TextAlign.center, style: TextStyle(fontFamily: "Gugi-regular", fontSize: 25, fontWeight: FontWeight.bold),),
+            const Text("제발모발", textAlign: TextAlign.center,
+              style: TextStyle(fontFamily: "Gugi-regular",
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold),),
             SizedBox(
               height: phoneHeight * 0.05,
             ),
@@ -100,16 +115,16 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
 
     switch (index) {
       case 0:
-        // logout
-        // Navigator.of(context).popUntil((route) => route.isFirst);
-        try{
+      // logout
+      // Navigator.of(context).popUntil((route) => route.isFirst);
+        try {
           String token = await memberManager.jwtManager.getToken();
           JBMBLoginManager().tryLogout(token);
           log("[Logout] success logout with valid token");
         } catch (e) {
           log("[Logout] token was invalid but success logout : $e");
         }
-        Future.delayed(const Duration(milliseconds: 250), (){
+        Future.delayed(const Duration(milliseconds: 250), () {
           Navigator.pushReplacement(
             context,
             PageRouteBuilder(
@@ -121,10 +136,27 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
         });
         break;
       case 1:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => DiagnosisAlertPage(memberManager: memberManager,),
-        ));
-        // diagnose
+        JBMBSurveyManager surveyManager = JBMBSurveyManager();
+        JBMBDiagnoseManager diagnoseManager = JBMBDiagnoseManager(surveyManager);
+
+        int retval = diagnoseManager.createNewDiagnosis(memberManager.memberInfo, memberManager.jwtManager.getToken());
+
+        if (retval != -1){
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                DiagnosisAlertPage(memberManager: memberManager, diagnoseManager: diagnoseManager),
+          ));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Row(
+                children: const [
+                  Icon(Icons.check, color: Colors.red,),
+                  Text("서버상의 문제로, 진단을 시작할 수 없습니다.\n"
+                      "잠시 후에 다시 시도해주세요."),
+                ],
+              ))
+          );
+        }
         break;
       case 2:
         Navigator.of(context).push(MaterialPageRoute(

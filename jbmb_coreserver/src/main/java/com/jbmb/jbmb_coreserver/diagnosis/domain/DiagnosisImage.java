@@ -21,4 +21,13 @@ public class DiagnosisImage {
 
     @Column(name = "diagnosis_image", columnDefinition = "TEXT", nullable = true)
     private String diagnosisImage;
+
+    public void changeDiagnosisImage(String imageLink){
+        diagnosisImage=imageLink;
+    }
+
+    public boolean checkNull(){
+        if(diagnosisImage==null) return false;
+        return true;
+    }
 }

@@ -82,9 +82,11 @@ class JBMBRegisterManager {
 
     if (response.statusCode / 100 == 2) {
       log("[JBMBRegisterManager] API Response StatusCode 200");
-      return JBMBRegisterResponseObject.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+      return JBMBRegisterResponseObject.fromJson(
+          jsonDecode(utf8.decode(response.bodyBytes)));
     } else {
-      log("[JBMBRegisterManager] API Response StatusCode is not 200, throw exception");
+      log(
+          "[JBMBRegisterManager] API Response StatusCode is not 200, throw exception");
       throw Exception('[Error:Server] 서버 측 오류로 회원가입에 실패했습니다.');
     }
   }
@@ -98,26 +100,26 @@ class JBMBRegisterManager {
 
     switch (_validRegisterInput(registerInput)) {
       case 0:
-        // 유효성 검사 통과
+      // 유효성 검사 통과
         isInputValid = true;
         break;
       case 1:
-        // 필드 중 null 값 존재
+      // 필드 중 null 값 존재
         jbmbRegisterResult.setResultCode = 1;
         jbmbRegisterResult.setResult = "  빈 칸이 존재하거나, 유효하지 않은 입력입니다.";
         break;
       case 2:
-        // ID/PW 유효성 불통
+      // ID/PW 유효성 불통
         jbmbRegisterResult.setResultCode = 2;
         jbmbRegisterResult.setResult = "  ID/PW를 4자리 이상 입력해주세요.";
         break;
       case 3:
-        // 핸드폰 번호 유효성 불통
+      // 핸드폰 번호 유효성 불통
         jbmbRegisterResult.setResultCode = 3;
         jbmbRegisterResult.setResult = "  유효하지 않은 핸드폰 번호입니다.";
         break;
       case 4:
-        // 이메일 정규표현식 유효성 불통
+      // 이메일 정규표현식 유효성 불통
         jbmbRegisterResult.setResultCode = 4;
         jbmbRegisterResult.setResult = "  유효하지 않은 이메일 형식입니다.";
         break;
@@ -127,7 +129,7 @@ class JBMBRegisterManager {
     if (isInputValid) {
       try {
         JBMBRegisterResponseObject response =
-            await _tryRegisterJBMB(registerInput);
+        await _tryRegisterJBMB(registerInput);
         switch (response.getResultCode) {
           case 0:
             jbmbRegisterResult.setResultCode = 0;

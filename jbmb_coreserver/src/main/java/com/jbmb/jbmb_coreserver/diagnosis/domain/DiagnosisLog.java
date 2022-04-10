@@ -3,6 +3,7 @@ package com.jbmb.jbmb_coreserver.diagnosis.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @ToString
 @Getter
@@ -23,7 +24,10 @@ public class DiagnosisLog {
     @Column(name = "active", columnDefinition = "TINYINT", nullable = false)
     private Integer active;
 
-    public void changeActive(Integer id){
+    @Column(name="created_at", columnDefinition = "DATETIME", nullable = false)
+    private Date date;
+
+    public void changeActive(){
         active=1;
     }
 }

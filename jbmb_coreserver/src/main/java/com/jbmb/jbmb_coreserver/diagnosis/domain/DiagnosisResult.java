@@ -30,7 +30,4 @@ public class DiagnosisResult {
 
     @Column(name = "result_2", nullable = false)
     private Float result2;
-
-    @Column(name = "result_3", nullable = false)
-    private Float result3;
 }
