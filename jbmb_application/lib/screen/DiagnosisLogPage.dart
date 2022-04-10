@@ -100,7 +100,7 @@ class _DiagnosisLogPageState extends State<DiagnosisLogPage> {
                                 DiagnosisResultPage(
                                   memberManager: widget.memberManager,
                                   way: 2,
-                                  resultObject: JBMBDiagnosisResultResponseObject(0, [99.9, 0.01, 0])
+                                  resultObject: JBMBDiagnosisResultResponseObject(0, [99.9, 0.01, 0], "2022-04-08 11:11:00", 0)
                                 ),
                             transitionDuration: Duration.zero,
                             reverseTransitionDuration: Duration.zero,

@@ -47,31 +47,41 @@ class JBMBStartAnalysisResponseObject extends JBMBNewDiagnosisResponse {
 /// 진단 결과 페이지에 띄울 진단 결과를 받아오는 Response Object
 class JBMBDiagnosisResultResponseObject extends JBMBDefaultResponseObject {
   // member variable
-  int? surveyResult;
-  List<double>? percent;
+  int? _surveyResult;
+  List<double>? _percent;
+  String? _date;
+  int? _aiResult;
 
   // constructor
-  JBMBDiagnosisResultResponseObject(this.surveyResult, this.percent) : super(0);
+  JBMBDiagnosisResultResponseObject(this._surveyResult, this._percent, this._date, this._aiResult) : super(0);
 
   // fromJson function
   JBMBDiagnosisResultResponseObject.fromJson(Map<String, dynamic> json)
-      : surveyResult = json['surveyResult'],
-        percent = json['percent'],
+      : _surveyResult = json['surveyResult'],
+        _percent = json['percent'],
+        _date = json['date'],
+        _aiResult = json['aiResult'],
         super.fromJson(json);
 
   // getter
-  int? get getSurveyResult => surveyResult;
-  set setSurveyResult(int? _surveyResult) => surveyResult = _surveyResult;
+  int? get getSurveyResult => _surveyResult;
+  set setSurveyResult(int? surveyResult) => _surveyResult = surveyResult;
 
-  List<double>? get getPercent => percent;
-  set setPercent(List<double>? _percent) => percent = _percent;
+  List<double>? get getPercent => _percent;
+  set setPercent(List<double>? percent) => _percent = percent;
+
+  String? get getDate => _date;
+  set setDate(String? date) => _date = date;
+
+  int? get getAIResult => _aiResult;
+  set setAIResult(int? result) => _aiResult = result;
 
   // null check method
   bool isSurveyResultNull() {
-    return surveyResult == null ? true : false;
+    return _surveyResult == null ? true : false;
   }
 
   bool isPercentNull() {
-    return percent == null ? true : false;
+    return _percent == null ? true : false;
   }
 }
