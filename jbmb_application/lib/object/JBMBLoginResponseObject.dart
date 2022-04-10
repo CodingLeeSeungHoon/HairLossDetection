@@ -22,7 +22,7 @@ class JBMBLoginResponseObject {
   set setJWT(String? jwt) => _jwt = jwt;
 
   int? get getResultCode => _resultCode;
-  
+
   set setResultCode(int? resultCode) => _resultCode = resultCode;
 
   // fromJson

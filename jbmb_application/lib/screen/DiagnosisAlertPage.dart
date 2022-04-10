@@ -4,6 +4,7 @@ import 'package:jbmb_application/object/JBMBMemberInfo.dart';
 import 'package:jbmb_application/screen/LoginedHome.dart';
 import 'package:jbmb_application/screen/SurveyCustomPage.dart';
 import 'package:jbmb_application/screen/SurveyPages.dart';
+import 'package:jbmb_application/service/JBMBDiagnoseManager.dart';
 import 'package:jbmb_application/service/JBMBMemberManager.dart';
 
 import '../widget/JBMBAppBars.dart';
@@ -13,8 +14,10 @@ import '../widget/JBMBBigLogo.dart';
 /// 무료 자가진단 입장 시, 주의사항에 대해 설명하는 페이지
 class DiagnosisAlertPage extends StatefulWidget {
   final JBMBMemberManager memberManager;
+  final JBMBDiagnoseManager diagnoseManager;
 
-  const DiagnosisAlertPage({Key? key, required this.memberManager})
+  const DiagnosisAlertPage(
+      {Key? key, required this.memberManager, required this.diagnoseManager})
       : super(key: key);
 
   @override
@@ -115,6 +118,7 @@ class _DiagnosisAlertPageState extends State<DiagnosisAlertPage> {
                                 qNum: 'Q1.',
                                 question: '\n하루에 빠지는 모발 양이 100개 이상이다.',
                                 memberManager: widget.memberManager,
+                                diagnoseManager: widget.diagnoseManager,
                               ),
                               transitionDuration: Duration.zero,
                               reverseTransitionDuration: Duration.zero,

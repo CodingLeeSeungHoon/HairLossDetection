@@ -9,19 +9,24 @@ import 'package:path_provider/path_provider.dart';
 import 'package:simple_s3/simple_s3.dart';
 import 'JBMBAppRoundImage.dart';
 
-class JBMBUploadedImage extends StatefulWidget {
+class JBMBUploadedImageWidget extends StatefulWidget {
   final Function(String imageUrl) onFileChanged;
+  final String? userID;
+  final int? diagnosisID;
 
-  const JBMBUploadedImage({
+  const JBMBUploadedImageWidget({
     Key? key,
     required this.onFileChanged,
+    required this.userID,
+    required this.diagnosisID
   });
 
   @override
-  _JBMBUploadedImageState createState() => _JBMBUploadedImageState();
+  _JBMBUploadedImageWidgetState createState() =>
+      _JBMBUploadedImageWidgetState();
 }
 
-class _JBMBUploadedImageState extends State<JBMBUploadedImage> {
+class _JBMBUploadedImageWidgetState extends State<JBMBUploadedImageWidget> {
   final ImagePicker _picker = ImagePicker();
   bool isLoading = false;
   String? imageUrl;
@@ -33,20 +38,20 @@ class _JBMBUploadedImageState extends State<JBMBUploadedImage> {
         if (isLoading)
           Center(
               child: Column(
-            children: const [
-              CircularProgressIndicator(
-                color: Colors.black45,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                "서버에 저장 중..",
-                style: TextStyle(
-                    color: Colors.black45, fontWeight: FontWeight.bold),
-              )
-            ],
-          )),
+                children: const [
+                  CircularProgressIndicator(
+                    color: Colors.black45,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    "서버에 저장 중..",
+                    style: TextStyle(
+                        color: Colors.black45, fontWeight: FontWeight.bold),
+                  )
+                ],
+              )),
         if (!isLoading && imageUrl == null)
           const Icon(
             Icons.image,
@@ -82,35 +87,39 @@ class _JBMBUploadedImageState extends State<JBMBUploadedImage> {
   Future _selectPhoto() async {
     await showModalBottomSheet(
         context: context,
-        builder: (context) => BottomSheet(
-            onClosing: () {},
-            builder: (context) => Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ListTile(
-                      leading: const Icon(Icons.camera),
-                      title: const Text('카메라 촬영'),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        _pickImage(ImageSource.camera);
-                      },
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.photo_album),
-                      title: const Text('앨범에서 찾기'),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                        _pickImage(ImageSource.gallery);
-                      },
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    )
-                  ],
-                )));
+        builder: (context) =>
+            BottomSheet(
+                onClosing: () {},
+                builder: (context) =>
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTile(
+                          leading: const Icon(Icons.camera),
+                          title: const Text('카메라 촬영'),
+                          onTap: () {
+                            Navigator.of(context).pop();
+                            _pickImage(ImageSource.camera);
+                          },
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.photo_album),
+                          title: const Text('앨범에서 찾기'),
+                          onTap: () {
+                            Navigator.of(context).pop();
+                            _pickImage(ImageSource.gallery);
+                          },
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        )
+                      ],
+                    )));
   }
 
+  /// 이미지 선택 혹은 촬영 - 편집 - 업로드가 모두 포함된 메소드
   Future _pickImage(ImageSource source) async {
+    // 이미지 선택 혹은 촬영
     final pickedFile = await _picker.pickImage(
         source: source,
         imageQuality: 50,
@@ -119,6 +128,7 @@ class _JBMBUploadedImageState extends State<JBMBUploadedImage> {
       return;
     }
 
+    // 이미지 편집
     var file = await ImageCropper().cropImage(
         sourcePath: pickedFile.path,
         androidUiSettings: const AndroidUiSettings(
@@ -136,9 +146,11 @@ class _JBMBUploadedImageState extends State<JBMBUploadedImage> {
 
     file = await compressImage(file.path, 35);
 
+    // 이미지 업로드
     await _uploadFile(file);
   }
 
+  /// 이미지 압축하는 메소드
   Future<File> compressImage(String path, int quality) async {
     final newPath = p.join((await getTemporaryDirectory()).path,
         '${DateTime.now()}.${p.extension(path)}');
@@ -147,6 +159,7 @@ class _JBMBUploadedImageState extends State<JBMBUploadedImage> {
     return result!;
   }
 
+  /// 이미지 파일을 S3에 업로드하는 메소드
   Future _uploadFile(File file) async {
     setState(() {
       isLoading = true;
@@ -155,7 +168,7 @@ class _JBMBUploadedImageState extends State<JBMBUploadedImage> {
     SimpleS3 _simpleS3 = SimpleS3();
     String result = await _simpleS3.uploadFile(file, 'jbmbbucket',
         "us-east-1:39989318-c9e2-4070-bd62-d0a52df01d88", AWSRegions.usEast1,
-        debugLog: true);
+        debugLog: true, fileName: widget.userID! + "_" + widget.diagnosisID.toString());
 
     // 'https://jbmbbucket.s3.amazonaws.com/' + fileName
 
@@ -164,6 +177,7 @@ class _JBMBUploadedImageState extends State<JBMBUploadedImage> {
       isLoading = false;
     });
 
-    widget.onFileChanged(file.path);
+    // changed
+    widget.onFileChanged('https://jbmbbucket.s3.amazonaws.com/' + widget.userID! + "_" + widget.diagnosisID.toString());
   }
 }

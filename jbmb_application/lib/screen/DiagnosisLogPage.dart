@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import '../object/JBMBDiagnosisResponseObject.dart';
 import '../object/JBMBMemberInfo.dart';
 import '../service/JBMBMemberManager.dart';
 import '../widget/JBMBAppBars.dart';
@@ -45,9 +46,18 @@ class _DiagnosisLogPageState extends State<DiagnosisLogPage> {
 
   @override
   Widget build(BuildContext context) {
-    double phoneWidth = MediaQuery.of(context).size.width;
-    double phoneHeight = MediaQuery.of(context).size.height;
-    double phonePadding = MediaQuery.of(context).padding.top;
+    double phoneWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    double phoneHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    double phonePadding = MediaQuery
+        .of(context)
+        .padding
+        .top;
 
     return Scaffold(
         key: _scaffoldKey,
@@ -74,17 +84,24 @@ class _DiagnosisLogPageState extends State<DiagnosisLogPage> {
                 return Container(
                   height: 60,
                   child: ListTile(
-                    leading: const Icon(Icons.library_books_outlined, color: Colors.grey,),
+                    leading: const Icon(
+                      Icons.library_books_outlined, color: Colors.grey,),
                     title: Text(item),
                     subtitle: Text("\n2022-03-17 23:37:29"),
-                    trailing: const Icon(Icons.double_arrow_rounded, color: Colors.grey),
+                    trailing: const Icon(
+                        Icons.double_arrow_rounded, color: Colors.grey),
                     style: ListTileStyle.list,
-                    onTap: (){
-                      Future.delayed(const Duration(milliseconds: 250), (){
+                    onTap: () {
+                      Future.delayed(const Duration(milliseconds: 250), () {
                         Navigator.push(
                           context,
                           PageRouteBuilder(
-                            pageBuilder: (context, animation1, animation2) => DiagnosisResultPage(memberManager: widget.memberManager, way: 2,),
+                            pageBuilder: (context, animation1, animation2) =>
+                                DiagnosisResultPage(
+                                  memberManager: widget.memberManager,
+                                  way: 2,
+                                  resultObject: JBMBDiagnosisResultResponseObject(0, [99.9, 0.01, 0], "2022-04-08 11:11:00", 0)
+                                ),
                             transitionDuration: Duration.zero,
                             reverseTransitionDuration: Duration.zero,
                           ),
@@ -105,7 +122,7 @@ class _DiagnosisLogPageState extends State<DiagnosisLogPage> {
               }
             },
             separatorBuilder: (BuildContext context, int index) =>
-                const Divider(
+            const Divider(
               height: 10,
               color: Colors.black45,
             ),

@@ -21,23 +21,34 @@ class JBMBOutlinedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    double phoneWidth = MediaQuery.of(context).size.width;
-    double phoneHeight = MediaQuery.of(context).size.height;
+    double phoneWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    double phoneHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
 
     return OutlinedButton.icon(
-        icon: Icon(iconData, color: elementColor, size: 15,),
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          primary: backgroundColor,
-          padding: const EdgeInsets.all(10.0),
-          fixedSize: Size(phoneWidth * 0.40, phoneHeight * 0.065),
-          textStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, fontFamily: 'NanumGothic-Regular', color: elementColor),
-          onPrimary: Colors.black87,
-          side: const BorderSide(color: Colors.black87, width: 2),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        ),
-      label: Text(buttonText, style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, fontFamily: 'NanumGothic-Regular', color: elementColor),),);
+      icon: Icon(iconData, color: elementColor, size: 15,),
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        primary: backgroundColor,
+        padding: const EdgeInsets.all(10.0),
+        fixedSize: Size(phoneWidth * 0.40, phoneHeight * 0.065),
+        textStyle: TextStyle(fontSize: 13,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'NanumGothic-Regular',
+            color: elementColor),
+        onPrimary: Colors.black87,
+        side: const BorderSide(color: Colors.black87, width: 2),
+        shape:
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      ),
+      label: Text(buttonText, style: TextStyle(fontSize: 13,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'NanumGothic-Regular',
+          color: elementColor),),);
   }
 }

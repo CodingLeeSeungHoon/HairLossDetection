@@ -29,7 +29,8 @@ class JBMBMemberManager {
   }
 
   /// update member info using api
-  Future<JBMBDefaultResponseObject> _tryUpdateMemberInfo(JBMBMemberInfo jbmbMemberInfo) async {
+  Future<JBMBDefaultResponseObject> _tryUpdateMemberInfo(
+      JBMBMemberInfo jbmbMemberInfo) async {
     final response = await http.post(
       // TODO : change uri
       Uri.parse('http://jebalmobal.site/user/account/---'),
@@ -42,9 +43,11 @@ class JBMBMemberManager {
     if (response.statusCode / 100 == 2) {
       log("[JBMBMemberManager] API Response StatusCode 200");
       log(jsonDecode(response.body));
-      return JBMBDefaultResponseObject.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+      return JBMBDefaultResponseObject.fromJson(
+          jsonDecode(utf8.decode(response.bodyBytes)));
     } else {
-      log("[JBMBMemberManager] API Response StatusCode is not 200, throw exception");
+      log(
+          "[JBMBMemberManager] API Response StatusCode is not 200, throw exception");
       throw Exception('[Error:Server] 서버 측 오류로 정보 업데이트에 실패했습니다.');
     }
   }
@@ -55,7 +58,8 @@ class JBMBMemberManager {
   Future<bool> updateMemberInfo(JBMBMemberInfo jbmbMemberInfo) async {
     try {
       // save server
-      JBMBDefaultResponseObject response =  await _tryUpdateMemberInfo(jbmbMemberInfo);
+      JBMBDefaultResponseObject response = await _tryUpdateMemberInfo(
+          jbmbMemberInfo);
       // save instance
       memberInfo = jbmbMemberInfo;
       return true;

@@ -1,6 +1,9 @@
-class JBMBDefaultResponseObject{
+class JBMBDefaultResponseObject {
   // member variable
   int? _resultCode;
+
+  // constructor
+  JBMBDefaultResponseObject(this._resultCode);
 
   // getter & setter
   int? get getResultCode => _resultCode;

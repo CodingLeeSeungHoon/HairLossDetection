@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jbmb_application/object/JBMBMemberInfo.dart';
 import 'package:jbmb_application/screen/UploadImagePage.dart';
+import 'package:jbmb_application/service/JBMBDiagnoseManager.dart';
 import 'package:jbmb_application/service/JBMBMemberManager.dart';
 import 'package:jbmb_application/widget/JBMBOutlinedButton.dart';
 
@@ -8,14 +9,20 @@ import '../widget/JBMBAppBars.dart';
 
 class UploadImageGuidePage extends StatelessWidget {
   final JBMBMemberManager memberManager;
+  final JBMBDiagnoseManager diagnoseManager;
+
   const UploadImageGuidePage({
     Key? key,
-    required this.memberManager
+    required this.memberManager,
+    required this.diagnoseManager
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double phoneWidth = MediaQuery.of(context).size.width;
+    double phoneWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
 
     return WillPopScope(
         child: Scaffold(
@@ -39,7 +46,7 @@ class UploadImageGuidePage extends StatelessWidget {
                           children: const [
                             Text(
                               "\n이미지 업로드\n"
-                              "가이드라인 ",
+                                  "가이드라인 ",
                               style: TextStyle(
                                   fontSize: 23,
                                   color: Colors.black54,
@@ -83,18 +90,21 @@ class UploadImageGuidePage extends StatelessWidget {
                           iconData: Icons.check,
                           onPressed: () {
                             Future.delayed(const Duration(milliseconds: 250),
-                                () {
-                              Navigator.pushReplacement(
-                                context,
-                                PageRouteBuilder(
-                                  pageBuilder:
-                                      (context, animation1, animation2) =>
-                                          UploadImagePage(memberManager: memberManager,),
-                                  transitionDuration: Duration.zero,
-                                  reverseTransitionDuration: Duration.zero,
-                                ),
-                              );
-                            });
+                                    () {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    PageRouteBuilder(
+                                      pageBuilder:
+                                          (context, animation1, animation2) =>
+                                          UploadImagePage(
+                                            memberManager: memberManager,
+                                            diagnoseManager: diagnoseManager
+                                          ),
+                                      transitionDuration: Duration.zero,
+                                      reverseTransitionDuration: Duration.zero,
+                                    ),
+                                  );
+                                });
                           },
                         ),
                       ],

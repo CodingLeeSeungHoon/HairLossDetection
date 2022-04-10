@@ -36,17 +36,28 @@ class _JoinPageState extends State<JoinPage> {
 
   @override
   Widget build(BuildContext context) {
-
-    double phoneWidth = MediaQuery.of(context).size.width;
-    double phoneHeight = MediaQuery.of(context).size.height;
-    double phonePadding = MediaQuery.of(context).padding.top;
+    double phoneWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    double phoneHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    double phonePadding = MediaQuery
+        .of(context)
+        .padding
+        .top;
 
     return Scaffold(
-        // resizeToAvoidBottomInset: false,
+      // resizeToAvoidBottomInset: false,
         extendBodyBehindAppBar: true,
         backgroundColor: Colors.white,
         appBar: JBMBTransparentAppbar(onPressedCancel: () {
-          if (MediaQuery.of(context).viewInsets.bottom != 0) {
+          if (MediaQuery
+              .of(context)
+              .viewInsets
+              .bottom != 0) {
             FocusManager.instance.primaryFocus?.unfocus();
           } else {
             Future.delayed(const Duration(milliseconds: 180), () {
@@ -186,7 +197,8 @@ class _JoinPageState extends State<JoinPage> {
                         width: phoneWidth * 0.35,
                         child: ListTile(
                           leading: Radio<String>(
-                            fillColor: MaterialStateColor.resolveWith((states) => Colors.black54),
+                            fillColor: MaterialStateColor.resolveWith((
+                                states) => Colors.black54),
                             value: 'male',
                             groupValue: _selectedGender,
                             onChanged: (value) {
@@ -203,7 +215,8 @@ class _JoinPageState extends State<JoinPage> {
                         width: phoneWidth * 0.35,
                         child: ListTile(
                           leading: Radio<String>(
-                            fillColor: MaterialStateColor.resolveWith((states) => Colors.black54),
+                            fillColor: MaterialStateColor.resolveWith((
+                                states) => Colors.black54),
                             value: 'female',
                             groupValue: _selectedGender,
                             onChanged: (value) {
@@ -239,10 +252,11 @@ class _JoinPageState extends State<JoinPage> {
                           setState(() {
                             _getValueFromTextField();
                           });
-                          JBMBRegisterResult registerResult = await jbmbRegisterManager.registerJBMB(jbmbMemberInfo);
+                          JBMBRegisterResult registerResult = await jbmbRegisterManager
+                              .registerJBMB(jbmbMemberInfo);
                           // print(registerResult.getResultCode);
                           // print(registerResult.getResult);
-                          if (registerResult.getResultCode == 0){
+                          if (registerResult.getResultCode == 0) {
                             // when success register
                             _doAfterSuccessRegister(context, registerResult);
                           } else {
@@ -265,7 +279,7 @@ class _JoinPageState extends State<JoinPage> {
   }
 
   /// 회원가입 취소 버튼을 눌렀을 때의 Motion
-  _clickedCancelButton(BuildContext context){
+  _clickedCancelButton(BuildContext context) {
     FocusManager.instance.primaryFocus?.unfocus();
     Future.delayed(const Duration(milliseconds: 300), () {
       Navigator.pop(context);
@@ -273,7 +287,7 @@ class _JoinPageState extends State<JoinPage> {
   }
 
   /// TextField로 부터 값을 가져와 State를 변경하는 메소드
-  _getValueFromTextField(){
+  _getValueFromTextField() {
     jbmbMemberInfo.setID = idController.text;
     jbmbMemberInfo.setPW = pwController.text;
     jbmbMemberInfo.setName = nameController.text;
@@ -284,7 +298,8 @@ class _JoinPageState extends State<JoinPage> {
   }
 
   /// register에 성공한 후의 Motion
-  _doAfterSuccessRegister(BuildContext context, JBMBRegisterResult registerResult){
+  _doAfterSuccessRegister(BuildContext context,
+      JBMBRegisterResult registerResult) {
     FocusManager.instance.primaryFocus?.unfocus();
     Navigator.pop(context);
     Future.delayed(const Duration(milliseconds: 200), () {
@@ -300,7 +315,8 @@ class _JoinPageState extends State<JoinPage> {
   }
 
   /// register에 실패한 후의 Motion
-  _doAfterFailRegister(BuildContext context, JBMBRegisterResult registerResult){
+  _doAfterFailRegister(BuildContext context,
+      JBMBRegisterResult registerResult) {
     FocusManager.instance.primaryFocus?.unfocus();
     Future.delayed(const Duration(milliseconds: 200), () {
       ScaffoldMessenger.of(context).showSnackBar(

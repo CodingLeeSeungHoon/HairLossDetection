@@ -49,9 +49,18 @@ class _CommunityPageState extends State<CommunityPage> {
 
   @override
   Widget build(BuildContext context) {
-    double phoneWidth = MediaQuery.of(context).size.width;
-    double phoneHeight = MediaQuery.of(context).size.height;
-    double phonePadding = MediaQuery.of(context).padding.top;
+    double phoneWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+    double phoneHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    double phonePadding = MediaQuery
+        .of(context)
+        .padding
+        .top;
 
     return Scaffold(
         key: _scaffoldKey,
@@ -106,7 +115,7 @@ class _CommunityPageState extends State<CommunityPage> {
                   }
                 },
                 separatorBuilder: (BuildContext context, int index) =>
-                    const Divider(
+                const Divider(
                   height: 10,
                   color: Colors.black45,
                 ),

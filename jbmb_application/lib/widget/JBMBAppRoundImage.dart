@@ -15,7 +15,7 @@ class JBMBAppRoundImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(height / 2),
+      borderRadius: BorderRadius.circular(1),
       child: Image(
         image: provider,
         height: height,
@@ -29,7 +29,9 @@ class JBMBAppRoundImage extends StatelessWidget {
     required double width,
   }) {
     // return JBMBAppRoundImage(NetworkImage(url), height: height, width: width);
-    return JBMBAppRoundImage(Image.file(File(url)).image, height: height, width: width);
+    return JBMBAppRoundImage(Image
+        .file(File(url))
+        .image, height: height, width: width);
   }
 
   factory JBMBAppRoundImage.memory(Uint8List data,
