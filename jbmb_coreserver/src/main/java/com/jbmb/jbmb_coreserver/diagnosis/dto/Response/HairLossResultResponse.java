@@ -13,5 +13,6 @@ public class HairLossResultResponse {
     private Integer resultCode;
     private Integer surveyResult;
     private List<Float> percent;
+    private Integer aiResult;
     private String date;
 }
