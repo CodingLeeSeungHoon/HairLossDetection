@@ -1,7 +1,7 @@
 package com.jbmb.jbmb_coreserver.diagnosis.controller;
 
-import com.jbmb.jbmb_coreserver.diagnosis.dto.Request.*;
-import com.jbmb.jbmb_coreserver.diagnosis.dto.Response.*;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.RequestDTO.Request.*;
+import com.jbmb.jbmb_coreserver.diagnosis.dto.ResponseDTO.Response.*;
 import com.jbmb.jbmb_coreserver.diagnosis.service.DiagnosisService;
 import groovy.util.logging.Slf4j;
 import lombok.RequiredArgsConstructor;

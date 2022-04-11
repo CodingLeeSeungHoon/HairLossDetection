@@ -1,4 +1,4 @@
-package com.jbmb.jbmb_coreserver.shampoo.dto;
+package com.jbmb.jbmb_coreserver.shampoo.dto.RequestDTO;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

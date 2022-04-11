@@ -1,7 +1,7 @@
 package com.jbmb.jbmb_coreserver.shampoo.controller;
 
-import com.jbmb.jbmb_coreserver.shampoo.dto.Request;
-import com.jbmb.jbmb_coreserver.shampoo.dto.Response;
+import com.jbmb.jbmb_coreserver.shampoo.dto.RequestDTO.Request;
+import com.jbmb.jbmb_coreserver.shampoo.dto.ResponseDTO.Response;
 import com.jbmb.jbmb_coreserver.shampoo.service.ShampooService;
 import groovy.util.logging.Slf4j;
 import lombok.RequiredArgsConstructor;
