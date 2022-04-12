@@ -234,10 +234,7 @@ public class DiagnosisService {
                 +diagnosisSurvey.getSurvey8()
                 +diagnosisSurvey.getSurvey9()
                 +diagnosisSurvey.getSurvey10();
-        if (sum<3) return 0;
-        else if(sum<4) return 1;
-        else if(sum<6) return 2;
-        return 3;
+        return sum;
     }
 
     /**
