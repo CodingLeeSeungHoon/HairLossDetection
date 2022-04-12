@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -168,8 +169,9 @@ class _JBMBUploadedImageWidgetState extends State<JBMBUploadedImageWidget> {
     SimpleS3 _simpleS3 = SimpleS3();
     String result = await _simpleS3.uploadFile(file, 'jbmbbucket',
         "us-east-1:39989318-c9e2-4070-bd62-d0a52df01d88", AWSRegions.usEast1,
-        debugLog: true, fileName: widget.userID! + "_" + widget.diagnosisID.toString());
+        debugLog: true, fileName: widget.userID! + "_" + widget.diagnosisID.toString() + ".jpg");
 
+    log(widget.userID! + "_" + widget.diagnosisID.toString() + ".jpg");
     // 'https://jbmbbucket.s3.amazonaws.com/' + fileName
 
     setState(() {
@@ -178,6 +180,6 @@ class _JBMBUploadedImageWidgetState extends State<JBMBUploadedImageWidget> {
     });
 
     // changed
-    widget.onFileChanged('https://jbmbbucket.s3.amazonaws.com/' + widget.userID! + "_" + widget.diagnosisID.toString());
+    widget.onFileChanged('https://jbmbbucket.s3.amazonaws.com/' + widget.userID! + "_" + widget.diagnosisID.toString() + ".jpg");
   }
 }

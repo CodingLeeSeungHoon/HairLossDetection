@@ -81,28 +81,47 @@ class _UploadImagePageState extends State<UploadImagePage> {
                               diagnosisID: widget.diagnoseManager.diagnosisID,
                               userID: widget.memberManager.memberInfo.getID,
                             ),
-                          if (loadingState == 1) ...[
-                            const Text("제발모발 서버에 이미지를 저장 중 입니다."),
-                            const Text("잠시만 기다려주세요."),
-                            StepIndicator(
-                              currentStep: 0,
-                            )
-                          ],
-                          if (loadingState == 2) ...[
-                            const Text("결과를 분석 및 저장 중 입니다."),
-                            const Text("최대 20초정도 소요될 수 있습니다."),
-                            StepIndicator(
-                              currentStep: 1,
-                            )
-                          ],
-                          if (loadingState == 3) ...[
-                            const Text("결과를 불러오고 있습니다."),
-                            const Text("잠시만 기다려주세요."),
-                            StepIndicator(
-                              currentStep: 2,
-                            )
-                          ],
-                          if (imageUrl != '')
+                          if (loadingState == 1)
+                            Container(
+                              alignment: Alignment.center,
+                              child: Column(
+                                children: [
+                                  const Text("제발모발 서버에 이미지를 저장 중 입니다."),
+                                  const Text("잠시만 기다려주세요.\n"),
+                                  StepIndicator(
+                                    currentStep: 0,
+                                  )
+                                ],
+                              ),
+                            ),
+                          if (loadingState == 2)
+                            Container(
+                              alignment: Alignment.center,
+                              child: Column(
+                                children: [
+                                  const Text(
+                                      "결과를 분석 및 저장 중 입니다."),
+                                  const Text("최대 20초정도 소요될 수 있습니다.\n"),
+                                  StepIndicator(
+                                    currentStep: 1,
+                                  )
+                                ],
+                              ),
+                            ),
+                          if (loadingState == 3)
+                            Container(
+                              alignment: Alignment.center,
+                              child: Column(
+                                children: [
+                                  const Text("결과를 불러오고 있습니다."),
+                                  const Text("잠시만 기다려주세요.\n"),
+                                  StepIndicator(
+                                    currentStep: 2,
+                                  )
+                                ],
+                              ),
+                            ),
+                          if (imageUrl != '' && loadingState == 0)
                             JBMBOutlinedButton(
                               buttonText: '제출하기',
                               iconData: Icons.subject,
@@ -159,20 +178,21 @@ class _UploadImagePageState extends State<UploadImagePage> {
       loadingState = 1;
     });
     bool imgRetVal = await diagnoseManager.submitImageUrl(
-        imageURL, memberManager.jwtManager.getToken());
+        imageURL, await memberManager.jwtManager.getToken());
     if (imgRetVal) {
       setState(() {
         loadingState = 2;
       });
       bool analRetVal = await diagnoseManager
-          .startAnalysis(memberManager.jwtManager.getToken());
+          .startAnalysis(await memberManager.jwtManager.getToken());
       if (analRetVal) {
         // when success submit image and start analysis
         setState(() {
           loadingState = 3;
         });
-        JBMBDiagnosisResultResponseObject? object = diagnoseManager
-            .getDiagnosisResultDirectly(memberManager.jwtManager.getToken());
+        JBMBDiagnosisResultResponseObject? object =
+            await diagnoseManager.getDiagnosisResultDirectly(
+                await memberManager.jwtManager.getToken());
         if (object != null) {
           return [object, 0];
         } else {
@@ -218,7 +238,6 @@ class _UploadImagePageState extends State<UploadImagePage> {
   }
 }
 
-
 /// 2022.04.07 이승훈
 /// 로딩 인디케이터
 class StepIndicator extends StatelessWidget {
@@ -231,7 +250,7 @@ class StepIndicator extends StatelessWidget {
     return StepProgressIndicator(
       totalSteps: 3,
       currentStep: currentStep,
-      size: 20,
+      size: 50,
       selectedColor: Colors.black,
       unselectedColor: Colors.grey,
       customStep: (index, color, _) => color == Colors.black

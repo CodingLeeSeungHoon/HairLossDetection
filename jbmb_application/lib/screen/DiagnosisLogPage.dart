@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:jbmb_application/object/JBMBDiagnosisLogsObject.dart';
+import 'package:jbmb_application/service/JBMBDiagnoseLogManager.dart';
+import 'package:jbmb_application/service/JBMBDiagnoseManager.dart';
 import '../object/JBMBDiagnosisResponseObject.dart';
 import '../object/JBMBMemberInfo.dart';
 import '../service/JBMBMemberManager.dart';
@@ -9,8 +12,14 @@ import 'DiagnosisResultPage.dart';
 
 class DiagnosisLogPage extends StatefulWidget {
   final JBMBMemberManager memberManager;
+  final JBMBDiagnoseLogManager diagnoseLogManager;
+  final JBMBDiagnoseManager diagnoseManager;
 
-  const DiagnosisLogPage({Key? key, required this.memberManager})
+  const DiagnosisLogPage(
+      {Key? key,
+      required this.memberManager,
+      required this.diagnoseLogManager,
+      required this.diagnoseManager})
       : super(key: key);
 
   @override
@@ -20,11 +29,16 @@ class DiagnosisLogPage extends StatefulWidget {
 class _DiagnosisLogPageState extends State<DiagnosisLogPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final controller = ScrollController();
+
+  // TODO : change type List<String> to List<JBMBDiagnosisLog>
+  JBMBDiagnosisLogsObject? logsObject;
   List<String> items = List.generate(15, (index) => '진료기록 ${index + 1}');
+  List<JBMBDiagnosisLog> logItems = List.empty();
 
   @override
   void initState() {
     super.initState();
+
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
         fetch();
@@ -39,6 +53,7 @@ class _DiagnosisLogPageState extends State<DiagnosisLogPage> {
   }
 
   Future fetch() async {
+    // TODO : change add rest logs
     setState(() {
       items.addAll(['진료기록 A', '진료기록 B', '진료기록 C', '진료기록 D']);
     });
@@ -46,18 +61,9 @@ class _DiagnosisLogPageState extends State<DiagnosisLogPage> {
 
   @override
   Widget build(BuildContext context) {
-    double phoneWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    double phoneHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
-    double phonePadding = MediaQuery
-        .of(context)
-        .padding
-        .top;
+    double phoneWidth = MediaQuery.of(context).size.width;
+    double phoneHeight = MediaQuery.of(context).size.height;
+    double phonePadding = MediaQuery.of(context).padding.top;
 
     return Scaffold(
         key: _scaffoldKey,
@@ -85,23 +91,31 @@ class _DiagnosisLogPageState extends State<DiagnosisLogPage> {
                   height: 60,
                   child: ListTile(
                     leading: const Icon(
-                      Icons.library_books_outlined, color: Colors.grey,),
+                      Icons.library_books_outlined,
+                      color: Colors.grey,
+                    ),
                     title: Text(item),
+                    // TODO : change date from Logs List
                     subtitle: Text("\n2022-03-17 23:37:29"),
-                    trailing: const Icon(
-                        Icons.double_arrow_rounded, color: Colors.grey),
+                    trailing: const Icon(Icons.double_arrow_rounded,
+                        color: Colors.grey),
                     style: ListTileStyle.list,
                     onTap: () {
+                      // TODO : Make JBMBDiagnosisResultResponseObject by Manager, diagnosisID in Logs List
                       Future.delayed(const Duration(milliseconds: 250), () {
                         Navigator.push(
                           context,
                           PageRouteBuilder(
                             pageBuilder: (context, animation1, animation2) =>
                                 DiagnosisResultPage(
-                                  memberManager: widget.memberManager,
-                                  way: 2,
-                                  resultObject: JBMBDiagnosisResultResponseObject(0, [99.9, 0.01, 0], "2022-04-08 11:11:00", 0)
-                                ),
+                                    memberManager: widget.memberManager,
+                                    way: 2,
+                                    resultObject:
+                                        JBMBDiagnosisResultResponseObject(
+                                            0,
+                                            [0.99, 0.01, 0],
+                                            "2022-04-08 11:11:00",
+                                            0)),
                             transitionDuration: Duration.zero,
                             reverseTransitionDuration: Duration.zero,
                           ),
@@ -122,7 +136,7 @@ class _DiagnosisLogPageState extends State<DiagnosisLogPage> {
               }
             },
             separatorBuilder: (BuildContext context, int index) =>
-            const Divider(
+                const Divider(
               height: 10,
               color: Colors.black45,
             ),

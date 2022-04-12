@@ -58,7 +58,7 @@ class JBMBDiagnosisResultResponseObject extends JBMBDefaultResponseObject {
   // fromJson function
   JBMBDiagnosisResultResponseObject.fromJson(Map<String, dynamic> json)
       : _surveyResult = json['surveyResult'],
-        _percent = json['percent'],
+        _percent = json['percent'].cast<double>(),
         _date = json['date'],
         _aiResult = json['aiResult'],
         super.fromJson(json);

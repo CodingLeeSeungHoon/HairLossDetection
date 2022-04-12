@@ -40,7 +40,7 @@ class JBMBSurveyManager {
 
     if (response.statusCode / 100 == 2) {
       log("[JBMBSurveyManager] API Response StatusCode 200");
-      log(jsonDecode(response.body));
+      // log(jsonDecode(response.body));
       return JBMBSaveSurveyResponseObject.fromJson(
           jsonDecode(utf8.decode(response.bodyBytes)));
     } else {

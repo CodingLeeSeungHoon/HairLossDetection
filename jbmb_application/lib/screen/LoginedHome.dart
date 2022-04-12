@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:jbmb_application/screen/CommunityPage.dart';
 import 'package:jbmb_application/screen/DiagnosisAlertPage.dart';
@@ -179,13 +181,15 @@ class _LoginedHomeState extends State<LoginedHome> {
   }
 
   /// Move Page by [currentIndex] when clicked CarouselSlider Button
-  void movePageByCurrentIndex(int currentIndex) {
+  Future<void> movePageByCurrentIndex(int currentIndex) async {
     switch (currentIndex) {
       case 0:
         JBMBSurveyManager surveyManager = JBMBSurveyManager();
         JBMBDiagnoseManager diagnoseManager = JBMBDiagnoseManager(surveyManager);
 
-        int retval = diagnoseManager.createNewDiagnosis(widget.memberManager.memberInfo, widget.memberManager.jwtManager.getToken());
+        String tempToken = await widget.memberManager.jwtManager.getToken();
+        int retval = await diagnoseManager.createNewDiagnosis(widget.memberManager.memberInfo, tempToken);
+        // log("retval : " + retval.toString());
         if (retval != -1){
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) =>
