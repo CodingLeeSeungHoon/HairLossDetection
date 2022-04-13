@@ -148,6 +148,11 @@ public class MemberService {
                 .build();
     }
 
+    /**
+     * 두피 유형 업데이트
+     * resultCode 0:성공 , 1:실패
+     * @param Member
+     */
     public Response.UpdateHairTypeResponse updateHairTypeService(Member user){
 
         Member member;
