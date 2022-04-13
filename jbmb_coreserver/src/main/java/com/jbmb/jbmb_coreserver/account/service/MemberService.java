@@ -147,4 +147,22 @@ public class MemberService {
                 .hairType(member.get().getHairType())
                 .build();
     }
+
+    public Response.UpdateHairTypeResponse updateHairTypeService(Member user){
+
+        Member member;
+
+        try{
+            member=memberRepository.findById(user.getId()).get();
+        }catch (Exception e){
+            log.info("프론트에서 잘못된 아이디가 넘어옴");
+            return Response.UpdateHairTypeResponse.builder().resultCode(1).build();
+        }
+
+        member.updateHairType(user.getHairType());
+        memberRepository.save(member);
+
+        log.info("두피 유형 업데이트 성공");
+        return Response.UpdateHairTypeResponse.builder().resultCode(0).build();
+    }
 }

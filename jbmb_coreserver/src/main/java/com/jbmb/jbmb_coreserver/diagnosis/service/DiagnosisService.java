@@ -181,22 +181,30 @@ public class DiagnosisService {
             return HairLossDetectionResponse.builder().resultCode(1).diagnosisID(hairLossDetectionRequest.getDiagnosisID()).build();
         }
 
-        if(diagnosisSurvey.checkNull() && diagnosisImage.checkNull()) {
-            diagnosisLog.changeActive();
-            updateLogRepository.save(diagnosisLog);
-        }
-        else {
-            log.info("null 값 존재");
+        if(!diagnosisSurvey.checkNull() || !diagnosisImage.checkNull()) {
+            log.info("설문조사 혹은 이미지 링크에 널값 존재");
             return HairLossDetectionResponse.builder().resultCode(1).diagnosisID(hairLossDetectionRequest.getDiagnosisID()).build();
         }
 
         try{
+            log.info("AI 이미지 진단 시작");
             aiAnalysisResponse= aiAnalysisService(diagnosisImage.getDiagnosisImage());
         }catch (Exception e){
-            log.info("active는 1로 바뀌었으난 AI 이미지 진단 실패");
-            return HairLossDetectionResponse.builder().resultCode(1).diagnosisID(hairLossDetectionRequest.getDiagnosisID()).build();
+            log.info("1차 AI 이미지 진단 실패");
+            log.info("재시도");
+            try{
+                aiAnalysisResponse= aiAnalysisService(diagnosisImage.getDiagnosisImage());
+            }catch (Exception e2){
+                return HairLossDetectionResponse.builder().resultCode(1).diagnosisID(hairLossDetectionRequest.getDiagnosisID()).build();                
+            }
         }
 
+        log.info("분석 성공");
+
+        diagnosisLog.changeActive();
+        updateLogRepository.save(diagnosisLog);
+        log.info("active를 1로 변경");
+        
         if(aiAnalysisResponse.getBody().get(0) > aiAnalysisResponse.getBody().get(1)){
             if(aiAnalysisResponse.getBody().get(0) <= aiAnalysisResponse.getBody().get(2))
                 ind=2;
@@ -208,7 +216,6 @@ public class DiagnosisService {
                 ind=2;
         }
 
-        log.info("분석 성공");
         diagnosisResultRepository.save(DiagnosisResult.builder()
                 .id(hairLossDetectionRequest.getDiagnosisID())
                 .resultCode(ind)
@@ -216,6 +223,8 @@ public class DiagnosisService {
                 .result1(aiAnalysisResponse.getBody().get(1))
                 .result2(aiAnalysisResponse.getBody().get(2))
                 .build());
+        log.info("진단 결과 저장");
+
         return HairLossDetectionResponse.builder().resultCode(0).diagnosisID(hairLossDetectionRequest.getDiagnosisID()).build();
     }
 
