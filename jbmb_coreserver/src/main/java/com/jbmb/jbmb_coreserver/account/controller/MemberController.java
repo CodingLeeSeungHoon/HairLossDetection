@@ -32,14 +32,19 @@ public class MemberController {
         return memberService.loginService(user);
     }
 
-
+    // 로그아웃
+    @PostMapping("/logout")
+    public Response.LogoutResponse logoutFromJBMB(HttpServletRequest req) {
+        return memberService.logoutService(req);
+    }
+    
     // 회원 정보 가져오기
     @GetMapping("/info")
     public Response.InformationResponse getInfo(ServletRequest req) {
         return memberService.getInfoService(req);
     }
 
-    // 로그인
+    // 두피 유형 업데이트
     @PostMapping("/update_hair_type")
     public Response.UpdateHairTypeResponse updateHairType(@RequestBody Member user) {
         return memberService.updateHairTypeService(user);
