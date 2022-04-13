@@ -49,4 +49,11 @@ public class Response {
         private Integer hairType;
     }
 
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UpdateHairTypeResponse {
+        private Integer resultCode;
+    }
 }
