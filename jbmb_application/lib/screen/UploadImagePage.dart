@@ -11,6 +11,7 @@ import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 import '../object/JBMBMemberInfo.dart';
 import '../widget/JBMBAppBars.dart';
+import 'LoginedHome.dart';
 
 class UploadImagePage extends StatefulWidget {
   final JBMBMemberManager memberManager;
@@ -224,15 +225,42 @@ class _UploadImagePageState extends State<UploadImagePage> {
     switch (errorCode) {
       case 1:
         ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("이미지 제출에 실패했습니다.")));
+            .showSnackBar(const SnackBar(content: Text("이미지 제출에 실패했습니다.\n처음부터 다시 진단을 진행해주세요.")));
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation1, animation2) =>
+                LoginedHome(
+                  memberManager: widget.memberManager,
+                ),
+          ),
+        );
         break;
       case 2:
         ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("분석 시작에 실패했습니다.")));
+            .showSnackBar(const SnackBar(content: Text("분석에 실패했습니다.\n처음부터 다시 진단을 진행해주세요.")));
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation1, animation2) =>
+                LoginedHome(
+                  memberManager: widget.memberManager,
+                ),
+          ),
+        );
         break;
       case 3:
         ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("데이터 불러오기에 실패했습니다.")));
+            .showSnackBar(const SnackBar(content: Text("데이터 불러오기에 실패했습니다. 진단 로그 보기에서 다시 확인하세요.")));
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation1, animation2) =>
+                LoginedHome(
+                  memberManager: widget.memberManager,
+                ),
+          ),
+        );
         break;
     }
   }
@@ -250,7 +278,7 @@ class StepIndicator extends StatelessWidget {
     return StepProgressIndicator(
       totalSteps: 3,
       currentStep: currentStep,
-      size: 50,
+      size: 60,
       selectedColor: Colors.black,
       unselectedColor: Colors.grey,
       customStep: (index, color, _) => color == Colors.black

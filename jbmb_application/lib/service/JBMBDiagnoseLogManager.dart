@@ -25,8 +25,9 @@ class JBMBDiagnoseLogManager {
   /// 진단 히스토리를 불러오는 API
   Future<JBMBDiagnosisLogsObject> _tryToGetDiagnosisLogByUserID(
       String jwtToken, String userID) async {
+    log('http://jebalmobal.site/user/diagnosis/data_list?id=$userID');
     final response = await http.get(
-      Uri.parse('http://jebalmobal.site/user/diagnosis/date_list/$userID'),
+      Uri.parse('http://jebalmobal.site/user/diagnosis/data_list?id=$userID'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'X-AUTH-TOKEN': jwtToken
@@ -35,7 +36,7 @@ class JBMBDiagnoseLogManager {
 
     if (response.statusCode / 100 == 2) {
       log("[JBMBDiagnoseLogManager] API Response StatusCode 200 (_tryToGetDiagnosisLogByUserID)");
-      log(jsonDecode(response.body));
+      // log(jsonDecode(response.body));
       return JBMBDiagnosisLogsObject.fromJson(
           jsonDecode(utf8.decode(response.bodyBytes)));
     } else {

@@ -136,8 +136,8 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
         JBMBDiagnoseManager diagnoseManager =
             JBMBDiagnoseManager(surveyManager);
 
-        int retval = diagnoseManager.createNewDiagnosis(
-            memberManager.memberInfo, memberManager.jwtManager.getToken());
+        int retval = await diagnoseManager.createNewDiagnosis(
+            memberManager.memberInfo, await memberManager.jwtManager.getToken());
 
         if (retval != -1) {
           Navigator.of(context).push(MaterialPageRoute(

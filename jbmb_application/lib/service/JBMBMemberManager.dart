@@ -32,7 +32,6 @@ class JBMBMemberManager {
   Future<JBMBDefaultResponseObject> _tryUpdateMemberInfo(
       JBMBMemberInfo jbmbMemberInfo) async {
     final response = await http.post(
-      // TODO : change uri
       Uri.parse('http://jebalmobal.site/user/account/---'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -68,5 +67,4 @@ class JBMBMemberManager {
       return false;
     }
   }
-
 }

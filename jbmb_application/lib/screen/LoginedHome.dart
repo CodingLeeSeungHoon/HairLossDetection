@@ -211,8 +211,23 @@ class _LoginedHomeState extends State<LoginedHome> {
         }
         break;
       case 1:
-        showModalBottomSheet(
-            context: context, builder: (context) => buildSheet());
+        // 헤어 타입 유무 확인 후 bottom sheet or shampoo page로 변환
+        int? hasHairType = widget.memberManager.memberInfo.getHairType;
+        if (hasHairType == null){
+          showModalBottomSheet(
+              context: context, builder: (context) => buildSheet());
+        } else {
+          switch (hasHairType){
+            case 0:
+              // 건성
+
+              break;
+            case 1:
+              // 지성
+
+              break;
+          }
+        }
         break;
       case 2:
         Navigator.of(context).push(MaterialPageRoute(
