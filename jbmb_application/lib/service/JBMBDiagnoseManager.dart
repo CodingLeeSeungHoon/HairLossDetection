@@ -13,7 +13,7 @@ import 'package:http/http.dart' as http;
 /// 진단 관련 API와 메소드를 관장하는 클래스
 class JBMBDiagnoseManager {
   // member variable
-  JBMBSurveyManager surveyManager;
+  JBMBSurveyManager? surveyManager;
   int? diagnosisID;
 
   // constructor
@@ -30,7 +30,7 @@ class JBMBDiagnoseManager {
   /// 2022.04.07 이승훈
   /// public method
   /// 진단 이후 바로 진단 결과를 받아오는 메소드
-  getDiagnosisResultDirectly(String jwtToken) async {
+  Future<JBMBDiagnosisResultResponseObject?> getDiagnosisResultDirectly(String jwtToken) async {
     try {
       JBMBDiagnosisResultResponseObject response = await _tryToGetDiagnosisResult(jwtToken, diagnosisID!);
       if(!response.isPercentNull() && !response.isSurveyResultNull() && response.getResultCode == 0){
@@ -73,14 +73,14 @@ class JBMBDiagnoseManager {
         'Content-Type': 'application/json; charset=UTF-8',
         'X-AUTH-TOKEN': jwtToken
       },
-      body: jsonEncode("{'diagnosisID' : $diagnosisID}"),
+      body: jsonEncode({'diagnosisID' : diagnosisID}),
     );
 
     if (response.statusCode / 100 == 2) {
       log("[JBMBDiagnoseManager] API Response StatusCode 200 (_tryToGetDiagnosisResult)");
-      log(jsonDecode(response.body));
+      // log(jsonDecode(response.body));
       return JBMBDiagnosisResultResponseObject.fromJson(
-          jsonDecode(utf8.decode(response.bodyBytes)));
+          jsonDecode(response.body));
     } else {
       log(
           "[JBMBDiagnoseManager] API Response StatusCode is not 200, throw exception (_tryToGetDiagnosisResult)");
@@ -115,12 +115,12 @@ class JBMBDiagnoseManager {
         'Content-Type': 'application/json; charset=UTF-8',
         'X-AUTH-TOKEN': jwtToken
       },
-      body: jsonEncode("{'diagnosisID' : $diagnosisID}"),
+      body: jsonEncode({'diagnosisID' : diagnosisID}),
     );
 
     if (response.statusCode / 100 == 2) {
       log("[JBMBDiagnoseManager] API Response StatusCode 200 (_tryAnalysis)");
-      log(jsonDecode(response.body));
+      // log(jsonDecode(response.body));
       return JBMBStartAnalysisResponseObject.fromJson(
           jsonDecode(utf8.decode(response.bodyBytes)));
     } else {
@@ -163,7 +163,7 @@ class JBMBDiagnoseManager {
 
     if (response.statusCode / 100 == 2) {
       log("[JBMBDiagnoseManager] API Response StatusCode 200 (_trySubmitImageUrl)");
-      log(jsonDecode(response.body));
+      // log(jsonDecode(response.body));
       return JBMBSaveImageResponseObject.fromJson(
           jsonDecode(utf8.decode(response.bodyBytes)));
     } else {
@@ -179,6 +179,8 @@ class JBMBDiagnoseManager {
   createNewDiagnosis(JBMBMemberInfo memberInfo, String jwtToken) async {
     try {
       JBMBNewDiagnosisResponse response = await _tryInitDiagnosis(memberInfo.getID!, jwtToken);
+      // log(response.getDiagnosisID.toString());
+      // log(response.getResultCode.toString());
       switch (response.getResultCode){
         case 0:
           // success
@@ -213,17 +215,18 @@ class JBMBDiagnoseManager {
         'Content-Type': 'application/json; charset=UTF-8',
         'X-AUTH-TOKEN': jwtToken
       },
-      body: jsonEncode("{'id': '$userID'}"),
+      body: jsonEncode({'id': userID}),
     );
+
+    log(jsonEncode({'id': userID}));
 
     if (response.statusCode / 100 == 2) {
       log("[JBMBDiagnoseManager] API Response StatusCode 200 (_tryInitDiagnosis)");
-      log(jsonDecode(response.body));
       return JBMBNewDiagnosisResponse.fromJson(
-          jsonDecode(utf8.decode(response.bodyBytes)));
+           jsonDecode(response.body));
     } else {
       log(
-          "[JBMBDiagnoseManager] API Response StatusCode is not 200, throw exception (_tryInitDiagnosis)");
+          "[JBMBDiagnoseManager] API Response St atusCode is not 200, throw exception (_tryInitDiagnosis)");
       throw Exception('[Error:Server] 서버 측 오류로 새로운 진단 아이디 생성에 실패했습니다.');
     }
   }

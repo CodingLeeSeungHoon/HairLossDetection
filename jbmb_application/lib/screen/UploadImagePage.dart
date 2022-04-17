@@ -11,6 +11,7 @@ import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 import '../object/JBMBMemberInfo.dart';
 import '../widget/JBMBAppBars.dart';
+import 'LoginedHome.dart';
 
 class UploadImagePage extends StatefulWidget {
   final JBMBMemberManager memberManager;
@@ -81,28 +82,47 @@ class _UploadImagePageState extends State<UploadImagePage> {
                               diagnosisID: widget.diagnoseManager.diagnosisID,
                               userID: widget.memberManager.memberInfo.getID,
                             ),
-                          if (loadingState == 1) ...[
-                            const Text("제발모발 서버에 이미지를 저장 중 입니다."),
-                            const Text("잠시만 기다려주세요."),
-                            StepIndicator(
-                              currentStep: 0,
-                            )
-                          ],
-                          if (loadingState == 2) ...[
-                            const Text("결과를 분석 및 저장 중 입니다."),
-                            const Text("최대 20초정도 소요될 수 있습니다."),
-                            StepIndicator(
-                              currentStep: 1,
-                            )
-                          ],
-                          if (loadingState == 3) ...[
-                            const Text("결과를 불러오고 있습니다."),
-                            const Text("잠시만 기다려주세요."),
-                            StepIndicator(
-                              currentStep: 2,
-                            )
-                          ],
-                          if (imageUrl != '')
+                          if (loadingState == 1)
+                            Container(
+                              alignment: Alignment.center,
+                              child: Column(
+                                children: [
+                                  const Text("제발모발 서버에 이미지를 저장 중 입니다."),
+                                  const Text("잠시만 기다려주세요.\n"),
+                                  StepIndicator(
+                                    currentStep: 0,
+                                  )
+                                ],
+                              ),
+                            ),
+                          if (loadingState == 2)
+                            Container(
+                              alignment: Alignment.center,
+                              child: Column(
+                                children: [
+                                  const Text(
+                                      "결과를 분석 및 저장 중 입니다."),
+                                  const Text("최대 20초정도 소요될 수 있습니다.\n"),
+                                  StepIndicator(
+                                    currentStep: 1,
+                                  )
+                                ],
+                              ),
+                            ),
+                          if (loadingState == 3)
+                            Container(
+                              alignment: Alignment.center,
+                              child: Column(
+                                children: [
+                                  const Text("결과를 불러오고 있습니다."),
+                                  const Text("잠시만 기다려주세요.\n"),
+                                  StepIndicator(
+                                    currentStep: 2,
+                                  )
+                                ],
+                              ),
+                            ),
+                          if (imageUrl != '' && loadingState == 0)
                             JBMBOutlinedButton(
                               buttonText: '제출하기',
                               iconData: Icons.subject,
@@ -159,20 +179,21 @@ class _UploadImagePageState extends State<UploadImagePage> {
       loadingState = 1;
     });
     bool imgRetVal = await diagnoseManager.submitImageUrl(
-        imageURL, memberManager.jwtManager.getToken());
+        imageURL, await memberManager.jwtManager.getToken());
     if (imgRetVal) {
       setState(() {
         loadingState = 2;
       });
       bool analRetVal = await diagnoseManager
-          .startAnalysis(memberManager.jwtManager.getToken());
+          .startAnalysis(await memberManager.jwtManager.getToken());
       if (analRetVal) {
         // when success submit image and start analysis
         setState(() {
           loadingState = 3;
         });
-        JBMBDiagnosisResultResponseObject? object = diagnoseManager
-            .getDiagnosisResultDirectly(memberManager.jwtManager.getToken());
+        JBMBDiagnosisResultResponseObject? object =
+            await diagnoseManager.getDiagnosisResultDirectly(
+                await memberManager.jwtManager.getToken());
         if (object != null) {
           return [object, 0];
         } else {
@@ -204,20 +225,46 @@ class _UploadImagePageState extends State<UploadImagePage> {
     switch (errorCode) {
       case 1:
         ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("이미지 제출에 실패했습니다.")));
+            .showSnackBar(const SnackBar(content: Text("이미지 제출에 실패했습니다.\n처음부터 다시 진단을 진행해주세요.")));
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation1, animation2) =>
+                LoginedHome(
+                  memberManager: widget.memberManager,
+                ),
+          ),
+        );
         break;
       case 2:
         ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("분석 시작에 실패했습니다.")));
+            .showSnackBar(const SnackBar(content: Text("분석에 실패했습니다.\n처음부터 다시 진단을 진행해주세요.")));
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation1, animation2) =>
+                LoginedHome(
+                  memberManager: widget.memberManager,
+                ),
+          ),
+        );
         break;
       case 3:
         ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("데이터 불러오기에 실패했습니다.")));
+            .showSnackBar(const SnackBar(content: Text("데이터 불러오기에 실패했습니다. 진단 로그 보기에서 다시 확인하세요.")));
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation1, animation2) =>
+                LoginedHome(
+                  memberManager: widget.memberManager,
+                ),
+          ),
+        );
         break;
     }
   }
 }
-
 
 /// 2022.04.07 이승훈
 /// 로딩 인디케이터
@@ -231,7 +278,7 @@ class StepIndicator extends StatelessWidget {
     return StepProgressIndicator(
       totalSteps: 3,
       currentStep: currentStep,
-      size: 20,
+      size: 60,
       selectedColor: Colors.black,
       unselectedColor: Colors.grey,
       customStep: (index, color, _) => color == Colors.black

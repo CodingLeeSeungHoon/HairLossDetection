@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:jbmb_application/object/JBMBDefaultResponseObject.dart';
+import 'package:jbmb_application/object/JBMBHairTypeUpdateRequestObject.dart';
 import 'package:jbmb_application/service/JBMBJwtManager.dart';
 
 import '../object/JBMBMemberInfo.dart';
@@ -29,20 +30,19 @@ class JBMBMemberManager {
   }
 
   /// update member info using api
-  Future<JBMBDefaultResponseObject> _tryUpdateMemberInfo(
-      JBMBMemberInfo jbmbMemberInfo) async {
+  Future<JBMBDefaultResponseObject> _tryUpdateHairType(
+      JBMBHairTypeUpdateRequestObject hairTypeUpdateRequestObject) async {
     final response = await http.post(
-      // TODO : change uri
-      Uri.parse('http://jebalmobal.site/user/account/---'),
+      Uri.parse('http://jebalmobal.site/user/account/update_hair_type'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(memberInfo.toJson()),
+      body: jsonEncode(hairTypeUpdateRequestObject.toJson()),
     );
 
     if (response.statusCode / 100 == 2) {
       log("[JBMBMemberManager] API Response StatusCode 200");
-      log(jsonDecode(response.body));
+      // log(jsonDecode(response.body));
       return JBMBDefaultResponseObject.fromJson(
           jsonDecode(utf8.decode(response.bodyBytes)));
     } else {
@@ -53,20 +53,21 @@ class JBMBMemberManager {
   }
 
   /// 2022.03.27 이승훈
-  /// JBMBMemberManager의 [memberInfo]를 최신화하는 메소드
+  /// JBMBMemberManager 의 [memberInfo]를 최신화하는 메소드
   /// 샴푸 업데이트, 정보 변경에 사용
-  Future<bool> updateMemberInfo(JBMBMemberInfo jbmbMemberInfo) async {
+  Future<bool> updateHairType(JBMBHairTypeUpdateRequestObject hairTypeUpdateRequestObject) async {
     try {
       // save server
-      JBMBDefaultResponseObject response = await _tryUpdateMemberInfo(
-          jbmbMemberInfo);
+      JBMBDefaultResponseObject response = await _tryUpdateHairType(
+          hairTypeUpdateRequestObject);
+
       // save instance
-      memberInfo = jbmbMemberInfo;
+      memberInfo.setHairType = hairTypeUpdateRequestObject.getHairType;
       return true;
+
     } catch (e) {
       log('[JBMBMemberManager] caught Exception : $e');
       return false;
     }
   }
-
 }

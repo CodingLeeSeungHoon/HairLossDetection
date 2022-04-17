@@ -303,6 +303,7 @@ class _JoinPageState extends State<JoinPage> {
     FocusManager.instance.primaryFocus?.unfocus();
     Navigator.pop(context);
     Future.delayed(const Duration(milliseconds: 200), () {
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Row(
             children: [
@@ -319,6 +320,7 @@ class _JoinPageState extends State<JoinPage> {
       JBMBRegisterResult registerResult) {
     FocusManager.instance.primaryFocus?.unfocus();
     Future.delayed(const Duration(milliseconds: 200), () {
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Row(
             children: [
