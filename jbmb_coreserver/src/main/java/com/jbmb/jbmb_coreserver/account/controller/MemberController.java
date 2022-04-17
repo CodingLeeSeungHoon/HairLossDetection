@@ -1,10 +1,7 @@
 package com.jbmb.jbmb_coreserver.account.controller;
 
-import com.jbmb.jbmb_coreserver.account.dto.InformationResponse;
-import com.jbmb.jbmb_coreserver.account.dto.LoginResponse;
-import com.jbmb.jbmb_coreserver.account.dto.LogoutResponse;
 import com.jbmb.jbmb_coreserver.account.domain.Member;
-import com.jbmb.jbmb_coreserver.account.dto.SignupResponse;
+import com.jbmb.jbmb_coreserver.account.dto.ResponseDTO.Response;
 import com.jbmb.jbmb_coreserver.account.service.MemberService;
 import groovy.util.logging.Slf4j;
 import lombok.RequiredArgsConstructor;
@@ -25,26 +22,32 @@ public class MemberController {
 
     // 회원가입
     @PostMapping("/signup")
-    public SignupResponse joinInJBMB(@RequestBody Member user) {
+    public Response.SignupResponse joinInJBMB(@RequestBody Member user) {
         return memberService.joinService(user);
     }
 
     // 로그인
     @PostMapping("/login")
-    public LoginResponse loginInJBMB(@RequestBody Member user) {
+    public Response.LoginResponse loginInJBMB(@RequestBody Member user) {
         return memberService.loginService(user);
     }
 
     // 로그아웃
     @PostMapping("/logout")
-    public LogoutResponse logoutFromJBMB(HttpServletRequest req) {
+    public Response.LogoutResponse logoutFromJBMB(HttpServletRequest req) {
         return memberService.logoutService(req);
     }
-
+    
+    // 회원 정보 가져오기
     @GetMapping("/info")
-    public InformationResponse getInfo(ServletRequest req) {
+    public Response.InformationResponse getInfo(ServletRequest req) {
         return memberService.getInfoService(req);
     }
 
-    
+    // 두피 유형 업데이트
+    @PostMapping("/update_hair_type")
+    public Response.UpdateHairTypeResponse updateHairType(@RequestBody Member user) {
+        return memberService.updateHairTypeService(user);
+    }
+
 }

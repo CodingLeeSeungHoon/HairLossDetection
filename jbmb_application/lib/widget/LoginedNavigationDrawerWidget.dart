@@ -8,6 +8,7 @@ import 'package:jbmb_application/screen/HospitalPage.dart';
 import 'package:jbmb_application/screen/InfoPage.dart';
 import 'package:jbmb_application/screen/LoginPage.dart';
 import 'package:jbmb_application/screen/ShampooPage.dart';
+import 'package:jbmb_application/service/JBMBDiagnoseLogManager.dart';
 import 'package:jbmb_application/service/JBMBLoginManager.dart';
 import 'package:jbmb_application/service/JBMBMemberManager.dart';
 
@@ -21,37 +22,32 @@ import '../service/JBMBSurveyManager.dart';
 class LoginedNavigationDrawerWidget extends StatelessWidget {
   final JBMBMemberManager memberManager;
 
-  LoginedNavigationDrawerWidget({
-    Key? key,
-    required this.memberManager
-  }) : super(key: key);
+  LoginedNavigationDrawerWidget({Key? key, required this.memberManager})
+      : super(key: key);
   final padding = EdgeInsets.symmetric(horizontal: 3);
 
   @override
   Widget build(BuildContext context) {
-    double phoneWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    double phoneHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
-    double phonePadding = MediaQuery
-        .of(context)
-        .padding
-        .top;
+    double phoneWidth = MediaQuery.of(context).size.width;
+    double phoneHeight = MediaQuery.of(context).size.height;
+    double phonePadding = MediaQuery.of(context).padding.top;
 
     return Drawer(
       child: Material(
         child: ListView(
           padding: padding,
           children: <Widget>[
-            SizedBox(height: phoneHeight * 0.10,),
-            const Text("제발모발", textAlign: TextAlign.center,
-              style: TextStyle(fontFamily: "Gugi-regular",
+            SizedBox(
+              height: phoneHeight * 0.10,
+            ),
+            const Text(
+              "제발모발",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontFamily: "Gugi-regular",
                   fontSize: 25,
-                  fontWeight: FontWeight.bold),),
+                  fontWeight: FontWeight.bold),
+            ),
             SizedBox(
               height: phoneHeight * 0.05,
             ),
@@ -115,8 +111,8 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
 
     switch (index) {
       case 0:
-      // logout
-      // Navigator.of(context).popUntil((route) => route.isFirst);
+        // logout
+        // Navigator.of(context).popUntil((route) => route.isFirst);
         try {
           String token = await memberManager.jwtManager.getToken();
           JBMBLoginManager().tryLogout(token);
@@ -137,52 +133,66 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
         break;
       case 1:
         JBMBSurveyManager surveyManager = JBMBSurveyManager();
-        JBMBDiagnoseManager diagnoseManager = JBMBDiagnoseManager(surveyManager);
+        JBMBDiagnoseManager diagnoseManager =
+            JBMBDiagnoseManager(surveyManager);
 
-        int retval = diagnoseManager.createNewDiagnosis(memberManager.memberInfo, memberManager.jwtManager.getToken());
+        int retval = await diagnoseManager.createNewDiagnosis(
+            memberManager.memberInfo, await memberManager.jwtManager.getToken());
 
-        if (retval != -1){
+        if (retval != -1) {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) =>
-                DiagnosisAlertPage(memberManager: memberManager, diagnoseManager: diagnoseManager),
+            builder: (context) => DiagnosisAlertPage(
+                memberManager: memberManager, diagnoseManager: diagnoseManager),
           ));
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Row(
-                children: const [
-                  Icon(Icons.check, color: Colors.red,),
-                  Text("서버상의 문제로, 진단을 시작할 수 없습니다.\n"
-                      "잠시 후에 다시 시도해주세요."),
-                ],
-              ))
-          );
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Row(
+            children: const [
+              Icon(
+                Icons.check,
+                color: Colors.red,
+              ),
+              Text("서버상의 문제로, 진단을 시작할 수 없습니다.\n"
+                  "잠시 후에 다시 시도해주세요."),
+            ],
+          )));
         }
         break;
       case 2:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => DiagnosisLogPage(memberManager: memberManager,),
+          builder: (context) => DiagnosisLogPage(
+            memberManager: memberManager,
+            diagnoseManager: JBMBDiagnoseManager(null),
+            diagnoseLogManager: JBMBDiagnoseLogManager(),
+          ),
         ));
         break;
       case 3:
-      // shampoo
+        // shampoo
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ShampooPage(memberManager: memberManager,),
+          builder: (context) => ShampooPage(
+            memberManager: memberManager,
+          ),
         ));
         break;
       case 4:
-      // hospital
+        // hospital
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => HospitalPage(memberManager: memberManager,),
+          builder: (context) => HospitalPage(
+            memberManager: memberManager,
+          ),
         ));
         break;
       case 5:
-      // jbmb community
+        // jbmb community
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => CommunityPage(memberManager: memberManager,),
+          builder: (context) => CommunityPage(
+            memberManager: memberManager,
+          ),
         ));
         break;
       case 6:
-      // info
+        // info
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => InfoPage(),
         ));

@@ -1,17 +1,14 @@
 package com.jbmb.jbmb_coreserver.shampoo.service;
 
 import com.jbmb.jbmb_coreserver.account.repository.MemberRepository;
-import com.jbmb.jbmb_coreserver.shampoo.dto.Request;
-import com.jbmb.jbmb_coreserver.shampoo.dto.Response;
+import com.jbmb.jbmb_coreserver.shampoo.dto.RequestDTO.Request;
+import com.jbmb.jbmb_coreserver.shampoo.dto.ResponseDTO.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @Service

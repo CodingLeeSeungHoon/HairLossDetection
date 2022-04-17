@@ -85,4 +85,7 @@ public class Member implements UserDetails {
         return true;
     }
 
+    public void updateHairType(Integer hairType){
+        this.hairType=hairType;
+    }
 }

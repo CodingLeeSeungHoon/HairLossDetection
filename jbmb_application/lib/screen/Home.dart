@@ -120,6 +120,7 @@ class _HomeState extends State<Home> {
                                   buttonText: getButtonTextByIndex(_current),
                                   iconData: getIconDataByIndex(_current),
                                   onPressed: () {
+                                    ScaffoldMessenger.of(context).removeCurrentSnackBar();
                                     ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBar(
                                             duration:

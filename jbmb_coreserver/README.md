@@ -18,10 +18,8 @@
    │  │               │   ├── domain
    │  │               │   │   └── Member.java
    │  │               │   ├── dto
-   │  │               │   │   ├── Login.java
-   │  │               │   │   ├── Logout.java
-   │  │               │   │   ├── Signup.java
-   │  │               │   │   └── InformationResponse.java
+   │  │               │   │   └── ResponseDTO
+   │  │               │   │       └── Response.java
    │  │               │   ├── jwt
    │  │               │   │   ├── JwtAuthenticationFilter.java
    │  │               │   │   └── JwtTokenProvider.java
@@ -39,25 +37,10 @@
    │  │               │   │   ├── DiagnosisResultImage.java
    │  │               │   │   └── DiagnosisSurvey.java
    │  │               │   ├── dto
-   │  │               │   │   ├── Request
-   │  │               │   │   │   ├── DisabledRequest.java
-   │  │               │   │   │   ├── GetDataForDiagnosisRequest.java
-   │  │               │   │   │   ├── HairLossBySurveyRequest.java
-   │  │               │   │   │   ├── HairLossDetectionRequest.java
-   │  │               │   │   │   ├── HairLossResultRequest.java
-   │  │               │   │   │   ├── ImageLinkRequest.java
-   │  │               │   │   │   ├── UpdateDiagnosisRequest.java
-   │  │               │   │   │   └── UpdateSurveyResponse.java
-   │  │               │   │   └── Response
-   │  │               │   │       ├── AIAnalysisResponse.java
-   │  │               │   │       ├── DisabledResponse.java
-   │  │               │   │       ├── GetDataForDiagnosisResponse.java
-   │  │               │   │       ├── GetDataFromDiagnosisResponse.java
-   │  │               │   │       ├── HairLossBySurveyResponse.java
-   │  │               │   │       ├── HairLossDetectionResponse.java
-   │  │               │   │       ├── HairLossResultResponse.java
-   │  │               │   │       ├── UpdateImageLinkResponse.java
-   │  │               │   │       └── UpdateSurveyResponse.java
+   │  │               │   │   │── RequestDTO
+   │  │               │   │   │   └── Request.java
+   │  │               │   │   └── ResponseDTO
+   │  │               │   │       └── Response.java
    │  │               │   ├── repository
    │  │               │   │   ├── DiagnosisResultRepository.java
    │  │               │   │   ├── ImageLinkRepository.java
@@ -69,8 +52,10 @@
    │  │               │   ├── controller
    │  │               │   │   └── ShampooController.java
    │  │               │   ├── dto
-   │  │               │   │   ├── Response.java
-   │  │               │   │   └── Request.java
+   │  │               │   │   │── RequestDTO
+   │  │               │   │   │   └── Request.java
+   │  │               │   │   └── ResponseDTO
+   │  │               │   │       └── Response.java
    │  │               │   └── service
    │  │               │       └── ShampooService.java
    │  │               └── board

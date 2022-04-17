@@ -58,6 +58,7 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
           extendBodyBehindAppBar: true,
           appBar: JBMBTransparentAppbar(onPressedCancel: () {
             if (widget.way == 1) {
+              // entered this page after diagnose
               Future.delayed(const Duration(milliseconds: 250), () {
                 Navigator.pushReplacement(
                   context,
@@ -72,6 +73,7 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
                 );
               });
             } else {
+              // entered this page through logs page
               Navigator.of(context).pop();
             }
           }),
@@ -206,17 +208,11 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
                                 ))
                           ])
                     ]),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Icon(Icons.arrow_back),
-                        Text("양 쪽으로 스크롤 할 수 있습니다."),
-                        Icon(Icons.arrow_forward),
-                      ],
-                    ),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: DataTable(
+                        // border: TableBorder.symmetric(inside: BorderSide(color: Colors.grey, width: 1.0,)),
+                        dividerThickness: 3,
                         columns: const [
                           DataColumn(
                             label: Center(
@@ -245,21 +241,21 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
                             DataCell(
                               Center(
                                   child: Text(
-                                '${widget.resultObject.getPercent![0]}%',
+                                '${widget.resultObject.getPercent![0] * 100}%',
                                 textAlign: TextAlign.center,
                               )),
                             ),
                             DataCell(
                               Center(
                                   child: Text(
-                                '${widget.resultObject.getPercent![1]}%',
+                                '${widget.resultObject.getPercent![1] * 100}%',
                                 textAlign: TextAlign.center,
                               )),
                             ),
                             DataCell(
                               Center(
                                   child: Text(
-                                '${widget.resultObject.getPercent![2]}%',
+                                '${widget.resultObject.getPercent![2] * 100}%',
                                 textAlign: TextAlign.center,
                               )),
                             ),
@@ -281,12 +277,15 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
                           color: Colors.black,
                         ),
                         Text(
-                          " 통합 결과\n",
+                          " 통합 결과",
                           style: textStyle,
                         ),
                       ],
                     ),
                     converter.getWholeResult(widget.resultObject.getSurveyResult!, converter.getLabelByPercent(widget.resultObject.getPercent!)),
+                    const SizedBox(
+                      height: 30,
+                    ),
                     Container(
                       width: phoneWidth * 0.85,
                       alignment: Alignment.topLeft,

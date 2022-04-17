@@ -1,13 +1,11 @@
 package com.jbmb.jbmb_coreserver.diagnosis.domain;
 
-import com.jbmb.jbmb_coreserver.diagnosis.repository.UpdateSurveyRepository;
 import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.transaction.Transactional;
 
 @ToString
 @Getter

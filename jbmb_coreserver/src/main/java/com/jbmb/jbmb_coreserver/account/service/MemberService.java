@@ -1,10 +1,7 @@
 package com.jbmb.jbmb_coreserver.account.service;
 
-import com.jbmb.jbmb_coreserver.account.dto.InformationResponse;
-import com.jbmb.jbmb_coreserver.account.dto.LoginResponse;
-import com.jbmb.jbmb_coreserver.account.dto.LogoutResponse;
 import com.jbmb.jbmb_coreserver.account.domain.Member;
-import com.jbmb.jbmb_coreserver.account.dto.SignupResponse;
+import com.jbmb.jbmb_coreserver.account.dto.ResponseDTO.Response;
 import com.jbmb.jbmb_coreserver.account.jwt.JwtTokenProvider;
 import com.jbmb.jbmb_coreserver.account.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,12 +29,12 @@ public class MemberService {
      * 회원가입 버튼 클릭 시
      * resultCode 0:성공 , 1:ID 중복, 2:실패
      * @param Member
-     * @return Signup
+     * @return SignupResponse
      */
-    public SignupResponse joinService(Member user){
+    public Response.SignupResponse joinService(Member user){
         if(memberRepository.findById(user.getId()).isPresent()){
             log.info("ID 중복");
-            return SignupResponse
+            return Response.SignupResponse
                     .builder()
                     .resultCode(1)
                     .build(); // 중복 체크
@@ -56,13 +53,13 @@ public class MemberService {
                     .roles(Collections.singletonList("ROLE_USER")) // 최초 가입시 USER 로 설정
                     .build());
             log.info("회원가입 성공");
-            return SignupResponse
+            return Response.SignupResponse
                     .builder()
                     .resultCode(0)
                     .build();
         } catch (Exception e){
             log.info("회원가입 오류");
-            return SignupResponse
+            return Response.SignupResponse
                     .builder()
                     .resultCode(2)
                     .build();
@@ -74,26 +71,26 @@ public class MemberService {
      * { resultCode 0:성공 , 1:존재하지 않는 ID, 2:비밀번호 오류
      *   jwt : jwt }
      * @param Member
-     * @return Login
+     * @return LoginResponse
      */
-    public LoginResponse loginService(Member user){
+    public Response.LoginResponse loginService(Member user){
         Optional<Member> member=memberRepository.findById(user.getId());
         if (!member.isPresent()) {
             log.info("가입되지 않은 ID");
-            return LoginResponse
+            return Response.LoginResponse
                     .builder()
                     .resultCode(1)
                     .build(); // 가입되지 않은 ID
         }
         if (!passwordEncoder.matches(user.getPassword(), member.get().getPassword())) {
             log.info("비밀번호 오류");
-            return LoginResponse
+            return Response.LoginResponse
                     .builder()
                     .resultCode(2)
                     .build(); // 잘못된 비밀번호
         }
         log.info("로그인 성공");
-        return LoginResponse.builder()
+        return Response.LoginResponse.builder()
                 .resultCode(0)
                 .jwt(jwtTokenProvider.createToken(member.get().getId(), member.get().getRoles()))
                 .id(user.getId())
@@ -104,9 +101,9 @@ public class MemberService {
      * 로그아웃 버튼 클릭 시
      * resultCode 0:성공 , 1:ID 이미 로그아웃, 2:Invalid token
      * @param HttpServletRequest
-     * @return Logout
+     * @return LogoutResponse
      */
-    public LogoutResponse logoutService(HttpServletRequest req){
+    public Response.LogoutResponse logoutService(HttpServletRequest req){
         String token = jwtTokenProvider.resolveToken(req);
         Integer re=jwtTokenProvider.checkAlreadyLogout(token);
         if (re==0) {
@@ -118,7 +115,7 @@ public class MemberService {
             log.info("redis value : "+redisTemplate.opsForValue().get(token));
             log.info("로그아웃 성공");
         }
-        return LogoutResponse
+        return Response.LogoutResponse
                 .builder()
                 .resultCode(re)
                 .build();
@@ -128,19 +125,19 @@ public class MemberService {
      * resultCode 0:성공 , 1:실패
      * 성공 시 id, name, phoneNumber, sex, age, hairType 리턴
      * @param ServeletRequest
-     * @return Logout
+     * @return InformationResponse
      */
-    public InformationResponse getInfoService(ServletRequest req){
+    public Response.InformationResponse getInfoService(ServletRequest req){
         Optional<Member> member;
         try {
             String id = jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken((HttpServletRequest) req));
             member=memberRepository.findById(id);
         }catch (Exception e){
             log.info("오류");
-            return InformationResponse.builder().resultCode(1).build();
+            return Response.InformationResponse.builder().resultCode(1).build();
         }
         log.info("회원 정보 조회 성공");
-        return InformationResponse.builder()
+        return Response.InformationResponse.builder()
                 .resultCode(0)
                 .id(member.get().getId())
                 .name(member.get().getName())
@@ -149,5 +146,28 @@ public class MemberService {
                 .age(member.get().getAge())
                 .hairType(member.get().getHairType())
                 .build();
+    }
+
+    /**
+     * 두피 유형 업데이트
+     * resultCode 0:성공 , 1:실패
+     * @param Member
+     */
+    public Response.UpdateHairTypeResponse updateHairTypeService(Member user){
+
+        Member member;
+
+        try{
+            member=memberRepository.findById(user.getId()).get();
+        }catch (Exception e){
+            log.info("프론트에서 잘못된 아이디가 넘어옴");
+            return Response.UpdateHairTypeResponse.builder().resultCode(1).build();
+        }
+
+        member.updateHairType(user.getHairType());
+        memberRepository.save(member);
+
+        log.info("두피 유형 업데이트 성공");
+        return Response.UpdateHairTypeResponse.builder().resultCode(0).build();
     }
 }
