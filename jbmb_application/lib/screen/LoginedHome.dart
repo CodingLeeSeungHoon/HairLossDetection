@@ -7,6 +7,7 @@ import 'package:jbmb_application/screen/DiagnosisAlertPage.dart';
 import 'package:jbmb_application/screen/HospitalPage.dart';
 import 'package:jbmb_application/screen/ShampooPage.dart';
 import 'package:jbmb_application/service/JBMBDiagnoseManager.dart';
+import 'package:jbmb_application/service/JBMBShampooManager.dart';
 import 'package:jbmb_application/service/JBMBSurveyManager.dart';
 import 'package:jbmb_application/widget/JBMBAppBars.dart';
 import 'package:jbmb_application/widget/JBMBBigButton.dart';
@@ -218,6 +219,7 @@ class _LoginedHomeState extends State<LoginedHome> {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ShampooPage(
                   memberManager: widget.memberManager,
+                  shampooManager: JBMBShampooManager(hasHairType),
                 ),
               ));
               break;
@@ -226,6 +228,7 @@ class _LoginedHomeState extends State<LoginedHome> {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ShampooPage(
                   memberManager: widget.memberManager,
+                  shampooManager: JBMBShampooManager(hasHairType),
                 ),
               ));
               break;
@@ -303,6 +306,7 @@ class _LoginedHomeState extends State<LoginedHome> {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => ShampooPage(
                         memberManager: widget.memberManager,
+                        shampooManager: JBMBShampooManager(widget.memberManager.memberInfo.getHairType),
                       ),
                     ));
                   } else {
@@ -330,6 +334,7 @@ class _LoginedHomeState extends State<LoginedHome> {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => ShampooPage(
                         memberManager: widget.memberManager,
+                        shampooManager: JBMBShampooManager(widget.memberManager.memberInfo.getHairType),
                       ),
                     ));
                   } else {
