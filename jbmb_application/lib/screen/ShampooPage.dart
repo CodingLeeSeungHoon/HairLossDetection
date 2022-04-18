@@ -1,8 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:jbmb_application/object/JBMBMemberInfo.dart';
 import 'package:jbmb_application/service/JBMBMemberManager.dart';
 import 'package:jbmb_application/widget/JBMBShampooListTile.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../object/JBMBShampooResponseObject.dart';
+import '../service/JBMBShampooManager.dart';
 import '../widget/JBMBAppBars.dart';
 import '../widget/LoginedNavigationDrawerWidget.dart';
 
@@ -10,28 +15,57 @@ import '../widget/LoginedNavigationDrawerWidget.dart';
 /// 두피에 따른 샴푸 검색 및 구매 페이지 유도
 class ShampooPage extends StatefulWidget {
   final JBMBMemberManager memberManager;
+  final JBMBShampooManager shampooManager;
 
-  const ShampooPage({Key? key, required this.memberManager}) : super(key: key);
+  const ShampooPage(
+      {Key? key, required this.memberManager, required this.shampooManager})
+      : super(key: key);
 
   @override
   _ShampooPageState createState() => _ShampooPageState();
 }
 
 class _ShampooPageState extends State<ShampooPage> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final controller = ScrollController();
-  List<String> items = List.generate(15, (index) => '샴푸 ${index + 1}');
+  // TODO : eliminate this variable
+  // List<String> items = List.generate(15, (index) => '샴푸 ${index + 1}');
+  List<JBMBShampooItems>? shampooItems;
 
   @override
   void initState() {
     super.initState();
+    _initShampooList();
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
         fetch();
       }
     });
   }
+
+  /// initiate shampoo list from api
+  _initShampooList() async{
+    String tempToken = await widget.memberManager.jwtManager.getToken();
+    JBMBShampooResponseObject? response = await widget.shampooManager.getShampoo(tempToken);
+    if (response != null){
+       setState(() {
+         shampooItems = response.getShampooItemsList;
+       });
+    }
+  }
+
+  /// initiate shampoo list from api
+  _addShampooList() async{
+    String tempToken = await widget.memberManager.jwtManager.getToken();
+    JBMBShampooResponseObject? response = await widget.shampooManager.getShampoo(tempToken);
+    if (response != null){
+      setState(() {
+        shampooItems?.addAll(response.getShampooItemsList!.reversed);
+      });
+    }
+  }
+
 
   @override
   void dispose() {
@@ -40,25 +74,12 @@ class _ShampooPageState extends State<ShampooPage> {
   }
 
   Future fetch() async {
-    setState(() {
-      items.addAll(['샴푸 A', '샴푸 B', '샴푸 C', '샴푸 D']);
-    });
+    _addShampooList();
   }
 
   @override
   Widget build(BuildContext context) {
-    double phoneWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    double phoneHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
-    double phonePadding = MediaQuery
-        .of(context)
-        .padding
-        .top;
+    double phoneWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
         key: _scaffoldKey,
@@ -80,14 +101,14 @@ class _ShampooPageState extends State<ShampooPage> {
           child: ListView.builder(
             controller: controller,
             padding: const EdgeInsets.all(8),
-            itemCount: items.length + 1,
+            itemCount: shampooItems == null ? 0 : shampooItems!.length + 1,
             itemBuilder: (context, index) {
-              if (index < items.length) {
-                final item = items[index];
+              if (shampooItems != null && index < shampooItems!.length) {
+                final item = shampooItems![index];
                 return Card(
                     clipBehavior: Clip.antiAlias,
                     child: Container(
-                      height: 150,
+                      height: 180,
                       padding: const EdgeInsets.all(0),
                       child: Row(children: [
                         Expanded(
@@ -95,11 +116,8 @@ class _ShampooPageState extends State<ShampooPage> {
                           child: Container(
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                                  image:
-                                  Image
-                                      .asset("images/shampoo.png")
-                                      .image,
-                                )),
+                              image: Image.network(item.getImgLink!).image,
+                            )),
                           ),
                         ),
                         const Spacer(
@@ -113,50 +131,48 @@ class _ShampooPageState extends State<ShampooPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: <Widget>[
-                                    Text(item,
+                                    Text(_resizeShampooName(item.getShampooName!),
                                         style: const TextStyle(
                                             fontSize: 17,
                                             fontWeight: FontWeight.bold)),
                                     Row(
-                                      children: const <Widget>[
-                                        Text(
+                                      children: <Widget>[
+                                        const Text(
                                           '샴푸 유형 : ',
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text(
-                                          "지성",
-                                          style: TextStyle(fontSize: 15.0),
+                                          getHairTypeStringByIntegerValue(widget.memberManager.memberInfo.getHairType!),
+                                          style: const TextStyle(fontSize: 15.0),
                                         ),
                                       ],
                                     ),
                                     Row(
-                                      children: const <Widget>[
-                                        Text(
-                                          '평점 : ',
+                                      children: <Widget>[
+                                        const Text(
+                                          '브랜드 : ',
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 15),
                                         ),
-                                        Icon(Icons.star_outlined,
-                                          color: Colors.yellow,),
                                         Text(
-                                          '(5/5)',
-                                          style: TextStyle(fontSize: 15),
+                                          item.getBrand!,
+                                          style: const TextStyle(fontSize: 15),
                                         )
                                       ],
                                     ),
                                     Row(
-                                      children: const <Widget>[
-                                        Text(
+                                      children: <Widget>[
+                                        const Text(
                                           '가격 : ',
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 15),
                                         ),
                                         Text(
-                                          '10,000원',
-                                          style: TextStyle(fontSize: 15),
+                                          item.getLPrice!.toString() + "원",
+                                          style: const TextStyle(fontSize: 15),
                                         )
                                       ],
                                     ),
@@ -164,10 +180,12 @@ class _ShampooPageState extends State<ShampooPage> {
                                       alignment: Alignment.bottomRight,
                                       child: Row(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.end,
+                                            MainAxisAlignment.end,
                                         children: <Widget>[
                                           TextButton(
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                _searchShampooByURL(item.getPurchaseLink!);
+                                              },
                                               child: const Text("구매 페이지로 연결")),
                                         ],
                                       ),
@@ -189,5 +207,35 @@ class _ShampooPageState extends State<ShampooPage> {
             },
           ),
         ));
+  }
+
+  _searchShampooByURL(String url) async {
+    // url = url.replaceFirst("https://", "https://m");
+    log(url);
+    String encodedUrl = Uri.encodeFull(url);
+    if (await canLaunch(encodedUrl)) {
+      await launch(encodedUrl);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("접속이 원활하지 않습니다."),)
+      );
+    }
+  }
+
+  _resizeShampooName(String shampooName) {
+    if (shampooName.length > 38){
+      return shampooName.substring(0, 38) + "...";
+    } else {
+      return shampooName;
+    }
+  }
+
+  String getHairTypeStringByIntegerValue(int hairType){
+    if (hairType == 0){
+      return "건성";
+    } else if (hairType == 1){
+      return "지성";
+    }
+    return "";
   }
 }

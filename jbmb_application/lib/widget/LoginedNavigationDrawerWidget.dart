@@ -12,11 +12,14 @@ import 'package:jbmb_application/service/JBMBDiagnoseLogManager.dart';
 import 'package:jbmb_application/service/JBMBLoginManager.dart';
 import 'package:jbmb_application/service/JBMBMemberManager.dart';
 
+import '../object/JBMBHairTypeUpdateRequestObject.dart';
 import '../screen/CommunityPage.dart';
 import '../screen/Home.dart';
 import '../screen/JoinPage.dart';
 import '../service/JBMBDiagnoseManager.dart';
+import '../service/JBMBShampooManager.dart';
 import '../service/JBMBSurveyManager.dart';
+import 'JBMBBigButton.dart';
 
 /// 2020.03.07 이승훈 개발
 class LoginedNavigationDrawerWidget extends StatelessWidget {
@@ -137,7 +140,8 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
             JBMBDiagnoseManager(surveyManager);
 
         int retval = await diagnoseManager.createNewDiagnosis(
-            memberManager.memberInfo, await memberManager.jwtManager.getToken());
+            memberManager.memberInfo,
+            await memberManager.jwtManager.getToken());
 
         if (retval != -1) {
           Navigator.of(context).push(MaterialPageRoute(
@@ -168,12 +172,21 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
         ));
         break;
       case 3:
-        // shampoo
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ShampooPage(
-            memberManager: memberManager,
-          ),
-        ));
+        // TODO : shampoo, check hair type
+        int? hasHairType = memberManager.memberInfo.getHairType;
+        if (hasHairType == null) {
+          Navigator.of(context).pop();
+          showModalBottomSheet(
+              context: context, builder: (context) => buildSheet(context));
+        } else {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ShampooPage(
+              memberManager: memberManager,
+              shampooManager:
+              JBMBShampooManager(memberManager.memberInfo.getHairType),
+            ),
+          ));
+        }
         break;
       case 4:
         // hospital
@@ -199,4 +212,103 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
         break;
     }
   }
+
+  /// 샴푸 bottomSheet 생성하는 메소드
+  Widget buildSheet(BuildContext context) => Container(
+      padding: const EdgeInsets.all(8),
+      margin: const EdgeInsets.all(8),
+      child: Column(
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "당신의\n두피 타입을\n선택해주세요.\n",
+                style: TextStyle(
+                    fontSize: 23,
+                    color: Colors.black54,
+                    fontFamily: 'NanumGothic-Regular',
+                    fontWeight: FontWeight.bold),
+              ),
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.info_outline),
+                    tooltip:
+                    '\n일반적으로 두피 역시 피부이기 때문에 \n건성 피부는 건성 두피, 지성 피부는 지성 두피를\n 가질 확률이 높습니다.\n'
+                        '건성 두피는 각질과 비듬이 많은 두피,\n지성 두피는 유분이 많은 두피를 의미합니다.\n'
+                        '샴푸를 한 지 반나절 내에 기름지고 축 가라앉는다면 지성,\n 비듬이나 각질 가루가 많이 떨어지는 두피는 건성입니다.\n',
+                  ),
+                  const Text("지성 두피와 건성 두피에 대해 \n알고 싶다면 버튼을 꾹 누르세요")
+                ],
+              ),
+              const Divider(
+                thickness: 2,
+              ),
+            ],
+          ),
+          Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  JBMBBigButton(
+                    buttonText: '지성',
+                    onPressed: () async {
+                      JBMBHairTypeUpdateRequestObject request =
+                      JBMBHairTypeUpdateRequestObject(
+                          memberManager.memberInfo.getID, 1);
+                      bool retval =
+                      await memberManager.updateHairType(request);
+                      if (retval) {
+                        // success to save hair type
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ShampooPage(
+                            memberManager: memberManager,
+                            shampooManager: JBMBShampooManager(memberManager.memberInfo.getHairType),
+                          ),
+                        ));
+                      } else {
+                        // failed to save hair type
+                        Navigator.of(context).pop();
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text(
+                                "서버가 원활하지 않아 두피 유형이 저장되지 않았습니다.\n잠시 후에 다시 시도해주세요")));
+                      }
+                    },
+                  ),
+                  JBMBBigButton(
+                    buttonText: '건성',
+                    backgroundColor: Colors.white,
+                    elementColor: Colors.black45,
+                    onPressed: () async {
+                      // TODO : save hair type codes
+                      JBMBHairTypeUpdateRequestObject request =
+                      JBMBHairTypeUpdateRequestObject(
+                          memberManager.memberInfo.getID, 0);
+                      bool retval =
+                      await memberManager.updateHairType(request);
+                      if (retval) {
+                        // success to save hair type
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ShampooPage(
+                            memberManager: memberManager,
+                            shampooManager: JBMBShampooManager(memberManager.memberInfo.getHairType),
+                          ),
+                        ));
+                      } else {
+                        // failed to save hair type
+                        Navigator.of(context).pop();
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text(
+                                "서버가 원활하지 않아 두피 유형이 저장되지 않았습니다.\n잠시 후에 다시 시도해주세요")));
+                      }
+                    },
+                  )
+                ],
+              ))
+        ],
+      ));
 }
