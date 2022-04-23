@@ -371,6 +371,7 @@ public class DiagnosisService {
         List<GetDataFromDiagnosisResponse.Log> diagnosisList = new ArrayList<>();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd a HH:mm:ss");
         for(DiagnosisLog d : logList){
+            if(d.getActive()==0)continue;
             diagnosisList.add(GetDataFromDiagnosisResponse.Log.builder().diagnosisID(d.getId()).date(simpleDateFormat.format(d.getDate())).build());
         }
 
