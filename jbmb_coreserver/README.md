@@ -34,7 +34,7 @@
    │  │               │   ├── domain
    │  │               │   │   ├── DiagnosisImage.java
    │  │               │   │   ├── DiagnosisLog.java
-   │  │               │   │   ├── DiagnosisResultImage.java
+   │  │               │   │   ├── DiagnosisResult.java
    │  │               │   │   └── DiagnosisSurvey.java
    │  │               │   ├── dto
    │  │               │   │   │── RequestDTO
