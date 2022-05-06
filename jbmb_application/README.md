@@ -3,42 +3,54 @@
 jbmb_application    
 └── lib    
    ├── object    
-   │   ├── JBMBRegister.dart    
-   │   ├── JBMBRegisterResult.dart    
-   │   ├── JBMBLogin.dart    
-   │   ├── JBMBLoginResult.dart    
-   │   ├── JBMBSurvey.dart    
-   │   ├── JBMBDiagnosisBySurveyResult.dart    
-   │   ├── JBMBDiagnosisByImageResult.dart    
+   │   ├── JBMBDefaultResponseObject.dart    
+   │   ├── JBMBDiagnosisLogsObject.dart    
+   │   ├── JBMBDiagnosisRequestObject.dart    
+   │   ├── JBMBDiagnosisResponseObject.dart    
+   │   ├── JBMBHairTypeUpdateRequestObject.dart    
+   │   ├── JBMBLoginRequestObject.dart    
+   │   ├── JBMBLoginResponseObject.dart    
+   │   ├── JBMBMemberInfo.dart    
+   │   ├── JBMBRegisterResponse.dart    
+   │   ├── JBMBSurveyRequestObject.dart    
+   │   ├── JBMBShampooRequestObject.dart    
+   │   ├── JBMBShampooResponseObject.dart    
+   │   └── JBMBSurveyResponseObject.dart    
    ├── screen    
-   │   ├── Home.dart    
-   │   ├── LoginPage.dart    
-   │   ├── JoinPage.dart    
-   │   ├── InfoPage.dart    
-   │   ├── DiagnoseAlertPage.dart    
-   │   ├── SurveyPage1~10.dart    
-   │   ├── UploadImagePage.dart    
-   │   ├── ResultPage.dart    
-   │   ├── ResultListPage.dart    
-   │   ├── HospitalPage.dart    
-   │   ├── ShampooPage.dart    
    │   ├── CommunityPage.dart    
-   │   └── CommunityPostPage.dart    
+   │   ├── DiagnoseAlertPage.dart  
+   │   ├── DiagnoseLogPage.dart  
+   │   ├── DiagnoseResultPage.dart  
+   │   ├── Home.dart      
+   │   ├── HospitalPage.dart    
+   │   ├── InfoPage.dart    
+   │   ├── JoinPage.dart    
+   │   ├── LoginedHome.dart  
+   │   ├── LoginPage.dart  
+   │   ├── ShampooPage.dart    
+   │   ├── SurveyCustomPage.dart  
+   │   ├── SurveyPages.dart  
+   │   ├── UploadImageGuidePage.dart  
+   │   └── UploadImagePage.dart    
    ├── service    
-   │   ├── JBMBRegisterManager.dart    
-   │   ├── JBMBLoginManager.dart    
-   │   ├── JBMBSurveyManager.dart    
-   │   ├── JBMBImageUploadManager.dart    
+   │   ├── JBMBDiagnoseLogManager.dart    
    │   ├── JBMBDiagnoseManager.dart    
+   │   ├── JBMBJwtManager.dart    
+   │   ├── JBMBLoginManager.dart    
+   │   ├── JBMBMemberManager.dart    
+   │   ├── JBMBRegisterManager.dart    
    │   ├── JBMBShampooManager.dart    
-   │   ├── JBMBHospitalManager.dart    
-   │   └── JBMBCommunityManager.dart    
+   │   └── JBMBSurveyManager.dart      
    ├── widget    
+   │   ├── JBMBAppBars.dart    
+   │   ├── JBMBAppRoundImage.dart    
+   │   ├── JBMBBigButton.dart  
    │   ├── JBMBBigLogo.dart    
-   │   ├── JBMBOutlinedButton.dart    
-   │   ├── JBMBBigButton.dart    
+   │   ├── JBMBDescription.dart  
+   │   ├── JBMBOutlinedButton.dart 
    │   ├── JBMBTextField.dart    
-   │   ├── MainDescription.dart    
+   │   ├── JBMBUploadedImage.dart  
+   │   ├── LoginedNavigationDrawerWidget.dart  
    │   └── NavigationDrawerWidget.dart    
    └── main.dart    
 ```

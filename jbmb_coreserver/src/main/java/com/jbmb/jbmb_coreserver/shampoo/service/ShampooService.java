@@ -77,6 +77,8 @@ public class ShampooService {
                     }).retrieve().bodyToMono(Response.SearchShampooResponse.class)
                     .block();
             for (Response.SearchShampooResponse.item item : searchShampooResponse.getItems()) {
+                item.setLink(item.getLink().replaceAll("//search", "//msearch"));
+                item.setLink(item.getLink().replaceAll("gate.nhn[?]id=", "product/"));
                 item.setTitle(item.getTitle().replaceAll("<[^>]*>", ""));
             }
         }catch (WebClientResponseException e){
