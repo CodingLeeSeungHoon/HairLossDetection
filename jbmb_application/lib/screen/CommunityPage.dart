@@ -1,10 +1,12 @@
 import "package:flutter/material.dart";
-import 'package:jbmb_application/object/JBMBMemberInfo.dart';
+import 'package:jbmb_application/service/JBMBCommunityManager.dart';
 import 'package:jbmb_application/widget/JBMBOutlinedButton.dart';
+import 'package:jbmb_application/object/JBMBCommunityResponseObject.dart';
 
 import '../service/JBMBMemberManager.dart';
 import '../widget/JBMBAppBars.dart';
 import '../widget/LoginedNavigationDrawerWidget.dart';
+import 'CommunityPostDetailPage.dart';
 
 /// 2022.03.08 이승훈
 /// JBMB 커뮤니티 페이지
@@ -12,8 +14,9 @@ import '../widget/LoginedNavigationDrawerWidget.dart';
 /// JBMBCommunityManager를 통해 DB상의 게시글을 불러옴.
 class CommunityPage extends StatefulWidget {
   final JBMBMemberManager memberManager;
+  final JBMBCommunityManager communityManager;
 
-  const CommunityPage({Key? key, required this.memberManager})
+  const CommunityPage({Key? key, required this.memberManager, required this.communityManager})
       : super(key: key);
 
   @override
@@ -23,16 +26,39 @@ class CommunityPage extends StatefulWidget {
 class _CommunityPageState extends State<CommunityPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final controller = ScrollController();
-  List<String> items = List.generate(15, (index) => '글 ${index + 1}');
+  List<JBMBCommunityItems>? communityItems;
 
   @override
   void initState() {
     super.initState();
+    _initPostList();
     controller.addListener(() {
       if (controller.position.maxScrollExtent == controller.offset) {
         fetch();
       }
     });
+  }
+
+  /// initiate community list from api
+  _initPostList() async{
+    String tempToken = await widget.memberManager.jwtManager.getToken();
+    JBMBCommunityResponseObject? response = await widget.communityManager.getPostList(tempToken);
+    if (response != null){
+      setState(() {
+        communityItems = response.getPostItemsList;
+      });
+    }
+  }
+
+  /// initiate community list from api
+  _addPostList() async{
+    String tempToken = await widget.memberManager.jwtManager.getToken();
+    JBMBCommunityResponseObject? response = await widget.communityManager.getPostList(tempToken);
+    if (response != null){
+      setState(() {
+        communityItems?.addAll(response.getPostItemsList!);
+      });
+    }
   }
 
   @override
@@ -43,7 +69,7 @@ class _CommunityPageState extends State<CommunityPage> {
 
   Future fetch() async {
     setState(() {
-      items.addAll(['글 A', '글 B', '글 C', '글 D']);
+      _addPostList();
     });
   }
 
@@ -84,10 +110,10 @@ class _CommunityPageState extends State<CommunityPage> {
               child: ListView.separated(
                 controller: controller,
                 padding: const EdgeInsets.all(8),
-                itemCount: items.length + 1,
+                itemCount: communityItems==null ? 0 : communityItems!.length + 1,
                 itemBuilder: (context, index) {
-                  if (index < items.length) {
-                    final item = items[index];
+                  if (communityItems != null && index < communityItems!.length) {
+                    var item = communityItems![index];
                     return Container(
                       height: 60,
                       child: ListTile(
@@ -95,12 +121,32 @@ class _CommunityPageState extends State<CommunityPage> {
                           Icons.library_books_outlined,
                           color: Colors.grey,
                         ),
-                        title: Text(item),
-                        subtitle: Text("\n2022-03-17 23:37:29"),
+                        title: Text(item.getTitle!),
+                        subtitle: Text(item.getAuthor! + "\n" + item.getDate!),
                         trailing: const Icon(Icons.double_arrow_rounded,
                             color: Colors.grey),
                         style: ListTileStyle.list,
-                        onTap: () {},
+                        onTap: () async {
+                          String tempToken = await widget.memberManager.jwtManager.getToken();
+                          JBMBPostDetailResponseObject? object = await widget.communityManager.getPostDetail(
+                              tempToken, item.getPostId);
+                          if (object != null) {
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                pageBuilder: (context, animation1,
+                                    animation2) =>
+                                    CommunityPostDetailPage(
+                                        memberManager: widget.memberManager,
+                                        communityManager: JBMBCommunityManager(),
+                                        postDetailResponseObject: object,
+                                        postID: item.getPostId!),
+                                transitionDuration: Duration.zero,
+                                reverseTransitionDuration: Duration.zero,
+                              ),
+                            );
+                          }
+                        },
                       ),
                     );
                   } else {
