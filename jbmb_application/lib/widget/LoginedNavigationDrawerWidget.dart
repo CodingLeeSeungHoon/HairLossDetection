@@ -16,6 +16,7 @@ import '../object/JBMBHairTypeUpdateRequestObject.dart';
 import '../screen/CommunityPage.dart';
 import '../screen/Home.dart';
 import '../screen/JoinPage.dart';
+import '../service/JBMBCommunityManager.dart';
 import '../service/JBMBDiagnoseManager.dart';
 import '../service/JBMBShampooManager.dart';
 import '../service/JBMBSurveyManager.dart';
@@ -201,6 +202,7 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => CommunityPage(
             memberManager: memberManager,
+            communityManager: JBMBCommunityManager(),
           ),
         ));
         break;

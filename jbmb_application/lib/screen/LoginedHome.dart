@@ -6,6 +6,7 @@ import 'package:jbmb_application/screen/CommunityPage.dart';
 import 'package:jbmb_application/screen/DiagnosisAlertPage.dart';
 import 'package:jbmb_application/screen/HospitalPage.dart';
 import 'package:jbmb_application/screen/ShampooPage.dart';
+import 'package:jbmb_application/service/JBMBCommunityManager.dart';
 import 'package:jbmb_application/service/JBMBDiagnoseManager.dart';
 import 'package:jbmb_application/service/JBMBShampooManager.dart';
 import 'package:jbmb_application/service/JBMBSurveyManager.dart';
@@ -246,6 +247,7 @@ class _LoginedHomeState extends State<LoginedHome> {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => CommunityPage(
             memberManager: widget.memberManager,
+            communityManager: JBMBCommunityManager(),
           ),
         ));
         break;
