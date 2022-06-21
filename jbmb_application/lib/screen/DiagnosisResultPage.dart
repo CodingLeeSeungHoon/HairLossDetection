@@ -241,21 +241,21 @@ class _DiagnosisResultPageState extends State<DiagnosisResultPage> {
                             DataCell(
                               Center(
                                   child: Text(
-                                '${widget.resultObject.getPercent![0] * 100}%',
+                                '${widget.resultObject.getPercent![0]}%',
                                 textAlign: TextAlign.center,
                               )),
                             ),
                             DataCell(
                               Center(
                                   child: Text(
-                                '${widget.resultObject.getPercent![1] * 100}%',
+                                '${widget.resultObject.getPercent![1]}%',
                                 textAlign: TextAlign.center,
                               )),
                             ),
                             DataCell(
                               Center(
                                   child: Text(
-                                '${widget.resultObject.getPercent![2] * 100}%',
+                                '${widget.resultObject.getPercent![2]}%',
                                 textAlign: TextAlign.center,
                               )),
                             ),
