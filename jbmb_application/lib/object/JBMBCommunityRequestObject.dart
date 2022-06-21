@@ -46,3 +46,21 @@ class JBMBEditingRequestObject{
         'text': text
       };
 }
+
+/// 2022.06.22 이승훈
+/// 커뮤니티 댓글 요청 오브젝트
+class JBMBCommentRequestObject{
+  String userId;
+  int postId;
+  String comment;
+
+  JBMBCommentRequestObject(this.userId, this.postId, this.comment);
+
+  // toJson
+  Map<String, dynamic> toJson() =>
+      {
+        'userId': userId,
+        'postId': postId,
+        'comment': comment
+      };
+}

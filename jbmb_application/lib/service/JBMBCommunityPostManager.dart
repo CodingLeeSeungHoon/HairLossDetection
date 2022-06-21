@@ -8,7 +8,7 @@ import 'package:jbmb_application/object/JBMBDefaultResponseObject.dart';
 import 'package:jbmb_application/service/JBMBMemberManager.dart';
 
 /// 2022.06.20 이승훈
-/// 커뮤니티 글 게시용 매니저
+/// 커뮤니티 글, 댓글 게시용 매니저
 class JBMBCommunityPostManager {
   JBMBMemberManager? memberManager;
 
@@ -110,6 +110,50 @@ class JBMBCommunityPostManager {
       log(
           "[JBMBCommunityPostManager] API Response StatusCode is not 200, throw exception (_tryToEditPost)");
       throw Exception('[Error:Server] 서버 측 오류로 글 수정에 실패했습니다');
+    }
+  }
+
+  /// 2022.06.22 이승훈
+  /// public method
+  /// 포스트에 댓글 남기기
+  commentInPost(String jwtToken, String userID, int postID, String comment) async {
+    try {
+      JBMBDefaultResponseObject response = await _tryToComment(jwtToken, JBMBCommentRequestObject(userID, postID, comment));
+      if (response.getResultCode == 0){
+        // 성공
+        return true;
+      } else {
+        // 실패
+        log('[JBMBCommunityPostManager] returned ResultCode is Failure Code');
+        return false;
+      }
+    } catch (e) {
+      log('[JBMBCommunityPostManager] caught Exception : $e');
+      return false;
+    }
+  }
+
+  /// 2022.06.22 이승훈
+  /// private method
+  /// 글 수정 API
+  Future<JBMBDefaultResponseObject> _tryToComment (String jwtToken, JBMBCommentRequestObject commentRequestObject) async {
+    final response = await http.post(
+      Uri.parse('http://jebalmobal.site/user/board/contents/comment'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'X-AUTH-TOKEN': jwtToken
+      },
+      body: jsonEncode(commentRequestObject.toJson()),
+    );
+
+    if (response.statusCode / 100 == 2) {
+      log("[JBMBCommunityPostManager] API Response StatusCode 200 (_tryToComment)");
+      return JBMBDefaultResponseObject.fromJson(
+          jsonDecode(response.body));
+    } else {
+      log(
+          "[JBMBCommunityPostManager] API Response StatusCode is not 200, throw exception (_tryToComment)");
+      throw Exception('[Error:Server] 서버 측 오류로 댓글 달기에 실패했습니다');
     }
   }
 }

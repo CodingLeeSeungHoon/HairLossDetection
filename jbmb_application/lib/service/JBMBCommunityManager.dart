@@ -117,4 +117,39 @@ class JBMBCommunityManager{
       throw Exception('[Error:Server] 서버 측 오류로 글 삭제에 실패했습니다.');
     }
   }
+
+  /// 2022.06.22 이승훈
+  /// 댓글 삭제 public method
+  deleteComment(String jwtToken, int commentId) async {
+    try{
+      JBMBDefaultResponseObject response = await _tryDeleteComment(jwtToken, commentId);
+      return response;
+    } catch (e){
+      log('[JBMBCommunityManager] caught Exception : $e');
+      return null;
+    }
+  }
+
+  /// 2022.06.22 이승훈
+  /// 댓글 삭제 private method with API
+  Future<JBMBDefaultResponseObject> _tryDeleteComment(String jwtToken, int commentId) async {
+    final response = await http.post(
+      Uri.parse('http://jebalmobal.site/user/board/contents/comment/delete'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'X-AUTH-TOKEN': jwtToken
+      },
+      body: jsonEncode({'commentId': commentId}),
+    );
+
+    if (response.statusCode / 100 == 2) {
+      log("[JBMBCommunityManager] API Response StatusCode 200");
+      return JBMBDefaultResponseObject.fromJson(
+          jsonDecode(utf8.decode(response.bodyBytes)));
+    } else {
+      log(
+          "[JBMBCommunityManager] API Response StatusCode is not 200, throw exception");
+      throw Exception('[Error:Server] 서버 측 오류로 댓글 삭제에 실패했습니다.');
+    }
+  }
 }

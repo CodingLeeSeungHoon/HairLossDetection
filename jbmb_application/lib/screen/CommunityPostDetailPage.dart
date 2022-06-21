@@ -88,6 +88,9 @@ class _CommunityPostDetailPageState extends State<CommunityPostDetailPage> {
     //    widget.postDetailResponseObject.getCommentItemsList;
 
     TextEditingController commentController = TextEditingController();
+    String editComment = "";
+    JBMBCommunityPostManager postManager =
+        JBMBCommunityPostManager(widget.memberManager);
 
     return Scaffold(
         key: _scaffoldKey,
@@ -110,7 +113,29 @@ class _CommunityPostDetailPageState extends State<CommunityPostDetailPage> {
                     obsecure: false,
                     hintText: "눌러서 댓글을 작성하세요!"),
               ),
-              IconButton(onPressed: () {}, icon: Icon(Icons.send))
+              IconButton(
+                  onPressed: () async {
+                    setState(() {
+                      editComment = commentController.text;
+                    });
+                    String tempToken =
+                        await widget.memberManager.jwtManager.getToken();
+                    bool commentResponse = await postManager.commentInPost(
+                        tempToken,
+                        widget.memberManager.memberInfo.getID!,
+                        widget.postID,
+                        editComment);
+                    if (commentResponse) {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => super.widget));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text("서버 측 오류로 댓글을 달지 못했습니다!")));
+                    }
+                  },
+                  icon: const Icon(Icons.send))
             ],
           ),
         ),
@@ -243,6 +268,76 @@ class _CommunityPostDetailPageState extends State<CommunityPostDetailPage> {
                   const Divider(
                     thickness: 1,
                   ),
+                  if (commentList != null)
+                    SizedBox(
+                      height: phoneHeight * 0.55,
+                      child: ListView.builder(
+                          itemCount:
+                              commentList == null ? 0 : commentList!.length + 1,
+                          itemBuilder: (context, index) {
+                            if (index < commentList!.length) {
+                              final item = commentList![index];
+                              return Card(
+                                clipBehavior: Clip.antiAlias,
+                                child: Container(
+                                  padding: const EdgeInsets.all(11),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        item.getId!,
+                                        style: const TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        item.getDate!,
+                                        style:
+                                            const TextStyle(color: Colors.grey),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(item.getComment!),
+                                      if (item.getId! ==
+                                          widget.memberManager.memberInfo.getID)
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            SizedBox(
+                                              width: 30,
+                                              child: IconButton(
+                                                onPressed: () async {
+                                                  // 댓글 삭제 버튼
+                                                  String tempToken = await widget.memberManager.jwtManager.getToken();
+                                                  JBMBDefaultResponseObject? response = await widget.communityManager.deleteComment(tempToken, item.getCommentId!);
+                                                  if (response == null){
+                                                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("댓글 삭제에 실패했습니다")));
+                                                  }
+                                                },
+                                                icon: const Icon(Icons.cancel),
+                                                color: Colors.red[300],
+                                                iconSize: 15,
+                                                splashColor: Colors.red[100],
+                                                splashRadius: 15,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                    ],
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return const SizedBox(
+                                height: 0,
+                              );
+                            }
+                          }),
+                    ),
                   SizedBox(
                     height: phoneHeight * 0.07,
                   )
