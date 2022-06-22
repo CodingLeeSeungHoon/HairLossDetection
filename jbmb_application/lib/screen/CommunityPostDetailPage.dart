@@ -9,6 +9,7 @@ import '../service/JBMBMemberManager.dart';
 import '../widget/JBMBAppBars.dart';
 import '../widget/LoginedNavigationDrawerWidget.dart';
 import 'CommunityCreatingPostPage.dart';
+import 'CommunityPage.dart';
 
 /// 2022.06.15 이한범
 /// JBMB 커뮤니티 게시글 상세 내역을 보여줌
@@ -126,10 +127,24 @@ class _CommunityPostDetailPageState extends State<CommunityPostDetailPage> {
                         widget.postID,
                         editComment);
                     if (commentResponse) {
-                      Navigator.pushReplacement(
+                      JBMBPostDetailResponseObject? object = await widget
+                          .communityManager
+                          .getPostDetail(tempToken, widget.postID);
+                      if (object != null) {
+                        Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => super.widget));
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation1, animation2) =>
+                                CommunityPostDetailPage(
+                                    memberManager: widget.memberManager,
+                                    communityManager: widget.communityManager,
+                                    postDetailResponseObject: object,
+                                    postID: widget.postID),
+                            transitionDuration: Duration.zero,
+                            reverseTransitionDuration: Duration.zero,
+                          ),
+                        );
+                      }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text("서버 측 오류로 댓글을 달지 못했습니다!")));
@@ -204,8 +219,22 @@ class _CommunityPostDetailPageState extends State<CommunityPostDetailPage> {
 
                                   if (response != null &&
                                       response.getResultCode == 0) {
-                                    // TODO : 삭제 후 화면 리프레쉬 안 될까..?
                                     Navigator.of(context).pop();
+                                    Navigator.pushReplacement(
+                                      context,
+                                      PageRouteBuilder(
+                                        pageBuilder:
+                                            (context, animation1, animation2) =>
+                                                CommunityPage(
+                                                    memberManager:
+                                                        widget.memberManager,
+                                                    communityManager:
+                                                        JBMBCommunityManager()),
+                                        transitionDuration: Duration.zero,
+                                        reverseTransitionDuration:
+                                            Duration.zero,
+                                      ),
+                                    );
                                   } else {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(const SnackBar(
@@ -312,10 +341,56 @@ class _CommunityPostDetailPageState extends State<CommunityPostDetailPage> {
                                               child: IconButton(
                                                 onPressed: () async {
                                                   // 댓글 삭제 버튼
-                                                  String tempToken = await widget.memberManager.jwtManager.getToken();
-                                                  JBMBDefaultResponseObject? response = await widget.communityManager.deleteComment(tempToken, item.getCommentId!);
-                                                  if (response == null){
-                                                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("댓글 삭제에 실패했습니다")));
+                                                  String tempToken =
+                                                      await widget.memberManager
+                                                          .jwtManager
+                                                          .getToken();
+                                                  JBMBDefaultResponseObject?
+                                                      response = await widget
+                                                          .communityManager
+                                                          .deleteComment(
+                                                              tempToken,
+                                                              item.getCommentId!);
+                                                  if (response == null) {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                            const SnackBar(
+                                                                content: Text(
+                                                                    "댓글 삭제에 실패했습니다")));
+                                                  } else {
+                                                    // Navigator.of(context).pop();
+                                                    JBMBPostDetailResponseObject?
+                                                        object = await widget
+                                                            .communityManager
+                                                            .getPostDetail(
+                                                                tempToken,
+                                                                widget.postID);
+                                                    if (object != null) {
+                                                      Navigator.pushReplacement(
+                                                        context,
+                                                        PageRouteBuilder(
+                                                          pageBuilder: (context,
+                                                                  animation1,
+                                                                  animation2) =>
+                                                              CommunityPostDetailPage(
+                                                                  memberManager:
+                                                                      widget
+                                                                          .memberManager,
+                                                                  communityManager:
+                                                                      widget
+                                                                          .communityManager,
+                                                                  postDetailResponseObject:
+                                                                      object,
+                                                                  postID: widget
+                                                                      .postID),
+                                                          transitionDuration:
+                                                              Duration.zero,
+                                                          reverseTransitionDuration:
+                                                              Duration.zero,
+                                                        ),
+                                                      );
+                                                    }
                                                   }
                                                 },
                                                 icon: const Icon(Icons.cancel),

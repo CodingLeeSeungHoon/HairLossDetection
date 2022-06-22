@@ -1,10 +1,12 @@
 import "package:flutter/material.dart";
+import 'package:jbmb_application/service/JBMBCommunityManager.dart';
 import 'package:jbmb_application/service/JBMBCommunityPostManager.dart';
 import 'package:jbmb_application/widget/JBMBOutlinedButton.dart';
 
 import '../service/JBMBMemberManager.dart';
 import '../widget/JBMBAppBars.dart';
 import '../widget/LoginedNavigationDrawerWidget.dart';
+import 'CommunityPage.dart';
 
 /// 2022.06.20 이승훈
 /// JBMB 커뮤니티 게시글 작성 페이지
@@ -64,7 +66,7 @@ class _CommunityCreatingPostPageState extends State<CommunityCreatingPostPage> {
       appBar: JBMBTransparentLogoAppbar(
         onPressedCancel: () {
           Navigator.of(context).pop();
-        },
+        }
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -125,6 +127,11 @@ class _CommunityCreatingPostPageState extends State<CommunityCreatingPostPage> {
                             text);
                         if (uploadResponse == true){
                           Navigator.of(context).pop();
+                          Navigator.pushReplacement(context, PageRouteBuilder(
+                            pageBuilder: (context, animation1, animation2) => CommunityPage(memberManager: widget.memberManager, communityManager: JBMBCommunityManager()),
+                            transitionDuration: Duration.zero,
+                            reverseTransitionDuration: Duration.zero,
+                          ),);
                           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                             content: Text("게시글 업로드에 성공했습니다!"),
                           ));
@@ -140,6 +147,11 @@ class _CommunityCreatingPostPageState extends State<CommunityCreatingPostPage> {
                         bool editResponse = await widget.postManager.editPostInCommunity(tempToken, widget.postId!, title, text);
                         if (editResponse == true){
                           Navigator.of(context).pop();
+                          Navigator.pushReplacement(context, PageRouteBuilder(
+                            pageBuilder: (context, animation1, animation2) => CommunityPage(memberManager: widget.memberManager, communityManager: JBMBCommunityManager()),
+                            transitionDuration: Duration.zero,
+                            reverseTransitionDuration: Duration.zero,
+                          ),);
                           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                             content: Text("게시글 수정에 성공했습니다!"),
                           ));
