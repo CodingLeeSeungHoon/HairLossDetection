@@ -126,7 +126,9 @@ class _DiagnosisLogPageState extends State<DiagnosisLogPage> {
                                 DiagnosisResultPage(
                                     memberManager: widget.memberManager,
                                     way: 2,
-                                    resultObject: object),
+                                    resultObject: object,
+                                    diagnosisID: item.getDiagnosisID,
+                                ),
                             transitionDuration: Duration.zero,
                             reverseTransitionDuration: Duration.zero,
                           ),

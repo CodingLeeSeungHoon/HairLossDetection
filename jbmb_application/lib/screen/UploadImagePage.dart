@@ -34,7 +34,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
     return WillPopScope(
         child: Scaffold(
           backgroundColor: Colors.white,
-          appBar: JBMBAppBarWithOutMenu(),
+          appBar: JBMBAppBarWithOutMenuAndBackButton(),
           body: Container(
               alignment: Alignment.center,
               padding: const EdgeInsets.all(8),
@@ -100,8 +100,7 @@ class _UploadImagePageState extends State<UploadImagePage> {
                               alignment: Alignment.center,
                               child: Column(
                                 children: [
-                                  const Text(
-                                      "결과를 분석 및 저장 중 입니다."),
+                                  const Text("결과를 분석 및 저장 중 입니다."),
                                   const Text("최대 20초정도 소요될 수 있습니다.\n"),
                                   StepIndicator(
                                     currentStep: 1,
@@ -143,6 +142,8 @@ class _UploadImagePageState extends State<UploadImagePage> {
                                           resultObject: object[0]
                                               as JBMBDiagnosisResultResponseObject,
                                           way: 1,
+                                          diagnosisID: widget
+                                              .diagnoseManager.getDiagnosisID!,
                                         ),
                                         transitionDuration: Duration.zero,
                                         reverseTransitionDuration:
@@ -224,41 +225,38 @@ class _UploadImagePageState extends State<UploadImagePage> {
   doActionByErrorCode(BuildContext context, int errorCode) {
     switch (errorCode) {
       case 1:
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("이미지 제출에 실패했습니다.\n처음부터 다시 진단을 진행해주세요.")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("이미지 제출에 실패했습니다.\n처음부터 다시 진단을 진행해주세요.")));
         Navigator.pushReplacement(
           context,
           PageRouteBuilder(
-            pageBuilder: (context, animation1, animation2) =>
-                LoginedHome(
-                  memberManager: widget.memberManager,
-                ),
+            pageBuilder: (context, animation1, animation2) => LoginedHome(
+              memberManager: widget.memberManager,
+            ),
           ),
         );
         break;
       case 2:
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("분석에 실패했습니다.\n처음부터 다시 진단을 진행해주세요.")));
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("분석에 실패했습니다.\n처음부터 다시 진단을 진행해주세요.")));
         Navigator.pushReplacement(
           context,
           PageRouteBuilder(
-            pageBuilder: (context, animation1, animation2) =>
-                LoginedHome(
-                  memberManager: widget.memberManager,
-                ),
+            pageBuilder: (context, animation1, animation2) => LoginedHome(
+              memberManager: widget.memberManager,
+            ),
           ),
         );
         break;
       case 3:
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("데이터 불러오기에 실패했습니다. 진단 로그 보기에서 다시 확인하세요.")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("데이터 불러오기에 실패했습니다. 진단 로그 보기에서 다시 확인하세요.")));
         Navigator.pushReplacement(
           context,
           PageRouteBuilder(
-            pageBuilder: (context, animation1, animation2) =>
-                LoginedHome(
-                  memberManager: widget.memberManager,
-                ),
+            pageBuilder: (context, animation1, animation2) => LoginedHome(
+              memberManager: widget.memberManager,
+            ),
           ),
         );
         break;
