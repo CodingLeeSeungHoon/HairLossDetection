@@ -32,7 +32,7 @@ public class JwtTokenProvider {
 
     private final UserDetailsService userDetailsService;
     private final RedisTemplate redisTemplate;
-    
+
     // 객체 초기화, secretKey를 Base64로 인코딩한다.
     @PostConstruct
     protected void init() {
@@ -79,7 +79,7 @@ public class JwtTokenProvider {
         }
     }
 
-    public Date getExpirationDate(String jwtToken){
+    public Date getExpirationDate(String jwtToken) {
         Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
         return claims.getBody().getExpiration();
     }
@@ -93,8 +93,8 @@ public class JwtTokenProvider {
                 return 1;
             }
             return 0;
-        } catch(
-        Exception e) {
+        } catch (
+                Exception e) {
             log.info("token is not valid");
             return 2;
         }
