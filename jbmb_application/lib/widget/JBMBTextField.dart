@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class JBMBTextField extends StatelessWidget {
   final bool obsecure;
-  final String labelText;
+  final String? labelText;
   final String? hintText;
   final TextInputType textInputType;
   final TextEditingController? controller;
@@ -10,7 +10,7 @@ class JBMBTextField extends StatelessWidget {
   const JBMBTextField({
     Key? key,
     required this.obsecure,
-    required this.labelText,
+    this.labelText,
     this.hintText,
     this.textInputType = TextInputType.text,
     this.controller
