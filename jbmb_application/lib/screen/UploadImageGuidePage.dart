@@ -27,7 +27,7 @@ class UploadImageGuidePage extends StatelessWidget {
     return WillPopScope(
         child: Scaffold(
           backgroundColor: Colors.white,
-          appBar: JBMBAppBarWithOutMenu(),
+          appBar: JBMBAppBarWithOutMenuAndBackButton(),
           body: Container(
             alignment: Alignment.center,
             padding: const EdgeInsets.all(8),

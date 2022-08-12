@@ -11,7 +11,7 @@ import 'package:jbmb_application/service/JBMBMemberManager.dart';
 /// 설문조사 버튼 누른 후 모션 메소드화 (애니메이션 제거, 페이지 변환)
 class JBMBSurveyCustomMotion {
   anyButtonPressed(BuildContext context, StatefulWidget widget) {
-    Navigator.pushReplacement(
+    Navigator.push(
       context,
       PageRouteBuilder(
         pageBuilder: (context, animation1, animation2) => widget,
@@ -21,7 +21,7 @@ class JBMBSurveyCustomMotion {
     );
   }
   lastAnyButtonPressed(BuildContext context, StatelessWidget widget) {
-    Navigator.pushReplacement(
+    Navigator.push(
       context,
       PageRouteBuilder(
         pageBuilder: (context, animation1, animation2) => widget,
@@ -89,7 +89,7 @@ class SurveyPage1 extends StatefulWidget {
 }
 
 class _SurveyPage1State extends State<SurveyPage1>{
-  bool isClicked = false;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -97,31 +97,35 @@ class _SurveyPage1State extends State<SurveyPage1>{
       qNum: widget.qNum,
       question: widget.question,
       onPressedYes: () async {
-        if (!isClicked){
+        if (!isLoading){
           setState(() {
-            isClicked = true;
+            isLoading = true;
           });
-          AfterClickedButton().afterDo(context, SurveyPage2(
+          await AfterClickedButton().afterDo(context, SurveyPage2(
             qNum: 'Q2.',
             question: '\n전보다 점점 이마가 넓어지는 느낌이 든다',
             memberManager: widget.memberManager,
             diagnoseManager: widget.diagnoseManager,
           ), widget.diagnoseManager, widget.qNum, 1, await widget.memberManager.jwtManager.getToken());
-        } else {
-          null;
+          setState(() {
+            isLoading = false;
+          });
         }
       },
       onPressedNo: () async {
-        if (!isClicked){
+        if (!isLoading){
           setState(() {
-            isClicked = true;
+            isLoading = true;
           });
-          AfterClickedButton().afterDo(context, SurveyPage2(
+          await AfterClickedButton().afterDo(context, SurveyPage2(
             qNum: 'Q2.',
             question: '\n전보다 점점 이마가 넓어지는 느낌이 든다',
             memberManager: widget.memberManager,
             diagnoseManager: widget.diagnoseManager,
           ), widget.diagnoseManager, widget.qNum, 0, await widget.memberManager.jwtManager.getToken());
+          setState(() {
+            isLoading = false;
+          });
         } else {
           null;
         }
@@ -151,7 +155,7 @@ class SurveyPage2 extends StatefulWidget {
 }
 
 class _SurveyPage2State extends State<SurveyPage2>{
-  bool isClicked = false;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -159,31 +163,37 @@ class _SurveyPage2State extends State<SurveyPage2>{
       qNum: widget.qNum,
       question: widget.question,
       onPressedYes: () async {
-        if (!isClicked){
+        if (!isLoading){
           setState(() {
-            isClicked = true;
+            isLoading = true;
           });
-          AfterClickedButton().afterDo(context, SurveyPage3(
+          await AfterClickedButton().afterDo(context, SurveyPage3(
               qNum: 'Q3.',
               question: '\n가늘고 힘이 없는 머리가 빠지기 시작한다.',
               memberManager: widget.memberManager,
               diagnoseManager: widget.diagnoseManager
           ), widget.diagnoseManager, widget.qNum, 1, await widget.memberManager.jwtManager.getToken());
+          setState(() {
+            isLoading = false;
+          });
         } else {
           null;
         }
       },
       onPressedNo: () async {
-        if (!isClicked){
+        if (!isLoading){
           setState(() {
-            isClicked = true;
+            isLoading = true;
           });
-          AfterClickedButton().afterDo(context, SurveyPage3(
+          await AfterClickedButton().afterDo(context, SurveyPage3(
               qNum: 'Q3.',
               question: '\n가늘고 힘이 없는 머리가 빠지기 시작한다.',
               memberManager: widget.memberManager,
               diagnoseManager: widget.diagnoseManager
           ), widget.diagnoseManager, widget.qNum, 0, await widget.memberManager.jwtManager.getToken());
+          setState(() {
+            isLoading = false;
+          });
         } else {
           null;
         }
@@ -214,7 +224,7 @@ class SurveyPage3 extends StatefulWidget {
 }
 
 class _SurveyPage3State extends State<SurveyPage3>{
-  bool isClicked = false;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -222,31 +232,37 @@ class _SurveyPage3State extends State<SurveyPage3>{
       qNum: widget.qNum,
       question: widget.question,
       onPressedYes: () async {
-        if (!isClicked){
+        if (!isLoading){
           setState(() {
-            isClicked = true;
+            isLoading = true;
           });
-          AfterClickedButton().afterDo(context, SurveyPage4(
+          await AfterClickedButton().afterDo(context, SurveyPage4(
               qNum: 'Q4.',
               question: '\n모발이 가늘고 부드러워진다.',
               memberManager: widget.memberManager,
               diagnoseManager: widget.diagnoseManager
           ), widget.diagnoseManager, widget.qNum, 1, await widget.memberManager.jwtManager.getToken());
+          setState(() {
+            isLoading = false;
+          });
         } else {
           null;
         }
       },
       onPressedNo: () async {
-        if (!isClicked){
+        if (!isLoading){
           setState(() {
-            isClicked = true;
+            isLoading = true;
           });
-          AfterClickedButton().afterDo(context, SurveyPage4(
+          await AfterClickedButton().afterDo(context, SurveyPage4(
               qNum: 'Q4.',
               question: '\n모발이 가늘고 부드러워진다.',
               memberManager: widget.memberManager,
               diagnoseManager: widget.diagnoseManager
           ), widget.diagnoseManager, widget.qNum, 0, await widget.memberManager.jwtManager.getToken());
+          setState(() {
+            isLoading = false;
+          });
         } else {
           null;
         }
@@ -276,7 +292,7 @@ class SurveyPage4 extends StatefulWidget {
 }
 
 class _SurveyPage4State extends State<SurveyPage4>{
-  bool isClicked = false;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -284,31 +300,37 @@ class _SurveyPage4State extends State<SurveyPage4>{
       qNum: widget.qNum,
       question: widget.question,
       onPressedYes: () async {
-        if (!isClicked){
+        if (!isLoading){
           setState(() {
-            isClicked = true;
+            isLoading = true;
           });
-          AfterClickedButton().afterDo(context, SurveyPage5(
+          await AfterClickedButton().afterDo(context, SurveyPage5(
               qNum: 'Q5.',
               question: '\n두피를 누르면 통증이 있다.',
               memberManager: widget.memberManager,
               diagnoseManager: widget.diagnoseManager
           ), widget.diagnoseManager, widget.qNum, 1, await widget.memberManager.jwtManager.getToken());
+          setState(() {
+            isLoading = false;
+          });
         } else {
           null;
         }
       },
       onPressedNo: () async {
-        if (!isClicked){
+        if (!isLoading){
           setState(() {
-            isClicked = true;
+            isLoading = true;
           });
-          AfterClickedButton().afterDo(context, SurveyPage5(
+          await AfterClickedButton().afterDo(context, SurveyPage5(
               qNum: 'Q5.',
               question: '\n두피를 누르면 통증이 있다.',
               memberManager: widget.memberManager,
               diagnoseManager: widget.diagnoseManager
           ), widget.diagnoseManager, widget.qNum, 0, await widget.memberManager.jwtManager.getToken());
+          setState(() {
+            isLoading = false;
+          });
         } else {
           null;
         }
@@ -338,7 +360,7 @@ class SurveyPage5 extends StatefulWidget {
 }
 
 class _SurveyPage5State extends State<SurveyPage5>{
-  bool isClicked = false;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -346,31 +368,37 @@ class _SurveyPage5State extends State<SurveyPage5>{
       qNum: widget.qNum,
       question: widget.question,
       onPressedYes: () async {
-        if(!isClicked){
+        if(!isLoading){
           setState(() {
-            isClicked = true;
+            isLoading = true;
           });
-          AfterClickedButton().afterDo(context, SurveyPage6(
+          await AfterClickedButton().afterDo(context, SurveyPage6(
               qNum: 'Q6.',
               question: '\n앞 머리와 뒷 머리의 굵기 차이가 있다',
               memberManager: widget.memberManager,
               diagnoseManager: widget.diagnoseManager
           ), widget.diagnoseManager, widget.qNum, 1, await widget.memberManager.jwtManager.getToken());
+          setState(() {
+            isLoading = false;
+          });
         } else {
           null;
         }
       },
       onPressedNo: () async {
-        if(!isClicked){
+        if(!isLoading){
           setState(() {
-            isClicked = true;
+            isLoading = true;
           });
-          AfterClickedButton().afterDo(context, SurveyPage6(
+          await AfterClickedButton().afterDo(context, SurveyPage6(
               qNum: 'Q6.',
               question: '\n앞 머리와 뒷 머리의 굵기 차이가 있다',
               memberManager: widget.memberManager,
               diagnoseManager: widget.diagnoseManager
           ), widget.diagnoseManager, widget.qNum, 0, await widget.memberManager.jwtManager.getToken());
+          setState(() {
+            isLoading = false;
+          });
         } else {
           null;
         }
@@ -400,7 +428,7 @@ class SurveyPage6 extends StatefulWidget {
 }
 
 class _SurveyPage6State extends State<SurveyPage6>{
-  bool isClicked = false;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -408,31 +436,37 @@ class _SurveyPage6State extends State<SurveyPage6>{
       qNum: widget.qNum,
       question: widget.question,
       onPressedYes: () async {
-        if(!isClicked){
+        if(!isLoading){
           setState(() {
-            isClicked = true;
+            isLoading = true;
           });
-          AfterClickedButton().afterDo(context, SurveyPage7(
+          await AfterClickedButton().afterDo(context, SurveyPage7(
               qNum: 'Q7.',
               question: '\n몸의 털이 갑자기 굵어진다',
               memberManager: widget.memberManager,
               diagnoseManager: widget.diagnoseManager
           ), widget.diagnoseManager, widget.qNum, 1, await widget.memberManager.jwtManager.getToken());
+          setState(() {
+            isLoading = false;
+          });
         } else {
           null;
         }
       },
       onPressedNo: () async {
-        if (!isClicked) {
+        if (!isLoading) {
           setState(() {
-            isClicked = true;
+            isLoading = true;
           });
-          AfterClickedButton().afterDo(context, SurveyPage7(
+          await AfterClickedButton().afterDo(context, SurveyPage7(
               qNum: 'Q7.',
               question: '\n몸의 털이 갑자기 굵어진다',
               memberManager: widget.memberManager,
               diagnoseManager: widget.diagnoseManager
           ), widget.diagnoseManager, widget.qNum, 0, await widget.memberManager.jwtManager.getToken());
+          setState(() {
+            isLoading = false;
+          });
         } else {
           null;
         }
@@ -462,7 +496,7 @@ class SurveyPage7 extends StatefulWidget {
 }
 
 class _SurveyPage7State extends State<SurveyPage7>{
-  bool isClicked = false;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -470,31 +504,37 @@ class _SurveyPage7State extends State<SurveyPage7>{
       qNum: widget.qNum,
       question: widget.question,
       onPressedYes: () async {
-        if(!isClicked){
+        if(!isLoading){
           setState(() {
-            isClicked = true;
+            isLoading = true;
           });
-          AfterClickedButton().afterDo(context, SurveyPage8(
+          await AfterClickedButton().afterDo(context, SurveyPage8(
               qNum: 'Q8.',
               question: '\n이마라인과 정수리 부분의 유난히 번들거린다',
               memberManager: widget.memberManager,
               diagnoseManager: widget.diagnoseManager
           ), widget.diagnoseManager, widget.qNum, 1, await widget.memberManager.jwtManager.getToken());
+          setState(() {
+            isLoading = false;
+          });
         } else {
           null;
         }
       },
       onPressedNo: () async {
-        if (!isClicked){
+        if (!isLoading){
           setState(() {
-            isClicked = true;
+            isLoading = true;
           });
-          AfterClickedButton().afterDo(context, SurveyPage8(
+          await AfterClickedButton().afterDo(context, SurveyPage8(
               qNum: 'Q8.',
               question: '\n이마라인과 정수리 부분의 유난히 번들거린다',
               memberManager: widget.memberManager,
               diagnoseManager: widget.diagnoseManager
           ), widget.diagnoseManager, widget.qNum, 0, await widget.memberManager.jwtManager.getToken());
+          setState(() {
+            isLoading = false;
+          });
         } else {
           null;
         }
@@ -524,7 +564,7 @@ class SurveyPage8 extends StatefulWidget {
 }
 
 class _SurveyPage8State extends State<SurveyPage8>{
-  bool isClicked = false;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -532,31 +572,37 @@ class _SurveyPage8State extends State<SurveyPage8>{
       qNum: widget.qNum,
       question: widget.question,
       onPressedYes: () async {
-        if(!isClicked){
+        if(!isLoading){
           setState(() {
-            isClicked = true;
+            isLoading = true;
           });
-          AfterClickedButton().afterDo(context, SurveyPage9(
+          await AfterClickedButton().afterDo(context, SurveyPage9(
               qNum: 'Q9.',
               question: '\n두피의 피지량이 갑자기 늘어났다',
               memberManager: widget.memberManager,
               diagnoseManager: widget.diagnoseManager
           ), widget.diagnoseManager, widget.qNum, 1, await widget.memberManager.jwtManager.getToken());
+          setState(() {
+            isLoading = false;
+          });
         } else {
           null;
         }
       },
       onPressedNo: () async {
-        if(!isClicked){
+        if(!isLoading){
           setState(() {
-            isClicked = true;
+            isLoading = true;
           });
-          AfterClickedButton().afterDo(context, SurveyPage9(
+          await AfterClickedButton().afterDo(context, SurveyPage9(
               qNum: 'Q9.',
               question: '\n두피의 피지량이 갑자기 늘어났다',
               memberManager: widget.memberManager,
               diagnoseManager: widget.diagnoseManager
           ), widget.diagnoseManager, widget.qNum, 0, await widget.memberManager.jwtManager.getToken());
+          setState(() {
+            isLoading = false;
+          });
         } else {
           null;
         }
@@ -586,7 +632,7 @@ class SurveyPage9 extends StatefulWidget {
 }
 
 class _SurveyPage9State extends State<SurveyPage9>{
-  bool isClicked = false;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -594,31 +640,37 @@ class _SurveyPage9State extends State<SurveyPage9>{
       qNum: widget.qNum,
       question: widget.question,
       onPressedYes: () async {
-        if(!isClicked){
+        if(!isLoading){
           setState(() {
-            isClicked = true;
+            isLoading = true;
           });
-          AfterClickedButton().afterDo(context, SurveyPage10(
+          await AfterClickedButton().afterDo(context, SurveyPage10(
               qNum: 'Q10.',
               question: '\n비듬이 많아지고 두피가 가렵다',
               memberManager: widget.memberManager,
               diagnoseManager: widget.diagnoseManager
           ), widget.diagnoseManager, widget.qNum, 1, await widget.memberManager.jwtManager.getToken());
+          setState(() {
+            isLoading = false;
+          });
         } else {
           null;
         }
       },
       onPressedNo: () async {
-        if(!isClicked){
+        if(!isLoading){
           setState(() {
-            isClicked = true;
+            isLoading = true;
           });
-          AfterClickedButton().afterDo(context, SurveyPage10(
+          await AfterClickedButton().afterDo(context, SurveyPage10(
               qNum: 'Q10.',
               question: '\n비듬이 많아지고 두피가 가렵다',
               memberManager: widget.memberManager,
               diagnoseManager: widget.diagnoseManager
           ), widget.diagnoseManager, widget.qNum, 0, await widget.memberManager.jwtManager.getToken());
+          setState(() {
+            isLoading = false;
+          });
         } else {
           null;
         }
@@ -648,7 +700,7 @@ class SurveyPage10 extends StatefulWidget {
 }
 
 class _SurveyPage10State extends State<SurveyPage10>{
-  bool isClicked = false;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -656,27 +708,33 @@ class _SurveyPage10State extends State<SurveyPage10>{
       qNum: widget.qNum,
       question: widget.question,
       onPressedYes: () async {
-        if(!isClicked){
+        if(!isLoading){
           setState(() {
-            isClicked = true;
+            isLoading = true;
           });
-          AfterClickedButton().afterLast(context, UploadImageGuidePage(
+          await AfterClickedButton().afterLast(context, UploadImageGuidePage(
             memberManager: widget.memberManager,
             diagnoseManager: widget.diagnoseManager,
           ), widget.diagnoseManager, widget.qNum, 1, await widget.memberManager.jwtManager.getToken());
+          setState(() {
+            isLoading = false;
+          });
         } else {
           null;
         }
       },
       onPressedNo: () async {
-        if(!isClicked){
+        if(!isLoading){
           setState(() {
-            isClicked = true;
+            isLoading = true;
           });
-          AfterClickedButton().afterLast(context, UploadImageGuidePage(
+          await AfterClickedButton().afterLast(context, UploadImageGuidePage(
             memberManager: widget.memberManager,
             diagnoseManager: widget.diagnoseManager,
           ), widget.diagnoseManager, widget.qNum, 0, await widget.memberManager.jwtManager.getToken());
+          setState(() {
+            isLoading = false;
+          });
         } else {
           null;
         }

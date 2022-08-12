@@ -106,11 +106,8 @@ class _DiagnosisAlertPageState extends State<DiagnosisAlertPage> {
                           _currentStep += 1;
                         });
                       } else {
-                        // when confirm all step
-                        Navigator.pop(context);
-                        // delay for button animation
                         Future.delayed(const Duration(milliseconds: 250), () {
-                          Navigator.pushReplacement(
+                          Navigator.push(
                             context,
                             PageRouteBuilder(
                               pageBuilder: (context, animation1, animation2) =>
