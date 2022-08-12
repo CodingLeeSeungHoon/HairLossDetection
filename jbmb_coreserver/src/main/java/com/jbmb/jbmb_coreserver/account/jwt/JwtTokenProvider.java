@@ -27,8 +27,8 @@ public class JwtTokenProvider {
 
     private String secretKey = "jebalMobal";
 
-    // 토큰 유효시간 30분
-    private long tokenValidTime = 30 * 60 * 1000L;
+    // 토큰 유효시간 120분
+    private long tokenValidTime = 120 * 60 * 1000L;
 
     private final UserDetailsService userDetailsService;
     private final RedisTemplate redisTemplate;
