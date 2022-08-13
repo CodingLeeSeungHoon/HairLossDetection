@@ -7,6 +7,7 @@ import 'package:jbmb_application/screen/DiagnosisLogPage.dart';
 import 'package:jbmb_application/screen/HospitalPage.dart';
 import 'package:jbmb_application/screen/InfoPage.dart';
 import 'package:jbmb_application/screen/LoginPage.dart';
+import 'package:jbmb_application/screen/LoginedHome.dart';
 import 'package:jbmb_application/screen/ShampooPage.dart';
 import 'package:jbmb_application/service/JBMBDiagnoseLogManager.dart';
 import 'package:jbmb_application/service/JBMBLoginManager.dart';
@@ -23,12 +24,25 @@ import '../service/JBMBSurveyManager.dart';
 import 'JBMBBigButton.dart';
 
 /// 2020.03.07 이승훈 개발
-class LoginedNavigationDrawerWidget extends StatelessWidget {
+class LoginedNavigationDrawerWidget extends StatefulWidget {
   final JBMBMemberManager memberManager;
 
-  LoginedNavigationDrawerWidget({Key? key, required this.memberManager})
+  const LoginedNavigationDrawerWidget({Key? key, required this.memberManager})
       : super(key: key);
+
+  @override
+  _LoginedNavigationDrawerWidgetState createState() =>
+      _LoginedNavigationDrawerWidgetState();
+}
+
+class _LoginedNavigationDrawerWidgetState extends State<LoginedNavigationDrawerWidget>{
   final padding = EdgeInsets.symmetric(horizontal: 3);
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +132,7 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
         // logout
         // Navigator.of(context).popUntil((route) => route.isFirst);
         try {
-          String token = await memberManager.jwtManager.getToken();
+          String token = await widget.memberManager.jwtManager.getToken();
           JBMBLoginManager().tryLogout(token);
           log("[Logout] success logout with valid token");
         } catch (e) {
@@ -136,37 +150,25 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
         });
         break;
       case 1:
-        JBMBSurveyManager surveyManager = JBMBSurveyManager();
-        JBMBDiagnoseManager diagnoseManager =
-            JBMBDiagnoseManager(surveyManager);
-
-        int retval = await diagnoseManager.createNewDiagnosis(
-            memberManager.memberInfo,
-            await memberManager.jwtManager.getToken());
-
-        if (retval != -1) {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => DiagnosisAlertPage(
-                memberManager: memberManager, diagnoseManager: diagnoseManager),
-          ));
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Row(
-            children: const [
-              Icon(
-                Icons.check,
-                color: Colors.red,
-              ),
-              Text("서버상의 문제로, 진단을 시작할 수 없습니다.\n"
-                  "잠시 후에 다시 시도해주세요."),
-            ],
-          )));
-        }
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Row(
+              children: const [
+                Icon(
+                  Icons.check,
+                  color: Colors.red,
+                ),
+                Text("   안정된 시작을 위해 홈 화면을 통해 \n"
+                    "   진단을 시작해주시기 바랍니다."),
+              ],
+            )));
         break;
       case 2:
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => LoginedHome(memberManager: widget.memberManager)
+        ));
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => DiagnosisLogPage(
-            memberManager: memberManager,
+            memberManager: widget.memberManager,
             diagnoseManager: JBMBDiagnoseManager(null),
             diagnoseLogManager: JBMBDiagnoseLogManager(),
           ),
@@ -174,34 +176,43 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
         break;
       case 3:
         // TODO : shampoo, check hair type
-        int? hasHairType = memberManager.memberInfo.getHairType;
+        int? hasHairType = widget.memberManager.memberInfo.getHairType;
         if (hasHairType == null) {
           Navigator.of(context).pop();
           showModalBottomSheet(
               context: context, builder: (context) => buildSheet(context));
         } else {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => LoginedHome(memberManager: widget.memberManager)
+          ));
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => ShampooPage(
-              memberManager: memberManager,
+              memberManager: widget.memberManager,
               shampooManager:
-              JBMBShampooManager(memberManager.memberInfo.getHairType),
+              JBMBShampooManager(widget.memberManager.memberInfo.getHairType),
             ),
           ));
         }
         break;
       case 4:
         // hospital
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => LoginedHome(memberManager: widget.memberManager)
+        ));
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => HospitalPage(
-            memberManager: memberManager,
+            memberManager: widget.memberManager,
           ),
         ));
         break;
       case 5:
         // jbmb community
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => LoginedHome(memberManager: widget.memberManager)
+        ));
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => CommunityPage(
-            memberManager: memberManager,
+            memberManager: widget.memberManager,
             communityManager: JBMBCommunityManager(),
           ),
         ));
@@ -261,15 +272,15 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
                     onPressed: () async {
                       JBMBHairTypeUpdateRequestObject request =
                       JBMBHairTypeUpdateRequestObject(
-                          memberManager.memberInfo.getID, 1);
+                          widget.memberManager.memberInfo.getID, 1);
                       bool retval =
-                      await memberManager.updateHairType(request);
+                      await widget.memberManager.updateHairType(request);
                       if (retval) {
                         // success to save hair type
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => ShampooPage(
-                            memberManager: memberManager,
-                            shampooManager: JBMBShampooManager(memberManager.memberInfo.getHairType),
+                            memberManager: widget.memberManager,
+                            shampooManager: JBMBShampooManager(widget.memberManager.memberInfo.getHairType),
                           ),
                         ));
                       } else {
@@ -289,15 +300,15 @@ class LoginedNavigationDrawerWidget extends StatelessWidget {
                       // TODO : save hair type codes
                       JBMBHairTypeUpdateRequestObject request =
                       JBMBHairTypeUpdateRequestObject(
-                          memberManager.memberInfo.getID, 0);
+                          widget.memberManager.memberInfo.getID, 0);
                       bool retval =
-                      await memberManager.updateHairType(request);
+                      await widget.memberManager.updateHairType(request);
                       if (retval) {
                         // success to save hair type
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => ShampooPage(
-                            memberManager: memberManager,
-                            shampooManager: JBMBShampooManager(memberManager.memberInfo.getHairType),
+                            memberManager: widget.memberManager,
+                            shampooManager: JBMBShampooManager(widget.memberManager.memberInfo.getHairType),
                           ),
                         ));
                       } else {
