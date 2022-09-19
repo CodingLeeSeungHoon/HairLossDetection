@@ -74,6 +74,10 @@ class _JBMBUploadedImageWidgetState extends State<JBMBUploadedImageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    double phoneWidth = MediaQuery.of(context).size.width;
+    double phoneHeight = MediaQuery.of(context).size.height;
+    double phonePadding = MediaQuery.of(context).padding.top;
+
     return Column(children: [
       if (isLoading)
         Align(
@@ -131,7 +135,7 @@ class _JBMBUploadedImageWidgetState extends State<JBMBUploadedImageWidget> {
             alignment: Alignment.bottomCenter,
             children: [
               /// 촬영 프리뷰 화면
-              getPreviewScreen(),
+              getPreviewScreen(phoneWidth, phoneHeight),
 
               /// 화면 Flip 버튼
               GestureDetector(
@@ -142,7 +146,7 @@ class _JBMBUploadedImageWidgetState extends State<JBMBUploadedImageWidget> {
                   });
                 },
                 child: getCameraButton(Alignment.bottomLeft,
-                    const Icon(Icons.flip_camera_ios_outlined)),
+                    const Icon(Icons.flip_camera_ios_outlined), phoneWidth),
               ),
 
               /// 촬영 버튼
@@ -161,7 +165,7 @@ class _JBMBUploadedImageWidgetState extends State<JBMBUploadedImageWidget> {
                   });
                 },
                 child: getCameraButton(
-                    Alignment.bottomRight, const Icon(Icons.camera)),
+                    Alignment.bottomRight, const Icon(Icons.camera), phoneWidth),
               ),
             ],
           ),
@@ -212,21 +216,23 @@ class _JBMBUploadedImageWidgetState extends State<JBMBUploadedImageWidget> {
     ]);
   }
 
-  Widget getPreviewScreen() {
+  Widget getPreviewScreen(double width, double height) {
+    // log(width.toString());
+    // log(height.toString());
     return Container(
       alignment: Alignment.center,
-      width: 292.5,
-      height: 520,
+      width: width * 0.78,
+      height: height * 0.64,
       child: CameraPreview(cameraController),
     );
   }
 
-  Widget getCameraButton(Alignment alignment, Icon icon) {
+  Widget getCameraButton(Alignment alignment, Icon icon, double phoneWidth) {
     return Align(
       alignment: alignment,
       child: Container(
-          height: 70,
-          width: 70,
+          height: phoneWidth * 0.18,
+          width: phoneWidth * 0.18,
           decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: Colors.white,
