@@ -49,8 +49,8 @@ No major branch strategy yet..
 **⚒ JBMB System Architecture**
  <p align="center">
 
-  <img src="https://github.com/CodingLeeSeungHoon/HairLossDetection/blob/deploy/jbmb_document/JBMB_system_architecture.png" />
-
+  <img src="https://github.com/CodingLeeSeungHoon/HairLossDetection/blob/deploy/jbmb_document/JBMB_system_architecture.drawio.png" />
+  
 </p>
  
 ---    
