@@ -69,7 +69,8 @@ class _UploadImagePageState extends State<UploadImagePage> {
                   Expanded(
                       flex: 4,
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           if (loadingState == 0)
                             JBMBUploadedImageWidget(
@@ -193,8 +194,8 @@ class _UploadImagePageState extends State<UploadImagePage> {
           loadingState = 3;
         });
         JBMBDiagnosisResultResponseObject? object =
-            await diagnoseManager.getDiagnosisResultDirectly(
-                await memberManager.jwtManager.getToken());
+        await diagnoseManager.getDiagnosisResultDirectly(
+            await memberManager.jwtManager.getToken());
         if (object != null) {
           return [object, 0];
         } else {

@@ -46,6 +46,8 @@ class _HospitalPageState extends State<HospitalPage> {
 
   void _getUserAndHospitalLocation() async {
     // accuracy is not worthy
+    LocationPermission permission = await Geolocator.requestPermission();
+
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.low);
 

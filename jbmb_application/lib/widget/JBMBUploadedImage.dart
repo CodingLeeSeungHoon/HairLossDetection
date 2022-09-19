@@ -1,13 +1,17 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:jbmb_application/widget/JBMBOutlinedButton.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:simple_s3/simple_s3.dart';
+import '../service/JBMBDiagnoseManager.dart';
+import '../service/JBMBMemberManager.dart';
 import 'JBMBAppRoundImage.dart';
 
 class JBMBUploadedImageWidget extends StatefulWidget {
@@ -15,12 +19,11 @@ class JBMBUploadedImageWidget extends StatefulWidget {
   final String? userID;
   final int? diagnosisID;
 
-  const JBMBUploadedImageWidget({
-    Key? key,
-    required this.onFileChanged,
-    required this.userID,
-    required this.diagnosisID
-  });
+  const JBMBUploadedImageWidget(
+      {Key? key,
+      required this.onFileChanged,
+      required this.userID,
+      required this.diagnosisID});
 
   @override
   _JBMBUploadedImageWidgetState createState() =>
@@ -29,93 +32,243 @@ class JBMBUploadedImageWidget extends StatefulWidget {
 
 class _JBMBUploadedImageWidgetState extends State<JBMBUploadedImageWidget> {
   final ImagePicker _picker = ImagePicker();
+  late List<CameraDescription> cameras;
+  late CameraController cameraController;
+
+  int isSelfMode = 1;
   bool isLoading = false;
+  bool stateCamera = false;
   String? imageUrl;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    startCamera(isSelfMode);
+    super.initState();
+  }
+
+  /// initializing camera
+  void startCamera(int isSelfMode) async {
+    cameras = await availableCameras();
+    // camera[1] == camera rear mode, camera[0] == camera front mode
+    cameraController = CameraController(
+        cameras[isSelfMode], ResolutionPreset.high,
+        enableAudio: false);
+
+    await cameraController.initialize().then((value) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {});
+    }).catchError((e) {
+      log(e);
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    cameraController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        if (isLoading)
-          Center(
-              child: Column(
-                children: const [
-                  CircularProgressIndicator(
-                    color: Colors.black45,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    "서버에 저장 중..",
-                    style: TextStyle(
-                        color: Colors.black45, fontWeight: FontWeight.bold),
-                  )
-                ],
-              )),
-        if (!isLoading && imageUrl == null)
-          const Icon(
-            Icons.image,
-            size: 300,
-            color: Colors.black45,
+    double phoneWidth = MediaQuery.of(context).size.width;
+    double phoneHeight = MediaQuery.of(context).size.height;
+    double phonePadding = MediaQuery.of(context).padding.top;
+
+    return Column(children: [
+      if (isLoading)
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Column(
+            children: const [
+              CircularProgressIndicator(
+                color: Colors.black45,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                "서버에 저장 중..",
+                style: TextStyle(
+                    color: Colors.black45, fontWeight: FontWeight.bold),
+              )
+            ],
           ),
-        if (!isLoading && imageUrl != null)
-          InkWell(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            onTap: () => _selectPhoto(),
-            child: JBMBAppRoundImage.url(
-              imageUrl!,
-              width: 300,
-              height: 300,
-            ),
-          ),
-        if (!isLoading)
-          InkWell(
-              onTap: () => _selectPhoto(),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  imageUrl != null ? '사진 변경' : '사진 업로드',
-                  style: const TextStyle(
-                      color: Colors.black45, fontWeight: FontWeight.bold),
-                ),
-              )),
+        ),
+
+      /// 로딩이 아닌 상태 + 아직 이미지를 업로드 하지 않은 상태
+      if (!isLoading && imageUrl == null && !stateCamera) ...[
+        const Icon(
+          Icons.image,
+          size: 300,
+          color: Colors.black45,
+        ),
+        JBMBOutlinedButton(
+          buttonText: "카메라 촬영",
+          iconData: Icons.camera_alt_outlined,
+          onPressed: () {
+            setState(() {
+              stateCamera = true;
+            });
+            // _pickImage(ImageSource.camera);
+          },
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        JBMBOutlinedButton(
+          buttonText: "앨범에서 찾기",
+          iconData: Icons.image,
+          onPressed: () {
+            _pickImage(ImageSource.gallery);
+          },
+        ),
       ],
+
+      /// camera 상태
+      if (!isLoading && imageUrl == null && stateCamera) ...[
+        if (cameraController.value.isInitialized)
+          Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              /// 촬영 프리뷰 화면
+              getPreviewScreen(phoneWidth, phoneHeight),
+
+              /// 화면 Flip 버튼
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isSelfMode = isSelfMode == 0 ? 1 : 0;
+                    startCamera(isSelfMode);
+                  });
+                },
+                child: getCameraButton(Alignment.bottomLeft,
+                    const Icon(Icons.flip_camera_ios_outlined), phoneWidth),
+              ),
+
+              /// 촬영 버튼
+              GestureDetector(
+                onTap: () {
+                  cameraController.takePicture().then((XFile? file) {
+                    if (mounted) {
+                      if (file != null) {
+                        String path = file.path;
+                        setState(() {
+                          stateCamera = false;
+                        });
+                        _takePhoto(path);
+                      }
+                    }
+                  });
+                },
+                child: getCameraButton(
+                    Alignment.bottomRight, const Icon(Icons.camera), phoneWidth),
+              ),
+            ],
+          ),
+      ],
+
+      /// 로딩이 아닌 상태 + 이미지를 업로드 한 상태
+      if (!isLoading && imageUrl != null && !stateCamera) ...[
+        InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          onTap: () {},
+          child: JBMBAppRoundImage.url(
+            imageUrl!,
+            width: 300,
+            height: 300,
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        JBMBOutlinedButton(
+          buttonText: "재촬영",
+          iconData: Icons.camera_alt_outlined,
+          onPressed: () {
+            setState(() {
+              widget.onFileChanged('');
+              imageUrl = null;
+              stateCamera = true;
+            });
+          },
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        JBMBOutlinedButton(
+          buttonText: "앨범에서 찾기",
+          iconData: Icons.image,
+          onPressed: () {
+            widget.onFileChanged('');
+            imageUrl = null;
+            _pickImage(ImageSource.gallery);
+          },
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+      ],
+    ]);
+  }
+
+  Widget getPreviewScreen(double width, double height) {
+    // log(width.toString());
+    // log(height.toString());
+    return Container(
+      alignment: Alignment.center,
+      width: width * 0.78,
+      height: height * 0.64,
+      child: CameraPreview(cameraController),
     );
   }
 
-  Future _selectPhoto() async {
-    await showModalBottomSheet(
-        context: context,
-        builder: (context) =>
-            BottomSheet(
-                onClosing: () {},
-                builder: (context) =>
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ListTile(
-                          leading: const Icon(Icons.camera),
-                          title: const Text('카메라 촬영'),
-                          onTap: () {
-                            Navigator.of(context).pop();
-                            _pickImage(ImageSource.camera);
-                          },
-                        ),
-                        ListTile(
-                          leading: const Icon(Icons.photo_album),
-                          title: const Text('앨범에서 찾기'),
-                          onTap: () {
-                            Navigator.of(context).pop();
-                            _pickImage(ImageSource.gallery);
-                          },
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        )
-                      ],
-                    )));
+  Widget getCameraButton(Alignment alignment, Icon icon, double phoneWidth) {
+    return Align(
+      alignment: alignment,
+      child: Container(
+          height: phoneWidth * 0.18,
+          width: phoneWidth * 0.18,
+          decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: const Offset(0, 3), // changes position of shadow
+                ),
+              ]),
+          child: icon),
+    );
+  }
+
+  Future _takePhoto(String path) async {
+    // 이미지 편집
+    var file = await ImageCropper().cropImage(
+        sourcePath: path,
+        androidUiSettings: const AndroidUiSettings(
+            toolbarTitle: '편집',
+            toolbarColor: Colors.grey,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        iosUiSettings: const IOSUiSettings(
+          title: '편집',
+        ));
+    if (file == null) {
+      return;
+    }
+
+    file = await compressImage(file.path, 35);
+
+    // 이미지 업로드
+    await _uploadFile(file);
   }
 
   /// 이미지 선택 혹은 촬영 - 편집 - 업로드가 모두 포함된 메소드
@@ -169,7 +322,9 @@ class _JBMBUploadedImageWidgetState extends State<JBMBUploadedImageWidget> {
     SimpleS3 _simpleS3 = SimpleS3();
     String result = await _simpleS3.uploadFile(file, 'jbmbbucket',
         "us-east-1:39989318-c9e2-4070-bd62-d0a52df01d88", AWSRegions.usEast1,
-        debugLog: true, fileName: widget.userID! + "_" + widget.diagnosisID.toString() + ".jpg");
+        debugLog: true,
+        fileName:
+            widget.userID! + "_" + widget.diagnosisID.toString() + ".jpg");
 
     log(widget.userID! + "_" + widget.diagnosisID.toString() + ".jpg");
     // 'https://jbmbbucket.s3.amazonaws.com/' + fileName
@@ -180,6 +335,10 @@ class _JBMBUploadedImageWidgetState extends State<JBMBUploadedImageWidget> {
     });
 
     // changed
-    widget.onFileChanged('https://jbmbbucket.s3.amazonaws.com/' + widget.userID! + "_" + widget.diagnosisID.toString() + ".jpg");
+    widget.onFileChanged('https://jbmbbucket.s3.amazonaws.com/' +
+        widget.userID! +
+        "_" +
+        widget.diagnosisID.toString() +
+        ".jpg");
   }
 }
