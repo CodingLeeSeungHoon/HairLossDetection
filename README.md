@@ -86,7 +86,4 @@ No major branch strategy yet..
 > 🏆 **[이한범](https://github.com/Y-greatigr)** : ```Docker``` ```BE Dev``` ```AI Dev``` ```BE Design```      
 > 🏆 **[김준태](https://github.com/KZunT)** : ```DB Design``` ```AWS``` ```AI Dev```
 
-```
-- 본 프로젝트의 라이선스는 '탈모 예방 및 진단 어플리케이션 개발'에 참여한 연구자들(이승훈, 이한범, 김준태)에게 있습니다.
-- 본 코드에 대해 무단 수정 및 사용, 배포를 금하며 연구자들의 허가가 필요합니다.
-```
+
