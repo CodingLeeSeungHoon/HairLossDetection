@@ -75,7 +75,7 @@ No major branch strategy yet..
   <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/jira-0052CC?style=for-the-badge&logo=jira&logoColor=white">
 
 ---    
-**😎 Contribution & License**
+**😎 Contribution**
 
 ```
 - 본 프로젝트(탈모 예방 및 진단 어플리케이션 개발)에 참여한 연구자 명단입니다.
